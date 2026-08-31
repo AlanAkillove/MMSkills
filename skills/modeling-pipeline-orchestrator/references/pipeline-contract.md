@@ -8,12 +8,16 @@
 schema_version:
 project_id:
 mode: compose | revise | audit | disclose | final_check
+run_profile: research-full | contest-standard | contest-fast
 entry_status: confirmed | ambiguous | unknown
 current_stage:
 stages: {}
 artifacts: []
 gates: []
 open_issues: []
+finding_register:
+  path: finding_register.jsonl
+  schema: schemas/finding.schema.json
 last_snapshot_id:
 event_log: []
 updated_at:

@@ -1,5 +1,7 @@
 # 阅读体验审计契约
 
+本契约的 YAML 是阅读体验角色视图；跨 skill 交换的 JSONL finding 以仓库根目录 [`schemas/finding.schema.json`](../../../schemas/finding.schema.json) 为共同 envelope，`reader_path`、`friction_type` 和 `reader_cost` 为补充字段。
+
 ## 范围 manifest
 
 ```yaml
@@ -62,6 +64,7 @@ reader_finding:
   confidence: high | medium | low | unknown
   human_status: unreviewed | needs-human-confirmation | human-confirmed | rejected | unknown
   decision_id: null
+  deduplication: {canonical_issue_key: null, relation: new | duplicate | supplement | upgrade | downgrade | conflict}
 ```
 
 ## 状态边界

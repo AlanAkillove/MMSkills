@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/AlanAkillove/MMSkills/schemas/model.schema.json",
+  "title": "Model candidate record",
+  "type": "object",
+  "required": ["model_id", "name", "role", "problem_targets", "fit", "assumptions", "costs", "risks", "unknowns", "validation_plan", "decision_status"],
+  "properties": {
+    "model_id": {"type": "string"},
+    "name": {"type": "string"},
+    "role": {"enum": ["baseline", "candidate", "adopted", "rejected", "sensitivity", "benchmark"]},
+    "problem_targets": {"type": "array", "items": {"type": "string"}, "minItems": 1},
+    "plain_language_purpose": {"type": "string"},
+    "fit": {"type": "string"},
+    "assumptions": {"type": "array", "items": {"type": "string"}},
+    "inputs_outputs": {"type": "string"},
+    "costs": {"type": "array", "items": {"type": "string"}},
+    "risks": {"type": "array", "items": {"type": "string"}},
+    "unknowns": {"type": "array", "items": {"type": "string"}},
+    "validation_plan": {"type": "array", "items": {"type": "string"}},
+    "decision_status": {"enum": ["candidate", "needs_human", "adopted", "rejected", "unknown"]},
+    "human_decision_id": {"type": ["string", "null"]},
+    "evidence_ids": {"type": "array", "items": {"type": "string"}},
+    "notes": {"type": "string"}
+  },
+  "additionalProperties": true
+}

@@ -8,37 +8,54 @@ import json
 import sys
 from collections import OrderedDict
 from pathlib import Path
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, List
 
 
-STAGE_GRAPH = OrderedDict(
-    [
-        ("rules_profile", ("modeling-rules-profile", [], "required")),
-        ("topic_selection", ("modeling-topic-selection", ["rules_profile"], "required")),
-        ("literature_evidence", ("modeling-literature-evidence", ["topic_selection"], "required")),
-        ("problem_familiarization", ("modeling-problem-familiarization", ["literature_evidence", "topic_selection"], "required")),
-        ("problem_intake", ("modeling-problem-intake", ["problem_familiarization", "topic_selection"], "required")),
-        ("assumption_ledger", ("modeling-assumption-ledger", ["problem_intake", "problem_familiarization"], "required")),
-        ("data_audit", ("modeling-data-audit", ["problem_intake", "problem_familiarization"], "required")),
-        ("model_architect", ("modeling-model-architect", ["problem_intake", "problem_familiarization", "assumption_ledger", "data_audit"], "required")),
-        ("experiment_validator", ("modeling-experiment-validator", ["model_architect"], "required")),
-        ("paper_architect", ("modeling-paper-architect", ["problem_intake", "model_architect", "experiment_validator"], "required")),
-        ("figure_design", ("modeling-figure-designer", ["paper_architect", "experiment_validator"], "required")),
-        ("figure_table", ("modeling-figure-table-auditor", ["experiment_validator", "figure_design"], "required")),
-        ("claim_evidence", ("modeling-claim-evidence-audit", ["paper_architect", "experiment_validator"], "required")),
-        ("terminology", ("modeling-terminology-auditor", ["paper_architect"], "required")),
-        ("draft", ("author/agent writing", ["paper_architect", "figure_design", "claim_evidence", "terminology"], "required")),
-        ("paper_review", ("modeling-paper-reviewer", ["draft"], "required")),
-        ("ai_pattern", ("modeling-ai-pattern-reviewer", ["draft"], "required")),
-        ("anti_homogenization", ("modeling-anti-homogenization-auditor", ["draft"], "required")),
-        ("reader", ("modeling-reader-experience-auditor", ["draft"], "required")),
-        ("naturalizer", ("modeling-paper-naturalizer", ["paper_review", "ai_pattern", "reader"], "required")),
-        ("support", ("modeling-support-materials-auditor", ["draft", "figure_table"], "required")),
-        ("ai_disclosure", ("modeling-ai-use-disclosure", ["rules_profile"], "required")),
-        ("final_preflight", ("modeling-final-preflight", ["naturalizer", "support", "ai_disclosure"], "required")),
-        ("process_freezer", ("modeling-process-freezer", ["final_preflight"], "required")),
-    ]
-)
+ROOT = Path(__file__).resolve().parents[3]
+REGISTRY_PATH = ROOT / "schemas" / "stage-registry.json"
+PROFILE_PATHS = {
+    "research-full": "profiles/research-full.yaml",
+    "contest-standard": "profiles/contest-standard.yaml",
+    "contest-fast": "profiles/contest-fast.yaml",
+}
+PROFILE_ALIASES = {
+    "research/full": "research-full",
+    "contest/standard": "contest-standard",
+    "contest/fast": "contest-fast",
+}
+
+
+def load_stage_graph(path: Path = REGISTRY_PATH):
+    """Load the single source of truth instead of maintaining a second graph here."""
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    if not isinstance(payload, dict):
+        raise ValueError("stage registry must be an object")
+    order = payload.get("default_order")
+    stages = payload.get("stages")
+    if not isinstance(order, list) or not isinstance(stages, dict):
+        raise ValueError("stage registry needs default_order and stages")
+    if set(order) != set(stages):
+        raise ValueError("stage registry order and stage keys must match")
+    positions = {stage: index for index, stage in enumerate(order)}
+    graph = OrderedDict()
+    for stage in order:
+        record = stages[stage]
+        if not isinstance(record, dict):
+            raise ValueError(f"stage {stage} must be an object")
+        dependencies = record.get("depends_on")
+        if not isinstance(dependencies, list) or any(dep not in stages for dep in dependencies):
+            raise ValueError(f"stage {stage} has an unknown dependency")
+        if any(positions[dep] >= positions[stage] for dep in dependencies):
+            raise ValueError(f"stage {stage} is not topologically ordered")
+        graph[stage] = (
+            record.get("skill"),
+            dependencies,
+            record.get("human_gate"),
+        )
+    return graph
+
+
+STAGE_GRAPH = load_stage_graph()
 STATUSES = {
     "not_started",
     "ready",
@@ -67,6 +84,9 @@ def stage_record(state: Dict[str, Any], stage: str) -> Dict[str, Any]:
 
 def validate_state(state: Dict[str, Any]) -> List[str]:
     errors: List[str] = []
+    run_profile = state.get("run_profile")
+    if run_profile is not None and PROFILE_ALIASES.get(run_profile, run_profile) not in PROFILE_PATHS:
+        errors.append(f"unknown run profile: {run_profile}")
     if not isinstance(state.get("stages"), dict):
         return ["stages must be an object"]
     for stage, record in state["stages"].items():
@@ -99,10 +119,15 @@ def ready_stages(state: Dict[str, Any]) -> List[str]:
 
 
 def plan_markdown(state: Dict[str, Any]) -> str:
+    profile = state.get("run_profile", "research-full")
+    normalized_profile = PROFILE_ALIASES.get(profile, profile)
+    profile_path = PROFILE_PATHS.get(normalized_profile)
     lines = [
         "# Pipeline run plan",
         "",
         f"Mode: {state.get('mode', 'unknown')}",
+        f"Run profile: {normalized_profile}",
+        f"Profile policy: {profile_path or 'unknown profile; human confirmation required'}",
         f"Entry: {state.get('entry_status', 'unknown')}",
         f"Current stage: {state.get('current_stage', 'unknown')}",
         f"Snapshot: {state.get('last_snapshot_id', 'unknown')}",
@@ -169,6 +194,10 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--input", required=True, type=Path, help="structured state JSON")
     parser.add_argument("--output", required=True, type=Path, help="Markdown plan output")
+    parser.add_argument(
+        "--profile",
+        help="optional run-profile override for this plan; it does not modify the input state",
+    )
     return parser.parse_args()
 
 
@@ -179,6 +208,9 @@ def main() -> int:
     except (OSError, json.JSONDecodeError, ValueError) as exc:
         print(f"ERROR: cannot read state: {exc}", file=sys.stderr)
         return 2
+    if args.profile:
+        state = dict(state)
+        state["run_profile"] = PROFILE_ALIASES.get(args.profile, args.profile)
     errors = validate_state(state)
     if errors:
         print("FAIL", file=sys.stderr)

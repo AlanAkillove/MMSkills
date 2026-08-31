@@ -6,6 +6,12 @@
 
 ### Added
 
+- 统一阶段注册表 `schemas/stage-registry.json`，将 `distinctiveness_coach` 纳入默认模型前路径，并修正文档、路由脚本与终检顺序漂移；
+- 增加 pipeline state、decision、evidence、finding、model、experiment 和 AI use event 的机器可读 schema，以及跨审查 finding 去重/冲突协议和合并脚本；
+- 增加 `research-full`、`contest-standard`、`contest-fast` 运行档位，明确在时间压缩下仍不可移除的人工门和证据；
+- 增加候选模型人工门、全题目选题、背景熟悉防跳模和跨审查去重的行为级回归场景与正反响应 fixtures；
+- 明确项目定位为通用流程架构 + CUMCM-first 规则实现，避免把单赛事规则误写成通用规范。
+
 - 初始化开源项目骨架；
 - 建立全流程数模技能的总架构、反同质化设计、质量模型和分板块调研计划；
 - 建立 AI 使用详情披露的规则适配与证据追踪设计草案。

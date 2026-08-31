@@ -1,0 +1,14 @@
+{
+  "case_id": "finding-deduplication",
+  "status": "needs_human",
+  "human_gate": "required",
+  "finding_records": [
+    {"finding_id": "f-review-01", "source_skill": "modeling-paper-reviewer", "canonical_issue_key": "metric-definition-v1", "evidence_anchor_ids": ["p3-table2", "fig4-y"], "relation": "new"},
+    {"finding_id": "f-reader-02", "source_skill": "modeling-reader-experience-auditor", "canonical_issue_key": "metric-definition-v1", "evidence_anchor_ids": ["p3-table2", "fig4-y"], "relation": "supplement"},
+    {"finding_id": "f-term-03", "source_skill": "modeling-terminology-auditor", "canonical_issue_key": "metric-definition-v1", "evidence_anchor_ids": ["p3-table2", "fig4-y"], "relation": "supplement"}
+  ],
+  "canonical_findings": [
+    {"finding_id": "f-review-01", "status": "needs_human", "source_record_ids": ["f-review-01", "f-reader-02", "f-term-03"], "source_skills": ["modeling-paper-reviewer", "modeling-reader-experience-auditor", "modeling-terminology-auditor"], "evidence_anchor_ids": ["p3-table2", "fig4-y"]}
+  ],
+  "open_record_count": 1
+}

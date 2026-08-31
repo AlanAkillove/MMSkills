@@ -1,0 +1,28 @@
+{
+  "case_id": "model-choice-human-gate",
+  "status": "needs_human",
+  "human_gate": "required",
+  "decision": {"status": "pending", "adopted_option": null},
+  "candidate_cards": [
+    {
+      "model_id": "baseline-regression",
+      "name": "基线回归模型",
+      "plain_language_purpose": "先估计目标量与已观测变量的基本关系，作为后续比较基准。",
+      "fit": "输入变量和样本量目前足以支持初步比较，但非线性关系仍未知。",
+      "costs": ["解释能力有限", "需要检查残差和共线性"],
+      "risks": ["可能遗漏阈值效应"],
+      "unknowns": ["留出数据上的稳定性"],
+      "validation_priority": ["固定留出方案", "与简单均值基线比较"]
+    },
+    {
+      "model_id": "tree-ensemble",
+      "name": "树集成模型",
+      "plain_language_purpose": "捕捉变量之间的非线性和交互关系，用来检验基线遗漏的结构。",
+      "fit": "可能更贴合非线性，但需要足够样本和严格的留出验证。",
+      "costs": ["解释路径更复杂", "需要调参"],
+      "risks": ["小样本过拟合", "特征重要性不等于因果作用"],
+      "unknowns": ["不同随机种子下的波动"],
+      "validation_priority": ["重复留出或交叉验证", "敏感性分析"]
+    }
+  ]
+}

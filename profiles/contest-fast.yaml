@@ -1,0 +1,45 @@
+profile_id: contest-fast
+label: 比赛快速档
+purpose: 时间紧时快速形成可审查论文，同时保留核心证据和人工门
+principles_preserved:
+  - human_decision_gates
+  - evidence_before_prose
+  - topic_specificity
+  - reproducibility
+  - truthful_ai_disclosure
+artifact_policy:
+  state: one_handoff_bundle_plus_core_ledgers
+  checkpoint: every_human_gate
+  event_granularity: per_stage_summary_with_source_ids
+  retain_raw_local_logs: true
+  forbidden_compression:
+    - delete_core_evidence
+    - merge_unresolved_decisions
+    - infer_missing_ai_history
+    - omit_failed_validation
+review_policy:
+  lenses:
+    - substantive
+    - claim_evidence
+    - terminology
+    - reader_experience
+  conditional_lenses:
+    - ai_pattern
+    - anti_homogenization
+    - figure_table
+  max_post_draft_lenses: 2
+  selection_rule: choose_one_highest_risk_substantive_lens_and_one_reader_or_compliance_lens
+human_gates:
+  - topic_selection
+  - problem_familiarization
+  - problem_intake
+  - distinctiveness_coach
+  - assumption_ledger
+  - data_audit
+  - model_architect
+  - experiment_validator
+  - paper_architect
+  - draft
+  - ai_disclosure
+  - final_preflight
+  - process_freezer

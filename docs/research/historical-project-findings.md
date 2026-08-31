@@ -63,7 +63,7 @@
 
 历史项目中较稳定的协作分工是：人类作为 `Research Chair` 负责方向和最终确认，Agent 分别承担资料侦察、模型候选、实验工程、对抗审稿、论文编辑和合规记录等角色。状态机和账本比“记住整段聊天”更可靠。
 
-**设计要求**：采用 `INTAKE → RULES_PROFILE → QUESTION_MAP → BASELINE → MODEL_CANDIDATES → HUMAN_GATE → VALIDATION → PAPER → AUDIT → FREEZE` 的可回退流程，并将人类决定记录在 `decision_log.md`。
+**设计要求（早期简化表述）**：采用可回退且有人类决策门的流程，并将人类决定记录在 `decision_log.md`。该记录中的 `INTAKE → QUESTION_MAP → BASELINE → MODEL_CANDIDATES` 是当时的概念性缩写；当前精确阶段、依赖和顺序以 [`schemas/stage-registry.json`](../../schemas/stage-registry.json) 为准，已拆分选题、文献 orientation、背景熟悉、写前差异化、候选模型、审查和披露阶段。
 
 ## 8. 该归纳不能推出的结论
 

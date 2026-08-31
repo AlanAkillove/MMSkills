@@ -1,0 +1,12 @@
+{
+  "case_id": "familiarization-no-model-jump",
+  "status": "partial",
+  "human_gate": "required",
+  "understanding_status": "partial",
+  "model_selection_started": false,
+  "source_boundary": {"problem_statement": "read", "orientation_sources": "partial", "unread_materials": ["一份待核对的行业报告"]},
+  "rounds": [
+    {"round_id": "r1", "team_restatement": "对象是受资源约束影响的时序分配问题。", "differences": ["时间窗口定义仍有两种理解"], "corrections": [], "open_questions": ["窗口边界"]},
+    {"round_id": "r2", "team_restatement": "团队将每个时间窗口的需求与可用资源分开记录。", "differences": [], "corrections": ["澄清了观测量与决策量"], "open_questions": ["外部文献中的指标能否迁移"]}
+  ]
+}

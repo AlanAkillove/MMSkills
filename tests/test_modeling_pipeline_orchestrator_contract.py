@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import subprocess
 import sys
 from pathlib import Path
@@ -9,6 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 SKILL = ROOT / "skills" / "modeling-pipeline-orchestrator"
 FIXTURES = ROOT / "tests" / "fixtures" / "modeling-pipeline-orchestrator"
 SCRIPT = SKILL / "scripts" / "route_pipeline.py"
+REGISTRY = ROOT / "schemas" / "stage-registry.json"
 
 
 def run_route(input_path: Path, output_path: Path) -> subprocess.CompletedProcess[str]:
@@ -71,29 +73,23 @@ def test_multi_topic_entry_routes_to_selection_before_intake(tmp_path: Path):
 
 
 def test_pre_model_dependencies_keep_intake_after_familiarization():
-    source = (SKILL / "scripts" / "route_pipeline.py").read_text(encoding="utf-8")
-    assert '"literature_evidence", ("modeling-literature-evidence", ["topic_selection"]' in source
-    assert '"problem_familiarization", ("modeling-problem-familiarization", ["literature_evidence", "topic_selection"]' in source
-    assert '"problem_intake", ("modeling-problem-intake", ["problem_familiarization", "topic_selection"]' in source
+    registry = json.loads(REGISTRY.read_text(encoding="utf-8"))
+    stages = registry["stages"]
+    assert stages["literature_evidence"]["depends_on"] == ["topic_selection"]
+    assert stages["problem_familiarization"]["depends_on"] == ["literature_evidence", "topic_selection"]
+    assert stages["problem_intake"]["depends_on"] == ["problem_familiarization", "topic_selection"]
+    assert stages["distinctiveness_coach"]["depends_on"] == ["problem_intake", "problem_familiarization"]
+    assert "distinctiveness_coach" in registry["default_order"]
 
 
 def test_pre_model_graph_is_topologically_ordered():
-    source = (SKILL / "scripts" / "route_pipeline.py").read_text(encoding="utf-8")
-    positions = {
-        stage: source.index(f'("{stage}",')
-        for stage in (
-            "topic_selection",
-            "literature_evidence",
-            "problem_familiarization",
-            "problem_intake",
-            "assumption_ledger",
-            "data_audit",
-            "model_architect",
-        )
-    }
+    registry = json.loads(REGISTRY.read_text(encoding="utf-8"))
+    order = registry["default_order"]
+    positions = {stage: order.index(stage) for stage in order}
     assert positions["topic_selection"] < positions["literature_evidence"]
     assert positions["literature_evidence"] < positions["problem_familiarization"]
     assert positions["problem_familiarization"] < positions["problem_intake"]
+    assert positions["problem_intake"] < positions["distinctiveness_coach"] < positions["model_architect"]
     assert positions["problem_intake"] < positions["assumption_ledger"] < positions["model_architect"]
 
 
@@ -121,6 +117,28 @@ def test_route_uses_human_gate_action_when_no_stage_is_ready(tmp_path: Path):
     assert "READY: none" in result.stdout
     assert "Resolve the listed human gates" in text
     assert "Open the ready stage's input artifacts" not in text
+
+
+def test_route_rejects_unknown_run_profile(tmp_path: Path):
+    source = FIXTURES / "initial_state.json"
+    output = tmp_path / "unknown-profile.md"
+    result = subprocess.run(
+        [
+            sys.executable,
+            str(SCRIPT),
+            "--input",
+            str(source),
+            "--output",
+            str(output),
+            "--profile",
+            "made-up-profile",
+        ],
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    assert result.returncode != 0
+    assert "unknown run profile" in result.stderr
 
 
 def test_negative_fixtures_are_explicit():

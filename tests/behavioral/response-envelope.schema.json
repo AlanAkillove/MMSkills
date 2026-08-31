@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Behavioral regression response envelope",
+  "type": "object",
+  "required": ["case_id", "status", "human_gate"],
+  "properties": {
+    "case_id": {"type": "string"},
+    "status": {"type": "string"},
+    "human_gate": {"type": "string"},
+    "decision": {"type": "object"},
+    "candidate_cards": {"type": "array"},
+    "topic_cards": {"type": "array"},
+    "rounds": {"type": "array"},
+    "finding_records": {"type": "array"},
+    "canonical_findings": {"type": "array"}
+  },
+  "additionalProperties": true
+}

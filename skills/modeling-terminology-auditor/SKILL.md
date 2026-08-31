@@ -28,7 +28,7 @@ description: "审查数学建模论文及其代码、图表中的术语、缩写
 
 ## 输入与读取顺序
 
-1. 固定版本和范围：题面/问题地图、假设账本、数据字典、模型注册、论文草稿、代码、图表源文件、引用/标准来源，以及未读取材料。
+1. 固定版本和范围：题面/问题地图、假设账本、数据字典、模型注册、论文草稿、代码、图表源文件、引用/标准来源，以及未读取材料；先读取已有 `finding_register.jsonl`，避免把同一概念冲突重复开单。
 2. 先建立对象、变量、指标、方法和结果的概念清单，再扫描词语；不要脱离语境按词频判定。
 3. 读取已有术语/符号/单位表；若没有则按 [terminology-schema.md](references/terminology-schema.md) 建立 `terminology_ledger.md`。
 4. 需要决定新词是否必要时读取 [term-decision-rubric.md](references/term-decision-rubric.md)；需要核对跨文件一致性时读取 [cross-artifact-consistency.md](references/cross-artifact-consistency.md)。
@@ -72,7 +72,10 @@ description: "审查数学建模论文及其代码、图表中的术语、缩写
 
 1. `terminology_ledger.md`：概念 ID、规范名、变体、定义、来源、符号、单位、范围和状态；
 2. `terminology_audit.md`：同义漂移、异义复用、定义缺失、高承诺滥用、跨产物冲突和最小修复建议；
-3. 人工确认队列：新术语、标准术语选择、概念是否相同、符号/单位变化和需要作者声音的表达决策。
+3. `terminology_findings.jsonl`：遵守共享 `finding.schema.json` 的结构化发现；
+4. 人工确认队列：新术语、标准术语选择、概念是否相同、符号/单位变化和需要作者声音的表达决策。
+
+如术语冲突以 JSONL finding 交接，使用仓库 [`schemas/finding.schema.json`](../../schemas/finding.schema.json) 的共同字段，并在 `deduplication` 中注明是新问题、补充证据还是与主张/阅读审查冲突；术语账本本身仍按本 skill 的概念字段维护。
 
 详细字段见 [terminology-schema.md](references/terminology-schema.md)。如果项目已有共享术语账本，必须在原账本上更新，不另建互相冲突的词表。
 

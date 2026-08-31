@@ -4,7 +4,7 @@
 
 本项目将 Agent 定位为数学建模团队的协作工具：人类负责核心建模判断与最终提交，Agent 负责问题理解、资料核验、数据审计、候选方案整理、实验记录、论文写作辅助、审稿式检查、语言自然化、格式预检和 AI 使用披露，并把这些工作组织成可追踪、可复核、可移交的流程。
 
-> 当前状态：26 个 skills 已完成首轮契约/结构验证；新增的选题、背景熟悉和文献 orientation 阶段还需要在脱敏真实项目中回归；规则 profile、TeX/PDF 渲染、披露 PDF 与最终冻结产物仍需按具体项目由人类确认。
+> 当前状态：26 个 skills 已完成首轮契约/结构验证；项目进入“架构收敛与行为回归”阶段。当前采用“通用流程架构 + CUMCM-first 规则实现”：共享阶段注册表、finding/schema、运行档位和行为场景已建立，但真实项目串联、赛事规则时效性、TeX/PDF 渲染、披露 PDF 与最终冻结产物仍需按具体项目由人类确认。
 
 ## 设计原则
 
@@ -27,6 +27,7 @@
   -> 人类确认主选/备选题目
   -> 题意拆解与问题地图
   -> 背景/文献学习与多轮理解确认
+  -> 写前差异化路径与题目锚点登记
   -> 数据/资料审计
   -> 基线与候选模型
   -> 人类模型决策门
@@ -45,6 +46,8 @@
 skills/       可被 Agent 调用的专项技能；每个技能独立目录、独立 SKILL.md
 references/   共享规则、检查表、术语与证据规范
 templates/    项目状态、日志、报告和披露材料模板
+schemas/      跨 skill 的机器可读状态、证据、决策、finding、模型和实验契约
+profiles/     research-full、contest-standard、contest-fast 运行档位
 scripts/      确定性辅助脚本，例如结构检查、日志转换、PDF 生成与验证
 tests/        技能契约测试、反例和脱敏 fixtures
 docs/         架构、研究记录、决策记录与质量模型
@@ -104,7 +107,7 @@ Agent 应先根据自身宿主能力选择项目级、用户级、会话级或�
 
 ## 当前工作方式
 
-本项目按“总设计 → 分板块调研 → 契约冻结 → 技能实现 → fixtures 测试 → 真实项目只读回归 → 发布准备”的顺序推进。当前已完成全流程首轮实现，并补齐“选题—题意—文献学习—理解确认”的前置链；新增前置链仍需用脱敏真实项目回归，后续继续维护技能契约、扩充赛事 profile，并避免把真实项目内容写回技能库。
+本项目按“总设计 → 分板块调研 → 契约冻结 → 技能实现 → fixtures 测试 → 行为级回归 → 脱敏真实项目只读回归 → 发布准备”的顺序推进。当前已完成全流程首轮实现，并补齐“选题—题意—背景熟悉—文献学习—理解确认—写前差异化”的前置链；本轮重点是统一阶段注册表和跨审查 finding，减少重复意见与文档漂移。规则实现目前以 CUMCM 为首个具体适配对象，其他赛事必须另建并核验 profile，不能从 CUMCM 自动推断。
 
 详见：
 
@@ -116,6 +119,10 @@ Agent 应先根据自身宿主能力选择项目级、用户级、会话级或�
 - [AI 使用披露设计草案](docs/ai-disclosure-design.md)
 - [反同质化设计草案](docs/anti-homogenization-design.md)
 - [质量模型与问题分类](docs/quality-model.md)
+- [共享机器契约与阶段注册表](schemas/README.md)
+- [运行档位](profiles/README.md)
+- [行为级回归场景](tests/behavioral/README.md)
+- [跨宿主兼容性烟雾矩阵](tests/compatibility/README.md)
 - [跨 Agent 安装教程与安装提示词](docs/agent-skill-installation.md)
 - [TeX 模板设计与赛事排版调研](docs/tex-template-design.md)
 - [TeX 通用模板](templates/tex/README.md)

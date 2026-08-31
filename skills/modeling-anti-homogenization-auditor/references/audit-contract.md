@@ -1,5 +1,7 @@
 # 反同质化审计契约
 
+本契约的 YAML 记录是角色视图；跨审查 JSONL 记录还必须满足仓库根目录 [`schemas/finding.schema.json`](../../../schemas/finding.schema.json)，并通过 `deduplication` 与其他透镜关联。`risk` 只表示审计观察状态，不表示原创性或 AI 来源结论。
+
 ## 范围 manifest
 
 ```yaml

@@ -1,0 +1,35 @@
+matrix_version: "0.1"
+source_contract:
+  required_files:
+    - SKILL.md
+    - references
+    - schemas
+    - profiles
+  required_states:
+    - copied
+    - discovered
+    - activated
+    - verified
+    - partial
+    - blocked
+hosts:
+  - host_id: codex
+    adapter_mode: native-standard-or-project
+    evidence_source: host-specific-current-documentation
+    smoke_actions: [discover, activate, run_behavior_case, verify_artifact]
+    status: fixture_only
+  - host_id: claude-code
+    adapter_mode: native-standard-or-native-adapter
+    evidence_source: host-specific-current-documentation
+    smoke_actions: [discover, activate, run_behavior_case, verify_artifact]
+    status: fixture_only
+  - host_id: gemini-cli
+    adapter_mode: native-standard-or-native-adapter
+    evidence_source: host-specific-current-documentation
+    smoke_actions: [discover, activate, run_behavior_case, verify_artifact]
+    status: fixture_only
+  - host_id: generic-agent
+    adapter_mode: project-instructions-or-prompt-only
+    evidence_source: host-capability-probe
+    smoke_actions: [map_source_contract, report_missing_capabilities, verify_artifact]
+    status: fixture_only

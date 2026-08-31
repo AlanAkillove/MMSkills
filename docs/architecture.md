@@ -14,30 +14,29 @@ MathModelingSkills 是一个面向数学建模论文生产过程的 Agent skill 
 ## 2. 生命周期状态机
 
 ```text
-INTAKE
-  -> RULES_PROFILE
+RULES_PROFILE
   -> TOPIC_SELECTION
-  -> LITERATURE_ORIENTATION
+  -> LITERATURE_EVIDENCE (orientation)
   -> PROBLEM_FAMILIARIZATION
-  -> QUESTION_MAP
+  -> PROBLEM_INTAKE
+  -> DISTINCTIVENESS_COACH
   -> (ASSUMPTION_LEDGER || DATA_AUDIT)
-  -> BASELINE
-  -> MODEL_CANDIDATES
-  -> HUMAN_MODEL_GATE
-  -> IMPLEMENTATION
-  -> VALIDATION
-  -> CLAIM_EVIDENCE_FREEZE
-  -> PAPER_STRUCTURE
+  -> MODEL_ARCHITECT
+  -> EXPERIMENT_VALIDATOR
+  -> PAPER_ARCHITECT
   -> FIGURE_DESIGN
+  -> (FIGURE_TABLE || CLAIM_EVIDENCE || TERMINOLOGY)
   -> DRAFT
-  -> SUBSTANTIVE_REVIEW
-  -> ANTI_HOMOGENIZATION_AUDIT
-  -> READER_EXPERIENCE_AUDIT
-  -> NATURALIZATION
-  -> FINAL_PREFLIGHT
+  -> PAPER_REVIEW
+  -> (AI_PATTERN || ANTI_HOMOGENIZATION || READER)
+  -> NATURALIZER
+  -> SUPPORT
   -> AI_DISCLOSURE
-  -> HUMAN_FINAL_FREEZE
+  -> FINAL_PREFLIGHT
+  -> PROCESS_FREEZER
 ```
+
+上图是编排器默认图的阅读索引；阶段 ID、依赖、人工门和顺序以 [`schemas/stage-registry.json`](../schemas/stage-registry.json) 为唯一来源。`TOPIC_SELECTION`、`LITERATURE_EVIDENCE` 和 `PROBLEM_FAMILIARIZATION` 不应被合并成一个“背景分析”阶段：它们分别解决全题目选取、来源学习和团队理解确认。
 
 状态不是简单的章节清单，而是每个阶段必须产出的可复核中间材料。任何阶段发现上游证据不足时，应回退到相应阶段，而不是用语言润色掩盖缺口。
 
@@ -58,6 +57,7 @@ INTAKE
 - `modeling-assumption-ledger`
 - `modeling-model-architect`
 - `modeling-experiment-validator`
+- `modeling-distinctiveness-coach`
 
 ### 3.3 论文与质量层
 
@@ -115,6 +115,8 @@ project_state/
 ├── tex_build_manifest.yaml
 ├── tex_layout_audit.md
 ├── issue_log.md
+├── finding_register.jsonl
+├── run_profile.yaml
 ├── ai_logs/
 │   ├── usage.jsonl
 │   ├── session_manifest.json
@@ -134,6 +136,7 @@ project_state/
 - 每个术语都有定义、首次出现位置、是否必要以及是否与已有术语冲突；
 - 每项差异化设计都有题目依据、技术功能、验证证据和人类决策记录；
 - 每条 AI 使用事件都有来源锚点、用途、输出采纳情况和人类验证状态；
+- 审稿、术语、图表、阅读体验、AI 模板化和反同质化发现共享 `finding.schema.json`，相同底层问题保留来源但只形成一个 canonical finding；
 - 不确定字段不得默认为“已确认”。
 
 ## 5. 人类决策门
@@ -179,9 +182,15 @@ project_state/
 
 输出质量不以“更复杂、更像论文、更高级”为标准，而以正确性、可解释性、读者可读性、可复核性、题目适配性和规则适配性为标准。
 
-## 8. 研究与实现顺序
+## 8. 机器契约与运行档位
 
-1. 先冻结共享 schema、质量模型、反同质化检查项和规则适配接口；
+共享机器可读契约位于 [`schemas/`](../schemas/)，其中 `stage-registry.json` 是阶段图的唯一来源，`finding.schema.json` 是跨审查共同问题的 envelope。Markdown 模板服务于讨论，不能替代结构化状态；修改共享字段时必须同步更新 skill、fixtures 和迁移说明。
+
+项目可按 [`profiles/`](../profiles/) 选择 `research-full`、`contest-standard` 或 `contest-fast`。档位只压缩中间产物和审查组合，不移除核心人工门、失败证据、未决事项、AI 使用事实或最终冻结。
+
+## 9. 研究与实现顺序
+
+1. 先冻结阶段注册表、共享 schema、finding 去重协议、质量模型、反同质化检查项和规则适配接口；
 2. 再实现前置闭环：全题目盘点 → 选题人工门 → 题意地图 → 文献学习 → 多轮理解确认；
 3. 再实现最小论文闭环：题意 → 证据 → 论文 → 审查 → 自然化 → 预检；
 4. 在写作前接入差异化设计、模型选择和作者决策记录；

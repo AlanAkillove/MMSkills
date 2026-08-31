@@ -1,5 +1,7 @@
 # 审稿 finding 契约
 
+本文件的 YAML 示例保留审稿角色的阅读友好字段；跨 skill 传递的 JSONL finding 必须同时满足仓库根目录 [`schemas/finding.schema.json`](../../../schemas/finding.schema.json)。`lens`、`blocking` 和本角色的关联 ID 是补充字段，去重关系使用 `deduplication` 对象。
+
 ## 评审范围 manifest
 
 ```yaml
@@ -47,6 +49,9 @@ finding:
   acceptance_test: null
   human_status: unreviewed
   decision_id: null
+  deduplication:
+    canonical_issue_key: null
+    relation: new | duplicate | supplement | upgrade | downgrade | conflict
   notes: null
 ```
 

@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/AlanAkillove/MMSkills/schemas/experiment.schema.json",
+  "title": "Reproducible experiment record",
+  "type": "object",
+  "required": ["experiment_id", "question", "model_id", "data_version", "code_entry", "parameters", "outputs", "status", "validation_status"],
+  "properties": {
+    "experiment_id": {"type": "string"},
+    "question": {"type": "string"},
+    "model_id": {"type": "string"},
+    "data_version": {"type": "string"},
+    "code_entry": {"type": "string"},
+    "parameters": {"type": "object"},
+    "random_seed": {"type": ["integer", "string", "null"]},
+    "comparator_ids": {"type": "array", "items": {"type": "string"}},
+    "outputs": {"type": "array", "items": {"type": "string"}},
+    "status": {"enum": ["planned", "running", "completed", "failed", "stale", "unknown"]},
+    "validation_status": {"enum": ["unassessed", "partial", "checked", "recomputed", "rerun", "conflict"]},
+    "claim_ids": {"type": "array", "items": {"type": "string"}},
+    "human_confirmation": {"enum": ["pending", "confirmed", "rejected", "not_available"]},
+    "notes": {"type": "string"}
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,13 @@
+{
+  "case_id": "topic-selection-full-inventory",
+  "status": "needs_human",
+  "human_gate": "required",
+  "all_topics_read": true,
+  "topic_cards": [
+    {"topic_id": "A", "observed_evidence": ["题面已读"], "fit": "与团队数据经验部分匹配", "risks": ["需要补背景"], "unknowns": ["数据入口"], "workload": "medium"},
+    {"topic_id": "B", "observed_evidence": ["题面已读"], "fit": "建模对象清晰", "risks": ["优化约束较多"], "unknowns": ["参数范围"], "workload": "high"},
+    {"topic_id": "C", "observed_evidence": ["题面已读"], "fit": "可快速建立基线", "risks": ["差异化空间待核实"], "unknowns": ["外部资料授权"], "workload": "medium"},
+    {"topic_id": "D", "observed_evidence": ["题面已读"], "fit": "与成员领域经验较远", "risks": ["理解成本高"], "unknowns": ["文献可得性"], "workload": "high"}
+  ],
+  "selection_decision": {"status": "pending", "human_confirmation": "pending", "main_topic": null, "backup_topic": null}
+}

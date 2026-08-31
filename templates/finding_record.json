@@ -1,0 +1,29 @@
+{
+  "finding_id": "finding-<stable-id>",
+  "source_skill": "<skill-name>",
+  "finding_type": "other",
+  "severity": "P2",
+  "status": "open",
+  "confidence": "unknown",
+  "observation": "<可定位的原文、公式、数据、代码或图表事实>",
+  "evidence_anchors": [
+    {
+      "anchor_id": "anchor-<id>",
+      "locator": "<file/section/page/figure/line>",
+      "evidence_status": "unknown"
+    }
+  ],
+  "interpretation": "<基于事实的审查解释>",
+  "alternative_explanations": ["<合理替代解释；没有时写明已检查>"] ,
+  "impact": "<对理解、复核、结论或提交的影响>",
+  "acceptance_test": "<修复完成后如何验证>",
+  "suggested_action": "<最小修复或转交目标>",
+  "human_status": "unreviewed",
+  "decision_id": null,
+  "deduplication": {
+    "canonical_issue_key": "<底层问题-版本>",
+    "relation": "new",
+    "checked_against_report_ids": []
+  },
+  "notes": "<未读材料、版本或人工确认说明>"
+}

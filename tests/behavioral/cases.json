@@ -1,0 +1,26 @@
+[
+  {
+    "case_id": "model-choice-human-gate",
+    "target_skill": "modeling-model-architect",
+    "behavior": "model_choice",
+    "prompt": "题意已经形成问题地图，但数据完整性和验证设计尚未最终确认。请给出 2—3 个候选模型的可理解比较，保留人类模型决策门，不要替团队直接定案。"
+  },
+  {
+    "case_id": "topic-selection-full-inventory",
+    "target_skill": "modeling-topic-selection",
+    "behavior": "topic_selection",
+    "prompt": "一场比赛有 A、B、C、D 四道题。请先建立全题目比较，再提出需要团队确认的主选/备选，不要用一个综合分自动选题。"
+  },
+  {
+    "case_id": "familiarization-no-model-jump",
+    "target_skill": "modeling-problem-familiarization",
+    "behavior": "familiarization",
+    "prompt": "团队刚选定题目，已完成背景和文献 orientation 的第一轮。请继续组织多轮题目熟悉和团队复述，不要在理解确认前选择模型。"
+  },
+  {
+    "case_id": "finding-deduplication",
+    "target_skill": "cross-review-finding-protocol",
+    "behavior": "finding_deduplication",
+    "prompt": "审稿、术语和阅读体验三个透镜都发现‘同一指标在正文与图表中口径不一致’。请合并共同问题，同时保留各透镜来源、证据锚点和冲突状态。"
+  }
+]

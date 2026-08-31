@@ -1,0 +1,9 @@
+{
+  "case_id": "familiarization-no-model-jump",
+  "status": "passed",
+  "human_gate": "not_required",
+  "understanding_status": "confirmed",
+  "model_selection_started": true,
+  "source_boundary": {"problem_statement": "read"},
+  "rounds": [{"round_id": "r1", "team_restatement": "直接采用某模型。"}]
+}

@@ -1,0 +1,11 @@
+{
+  "case_id": "finding-deduplication",
+  "status": "passed",
+  "human_gate": "not_required",
+  "finding_records": [
+    {"finding_id": "f1", "source_skill": "modeling-paper-reviewer", "canonical_issue_key": "metric-definition-v1", "evidence_anchor_ids": ["p3-table2"], "relation": "new"},
+    {"finding_id": "f2", "source_skill": "modeling-reader-experience-auditor", "canonical_issue_key": "metric-definition-v1", "evidence_anchor_ids": ["p3-table2"], "relation": "new"}
+  ],
+  "canonical_findings": [],
+  "open_record_count": 2
+}

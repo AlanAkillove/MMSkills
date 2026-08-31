@@ -1,0 +1,8 @@
+{
+  "case_id": "topic-selection-full-inventory",
+  "status": "passed",
+  "human_gate": "not_required",
+  "all_topics_read": false,
+  "topic_cards": [{"topic_id": "A", "fit": "最好"}, {"topic_id": "B", "fit": "一般"}],
+  "recommendation": {"winner": "A", "total_score": 9}
+}

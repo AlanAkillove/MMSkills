@@ -9,9 +9,10 @@
 | literature_evidence | modeling-literature-evidence | topic_selection（orientation 模式）或 problem_intake（citation-audit 模式） | source register + orientation ledger（orientation 模式） | 来源阅读与迁移边界 |
 | problem_familiarization | modeling-problem-familiarization | literature_evidence、topic_selection | background map + understanding checkpoint | 共同理解和未决边界 |
 | problem_intake | modeling-problem-intake | problem_familiarization、topic_selection（单题须显式 skipped） | question map | 正式题意/问题分析 |
+| distinctiveness_coach | modeling-distinctiveness-coach | problem_intake、problem_familiarization | distinctiveness ledger | 题目锚点和差异化路径 |
 | assumption_ledger | modeling-assumption-ledger | problem_intake、problem_familiarization | assumption ledger | 关键假设 |
 | data_audit | modeling-data-audit | problem_intake、problem_familiarization、数据入口 | data audit | 清洗/切分/授权 |
-| model_architect | modeling-model-architect | problem_intake、problem_familiarization、assumption、data（适用时，须显式 skipped） | model registry + candidate cards/decision brief + understanding check | 模型/目标/约束、用户解释与人工决策支持 |
+| model_architect | modeling-model-architect | problem_intake、problem_familiarization、distinctiveness_coach、assumption、data（适用时，须显式 skipped） | model registry + candidate cards/decision brief + understanding check | 模型/目标/约束、用户解释与人工决策支持 |
 | experiment_validator | modeling-experiment-validator | model、data（适用时） | experiment registry | 实验与结论充分性 |
 | paper_architect | modeling-paper-architect | question、model、experiment | paper blueprint | 结构与主张 |
 | figure_design | modeling-figure-designer | paper/model/experiment/claim plan | design brief + source/render | 图表问题、图型、视觉系统和制作 |
@@ -23,7 +24,7 @@
 | ai_pattern | modeling-ai-pattern-reviewer | draft | pattern report | 采用哪些建议 |
 | anti_homogenization | modeling-anti-homogenization-auditor | draft + distinctiveness | distinctiveness audit | 题目特异性 |
 | reader | modeling-reader-experience-auditor | rendered draft | reader audit | 是否可读 |
-| naturalizer | modeling-paper-naturalizer | accepted review + locked ledgers | revised text/changelog | 修改边界 |
+| naturalizer | modeling-paper-naturalizer | accepted review + AI/反同质化/阅读报告 + locked ledgers | revised text/changelog | 修改边界 |
 | support | modeling-support-materials-auditor | code/data/appendix + paper | support manifest | 支撑包 |
 | ai_disclosure | modeling-ai-use-disclosure | authorized history + rules | disclosure PDF | 真实披露 |
 | final_preflight | modeling-final-preflight | all relevant audits | release report | 最终提交 |
@@ -31,7 +32,7 @@
 
 ## 可并行分支
 
-选题比较必须先覆盖全场题目。选题后先以 orientation 模式建立背景/方法学习账本，再由题目熟悉 skill 组织多轮讲解与理解确认；理解确认后才运行正式 problem_intake，形成问题地图。之后 assumption_ledger 与 data_audit 在各自输入完整时可并行；figure_design 在 paper blueprint、模型和实验结果可用后运行，figure_table 在设计和证据输入形成后运行；claim_evidence、terminology 可与图表分支并行；paper_review 后的 ai_pattern、anti_homogenization、reader 可分别运行，再由作者决定自然化范围。并行不意味着共享文件可同时改写。
+选题比较必须先覆盖全场题目。选题后先以 orientation 模式建立背景/方法学习账本，再由题目熟悉 skill 组织多轮讲解与理解确认；理解确认后才运行正式 problem_intake，形成问题地图。问题地图之后先运行 distinctiveness_coach 保存题目锚点，再由 assumption_ledger 与 data_audit 在各自输入完整时并行；model_architect 读取差异化账本后才能形成候选模型。figure_design 在 paper blueprint、模型和实验结果可用后运行，figure_table 在设计和证据输入形成后运行；claim_evidence、terminology 可与图表分支并行；paper_review 后的 ai_pattern、anti_homogenization、reader 可分别运行，再由作者决定自然化范围。并行不意味着共享文件可同时改写；共同 finding 必须按 finding-protocol 合并。
 
 ## 返工影响矩阵
 

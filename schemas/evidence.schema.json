@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/AlanAkillove/MMSkills/schemas/evidence.schema.json",
+  "title": "Evidence record",
+  "type": "object",
+  "required": ["evidence_id", "evidence_type", "source_ref", "locator", "status", "scope", "verification_status"],
+  "properties": {
+    "evidence_id": {"type": "string", "minLength": 1},
+    "evidence_type": {"enum": ["problem_statement", "equation", "derivation", "data", "experiment", "code", "figure", "table", "citation", "rule", "decision", "other"]},
+    "source_ref": {"type": "string"},
+    "locator": {"type": "string"},
+    "excerpt_or_summary": {"type": "string"},
+    "status": {"enum": ["direct", "indirect", "partial", "unknown", "conflict"]},
+    "scope": {"type": "string"},
+    "verification_status": {"enum": ["unverified", "checked", "recomputed", "rerun", "human_confirmed", "rejected"]},
+    "supports": {"type": "array", "items": {"type": "string"}},
+    "version_hash": {"type": ["string", "null"]},
+    "notes": {"type": "string"}
+  },
+  "additionalProperties": true
+}

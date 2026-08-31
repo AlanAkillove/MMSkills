@@ -28,7 +28,7 @@ description: "从结构、句式、词汇、论证和图表层面识别数学建
 
 ## 输入与读取顺序
 
-1. 固定论文版本/hash、题面/问题地图、差异化账本、主张—证据矩阵、术语账本、图表注册和未读取材料。
+1. 固定论文版本/hash、题面/问题地图、差异化账本、主张—证据矩阵、术语账本、图表注册和未读取材料；先读取已有 `finding_register.jsonl`，避免重复报告已登记问题。
 2. 先从摘要、目录/章节结构、各节开头结尾、结论和图表说明建立信息架构，再看句式和词汇；不要把局部词频当作全篇结论。
 3. 按 [signal-taxonomy.md](references/signal-taxonomy.md) 从结构、句法、词汇、论证和图表五个层面抽取信号；每条至少带两个原文位置或一个位置加对照证据。遇到重复的自我免责/元话语时，读取共享的[防御性声明处理协议](../../references/defensive-statement-protocol.md)，区分无信息的声明簇与必要的范围、局限和合规说明。
 4. 按 [pattern-audit-protocol.md](references/pattern-audit-protocol.md) 检查替代解释、题目特异性和修复优先级；需要审计研究依据时再读取 [research-basis.md](references/research-basis.md)。
@@ -54,7 +54,7 @@ description: "从结构、句式、词汇、论证和图表层面识别数学建
 
 ### 3. 逐条记录而不是贴总标签
 
-每条信号写清原文位置、重复/对照位置、具体模式、为什么会增加阅读摩擦或抹平题目差异、合理替代解释、置信度（`high/medium/low`）和严重性（`P0–P3`）。同一底层问题的多个表象要合并，不能为了数量重复报错。
+每条信号写清原文位置、重复/对照位置、具体模式、为什么会增加阅读摩擦或抹平题目差异、合理替代解释、置信度（`high/medium/low`）和严重性（`P0–P3`）。输出 JSONL 时遵守仓库 [`schemas/finding.schema.json`](../../schemas/finding.schema.json)，并在 `deduplication` 中说明与已有 finding 的关系；同一底层问题的多个表象要合并，不能为了数量重复报错。
 
 ### 4. 回到题目和证据
 
@@ -66,7 +66,7 @@ description: "从结构、句式、词汇、论证和图表层面识别数学建
 
 ## 最低交付物
 
-默认生成 `ai_pattern_report.md`，至少包括：
+默认生成 `ai_pattern_report.md`，并在适用时生成 `ai_pattern_findings.jsonl`；至少包括：
 
 - 审查范围、版本、读者任务和未读取材料；
 - 结构/句法/词汇/论证/图表五层的观察信号；

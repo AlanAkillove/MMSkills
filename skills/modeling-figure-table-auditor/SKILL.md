@@ -19,7 +19,7 @@ description: "审计数模论文图表的证据角色、数据/单位/图例/标
 
 ## 输入与读取顺序
 
-1. 固定论文、图表、代码、数据、实验输出和渲染件版本/hash；确认目标赛事/读者/匿名要求；
+1. 固定论文、图表、代码、数据、实验输出和渲染件版本/hash；确认目标赛事/读者/匿名要求；读取已有 `finding_register.jsonl`，避免把同一数字/标签冲突重复计数；
 2. 读取图表注册、`paper_blueprint`、`claim_evidence_matrix`、`experiment_registry`、数据 manifest 和模型/术语账本；
 3. 逐张读取图/表、图注、正文前后文、公式、数据来源、生成代码/命令和输出日志；
 4. 有 PDF/图片时执行文本与视觉双层检查；没有渲染件时只做可读源/元数据审计并写未评估范围；
@@ -75,8 +75,10 @@ figure_id | figure_type | claim_ids | evidence_ids | experiment_ids
 location | source_data_ids | source_code_entry | version_hash | status
 observation | evidence_anchors | issue_type | impact | severity
 minimal_action | acceptance_test | confidence | handoff
-human_status | decision_id | notes
+human_status | decision_id | deduplication | notes
 ```
+
+跨审查 JSONL 以仓库 [`schemas/finding.schema.json`](../../schemas/finding.schema.json) 为共同 envelope；图表专属字段保留在本表中。若同一问题已由主张或审稿透镜登记，使用 `supplement`/`conflict`，不要只因 figure_id 不同而复制开放 finding。
 
 `status` 使用 `verified/partial/unassigned/conflict/unknown/unassessed`；`issue_type` 可为 `data_mismatch/unit_or_label/unsupported_claim/missing_source/readability/caption/cross_reference/privacy/other`。
 
@@ -95,7 +97,7 @@ P0/P1 未关闭时停止美化图表和润色结论，先核对数据/实验/主
 
 1. `figure_table_registry.md`：图表目的、来源、主张、读者任务和版本；
 2. `figure_table_audit.md`：逐图/表发现、证据、严重性、视觉状态和转交；
-3. `figure_table_findings.jsonl`：结构化 finding；
+3. `figure_table_findings.jsonl`：遵守共享 `finding.schema.json` 的结构化 finding；
 4. `figure_reproduction_manifest.yaml`：数据/代码/命令/输出 hash 和复现状态；
 5. `figure_open_questions.md`：缺来源、冲突、人工决定和未评估范围。
 

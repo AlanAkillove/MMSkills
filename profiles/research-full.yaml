@@ -1,0 +1,39 @@
+profile_id: research-full
+label: 完整研究档
+purpose: 需要完整留痕、复盘和跨会话交接的数模项目
+principles_preserved:
+  - human_decision_gates
+  - evidence_before_prose
+  - topic_specificity
+  - reproducibility
+  - truthful_ai_disclosure
+artifact_policy:
+  state: separate_stage_artifacts
+  checkpoint: every_stage_and_major_revision
+  event_granularity: per_source_or_interaction
+  retain_raw_local_logs: true
+review_policy:
+  lenses:
+    - substantive
+    - claim_evidence
+    - terminology
+    - figure_table
+    - ai_pattern
+    - anti_homogenization
+    - reader_experience
+  max_post_draft_lenses: all
+human_gates:
+  - topic_selection
+  - problem_familiarization
+  - problem_intake
+  - distinctiveness_coach
+  - assumption_ledger
+  - data_audit
+  - model_architect
+  - experiment_validator
+  - paper_architect
+  - claim_evidence
+  - draft
+  - ai_disclosure
+  - final_preflight
+  - process_freezer

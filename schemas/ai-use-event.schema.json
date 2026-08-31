@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/AlanAkillove/MMSkills/schemas/ai-use-event.schema.json",
+  "title": "AI use event",
+  "type": "object",
+  "required": ["event_id", "event_family", "source_ids", "stage", "tool", "purpose", "input_scope", "output_summary", "adoption", "human_modification", "human_verification", "substantive_risk", "evidence_level", "record_status", "artifact_refs", "rule_refs"],
+  "properties": {
+    "event_id": {"type": "string"},
+    "event_family": {"enum": ["problem_understanding", "literature_or_source", "solution_candidate", "code_or_computation", "figure_or_table", "result_interpretation", "structure_planning", "language_polish", "format_check", "disclosure", "other"]},
+    "source_ids": {"type": "array", "items": {"type": "string"}},
+    "stage": {"type": "string"},
+    "tool": {
+      "type": "object",
+      "required": ["name", "developer", "version_or_model", "identity_status"],
+      "properties": {
+        "name": {"type": "string"},
+        "developer": {"type": "string"},
+        "version_or_model": {"type": "string"},
+        "identity_status": {"enum": ["confirmed", "partially_known", "unknown", "conflict"]}
+      },
+      "additionalProperties": true
+    },
+    "purpose": {"type": "string"},
+    "input_scope": {"type": "string"},
+    "output_summary": {"type": "string"},
+    "prompt_status": {"enum": ["complete", "partial", "summary_only", "unavailable"]},
+    "adoption": {"enum": ["not_adopted", "partially_adopted", "adopted_after_edit", "adopted_as_is", "unclear", "not_applicable"]},
+    "human_modification": {"enum": ["none", "minor", "substantial", "rewrote", "unknown"]},
+    "human_verification": {"enum": ["not_needed", "checked_against_source", "recomputed", "rerun_code", "cross_checked", "author_reviewed", "pending", "unknown"]},
+    "substantive_risk": {"enum": ["none", "language_only", "supporting", "modeling_relevant", "core_decision", "conclusion_relevant", "unknown"]},
+    "evidence_level": {"enum": ["E3", "E2", "E1", "E0"]},
+    "record_status": {"enum": ["confirmed", "proposed", "partial_history", "conflict", "unknown", "privacy_blocked"]},
+    "artifact_refs": {"type": "array", "items": {"type": "string"}},
+    "rule_refs": {"type": "array", "items": {"type": "string"}},
+    "human_confirmation": {"enum": ["pending", "confirmed", "rejected", "not_available"]},
+    "verification_note": {"type": "string"},
+    "notes": {"type": "string"}
+  },
+  "additionalProperties": true
+}

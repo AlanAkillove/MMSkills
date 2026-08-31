@@ -1,0 +1,9 @@
+{
+  "case_id": "model-choice-human-gate",
+  "status": "passed",
+  "human_gate": "not_required",
+  "decision": {"status": "confirmed", "adopted_option": "tree-ensemble", "reasoning": "综合评分最高"},
+  "candidate_cards": [
+    {"model_id": "tree-ensemble", "name": "树集成", "overall_score": 92, "recommendation": true}
+  ]
+}

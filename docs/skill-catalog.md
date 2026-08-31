@@ -2,7 +2,7 @@
 
 这是当前技能目录和优先级记录。优先级依据“对后续返工的影响 × 可跨论文复用性 × 可测试性”确定。反同质化不是最后的装饰检查，而是从题意拆解和模型选择阶段开始的横切能力。
 
-当前进度：现有技能与新增的 `modeling-topic-selection`、`modeling-problem-familiarization` 已完成首轮设计和实现；前置选题、文献 orientation 和多轮理解阶段的真实项目回归仍需补做。TeX skill 的契约测试、模板编译和 PDF 渲染验证随对应变更执行。
+当前进度：现有技能与新增的 `modeling-topic-selection`、`modeling-problem-familiarization` 已完成首轮设计和实现；本轮优先收敛共享阶段注册表、finding/schema、行为回归和运行档位，而不是继续扩充技能数量。前置链和完整串联的脱敏真实项目回归仍需补做。当前规则实现以 CUMCM 为首个具体适配对象。
 
 ## P0：先做最小闭环
 
@@ -35,7 +35,6 @@
 | `modeling-ai-use-disclosure` | 从会话/日志整理赛事适配的 AI 使用详情 PDF | `AI工具使用详情.pdf` |
 | `modeling-literature-evidence` | 以 orientation/citation-audit 两种模式围绕背景、题意、方法、数据和主张建立可核查来源链 | `source_register.csv` + `literature_orientation_ledger.md` / `citation_evidence_matrix.csv` |
 | `modeling-process-freezer` | 冻结阶段快照、hash、谱系和人工签核 | `freeze_manifest.json` + `handoff.md` |
-| `modeling-pipeline-orchestrator` | 按依赖和人工门路由全流程 | `pipeline_state.yaml` + `run_plan.md` |
 | `modeling-tex-paper-production` | 按赛事 profile 生成、迁移、编译、渲染和审计 TeX 论文 | `main.tex` + `tex_build_manifest.yaml` + `tex_layout_audit.md` |
 
 ## P2：扩展完整工程链

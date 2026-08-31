@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/AlanAkillove/MMSkills/schemas/run-profile.schema.json",
+  "title": "Run profile",
+  "type": "object",
+  "required": ["profile_id", "label", "purpose", "principles_preserved", "artifact_policy", "review_policy", "human_gates"],
+  "properties": {
+    "profile_id": {"enum": ["research-full", "contest-standard", "contest-fast"]},
+    "label": {"type": "string"},
+    "purpose": {"type": "string"},
+    "principles_preserved": {"type": "array", "items": {"type": "string"}, "minItems": 1},
+    "artifact_policy": {"type": "object", "required": ["state", "checkpoint", "event_granularity"], "additionalProperties": true},
+    "review_policy": {"type": "object", "required": ["lenses", "max_post_draft_lenses"], "additionalProperties": true},
+    "human_gates": {"type": "array", "items": {"type": "string"}, "minItems": 1}
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/AlanAkillove/MMSkills/schemas/finding.schema.json",
+  "title": "Shared cross-review finding",
+  "description": "Common envelope for findings emitted by reviewer and auditor skills. A human-readable report may project this record, but must not replace it.",
+  "type": "object",
+  "required": [
+    "finding_id",
+    "source_skill",
+    "finding_type",
+    "severity",
+    "status",
+    "observation",
+    "evidence_anchors",
+    "impact",
+    "acceptance_test",
+    "deduplication",
+    "human_status"
+  ],
+  "properties": {
+    "finding_id": {"type": "string", "minLength": 1},
+    "source_skill": {"type": "string", "minLength": 1},
+    "source_report_id": {"type": ["string", "null"]},
+    "finding_type": {
+      "enum": [
+        "mathematical",
+        "problem_interpretation",
+        "assumption",
+        "data",
+        "model_fit",
+        "experiment",
+        "claim_evidence",
+        "terminology",
+        "reader_experience",
+        "figure_table",
+        "ai_pattern",
+        "anti_homogenization",
+        "defensive_statement_cluster",
+        "compliance",
+        "reproducibility",
+        "other"
+      ]
+    },
+    "severity": {"enum": ["P0", "P1", "P2", "P3"]},
+    "status": {"enum": ["open", "confirmed", "rejected", "superseded", "needs_human", "resolved", "unknown"]},
+    "confidence": {"enum": ["high", "medium", "low", "unknown"]},
+    "observation": {"type": "string", "minLength": 1},
+    "evidence_anchors": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["anchor_id", "locator", "evidence_status"],
+        "properties": {
+          "anchor_id": {"type": "string"},
+          "locator": {"type": "string"},
+          "anchor_type": {"type": "string"},
+          "excerpt": {"type": "string"},
+          "evidence_status": {"enum": ["direct", "indirect", "partial", "unknown", "conflict"]},
+          "version_hash": {"type": ["string", "null"]}
+        },
+        "additionalProperties": true
+      }
+    },
+    "interpretation": {"type": "string"},
+    "alternative_explanations": {"type": "array", "items": {"type": "string"}},
+    "impact": {"type": "string", "minLength": 1},
+    "acceptance_test": {"type": "string", "minLength": 1},
+    "suggested_action": {"type": "string"},
+    "related_claim_ids": {"type": "array", "items": {"type": "string"}},
+    "related_term_ids": {"type": "array", "items": {"type": "string"}},
+    "related_figure_ids": {"type": "array", "items": {"type": "string"}},
+    "related_finding_ids": {"type": "array", "items": {"type": "string"}},
+    "human_status": {"enum": ["unreviewed", "needs-human-confirmation", "human-confirmed", "rejected", "unknown"]},
+    "decision_id": {"type": ["string", "null"]},
+    "deduplication": {
+      "type": "object",
+      "required": ["canonical_issue_key", "relation"],
+      "properties": {
+        "canonical_issue_key": {"type": "string", "minLength": 1},
+        "relation": {"enum": ["new", "duplicate", "supplement", "upgrade", "downgrade", "conflict"]},
+        "checked_against_report_ids": {"type": "array", "items": {"type": "string"}},
+        "canonical_finding_id": {"type": ["string", "null"]}
+      },
+      "additionalProperties": true
+    },
+    "notes": {"type": "string"}
+  },
+  "additionalProperties": true
+}

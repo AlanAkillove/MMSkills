@@ -19,7 +19,7 @@ description: "从快速评阅、技术复核和非本专业阅读三条路径审
 
 ## 输入与读取顺序
 
-1. 固定论文版本/hash、目标读者、目标赛事/年份和审查范围；
+1. 固定论文版本/hash、目标读者、目标赛事/年份和审查范围；读取已有 `finding_register.jsonl`，先识别可复用的底层问题；
 2. 读取题面、`question_map`、论文摘要/目录/图表清单/结论和 `claim_evidence_matrix`，建立“读者要找什么”；
 3. 逐小节读取正文、公式、图表、附录和引用，并回查 `terminology_ledger`、`assumption_ledger`、代码/数据入口；遇到重复的自我免责或元话语时，按共享的[防御性声明处理协议](../../references/defensive-statement-protocol.md)区分阅读负担与必要边界；
 4. 若有 PDF/Word/LaTeX 渲染件，检查页面视觉信息、公式/图表清晰度、跨页和引用落点；若没有渲染件，只做文本层审计并标注未评估；
@@ -73,8 +73,10 @@ description: "从快速评阅、技术复核和非本专业阅读三条路径审
 finding_id | reader_path | severity | location | friction_type
 observation | evidence_anchors | affected_task | reader_cost
 minimal_action | acceptance_test | related_claim_ids | related_term_ids
-related_figure_ids | confidence | human_status | decision_id | notes
+related_figure_ids | confidence | human_status | decision_id | deduplication | notes
 ```
+
+JSONL 记录以仓库 [`schemas/finding.schema.json`](../../schemas/finding.schema.json) 为共同 envelope；`reader_path`、`friction_type` 和 `reader_cost` 是本角色补充字段。已有同一底层问题时不得只因读者路径不同就新建重复的开放 finding，应标记 `supplement` 或 `conflict`。
 
 `reader_cost` 使用 `extra_lookup/extra_backtrack/ambiguity/visual_block/attention_load/unknown`，不使用主观“高级/低级”标签。若阅读摩擦实际上来自数学错误、证据缺口或术语冲突，标明转交目标。
 
@@ -89,7 +91,7 @@ related_figure_ids | confidence | human_status | decision_id | notes
 
 ## 最低交付物
 
-默认生成 `reader_audit.md`，包含：审查范围和版本/hash、三条读者路径、全局导航图、finding 表、可保留的合理规范、转交专项 skill、未评估范围、人工确认队列和续接 checkpoint。若对 PDF/Word/LaTeX 做视觉审查，附页码、对象和渲染工具/版本；若只读文本，明确写未做视觉检查。
+默认生成 `reader_audit.md` 和 `reader_findings.jsonl`，其中报告是面向人的投影，结构化 finding 以共享 schema 为准。内容包含：审查范围和版本/hash、三条读者路径、全局导航图、finding 表、可保留的合理规范、转交专项 skill、未评估范围、人工确认队列和续接 checkpoint。若对 PDF/Word/LaTeX 做视觉审查，附页码、对象和渲染工具/版本；若只读文本，明确写未做视觉检查。
 
 ## 硬性禁令
 

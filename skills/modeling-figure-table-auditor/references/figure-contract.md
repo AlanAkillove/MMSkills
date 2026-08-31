@@ -1,5 +1,7 @@
 # 图表注册契约
 
+图表注册和角色 finding 可以保留本文件的专属字段；跨审查 JSONL finding 必须满足仓库根目录 [`schemas/finding.schema.json`](../../../schemas/finding.schema.json)，并把图表字段作为补充字段。
+
 ## 图表条目
 
 ```yaml
@@ -39,5 +41,5 @@ figure:
 ```text
 finding_id | figure_id | issue_type | severity | location | observation
 evidence_anchors | impact | proposed_action | acceptance_test
-confidence | human_status | decision_id | notes
+confidence | human_status | decision_id | deduplication | notes
 ```

@@ -33,7 +33,7 @@ description: "审计数学建模论文中的主张—证据链，逐项检查主
 
 ## 输入读取顺序
 
-1. 固定审查范围：论文版本/hash、题面/问题地图、假设账本、模型方程、数据字典、代码/运行日志、实验登记、图表源文件、引用和规则 profile；明确哪些未读取。
+1. 固定审查范围：论文版本/hash、题面/问题地图、假设账本、模型方程、数据字典、代码/运行日志、实验登记、图表源文件、引用和规则 profile；明确哪些未读取，并先读取已有 `finding_register.jsonl`。
 2. 优先读取摘要、各节开头/结尾、结果段、图表标题/图注、结论、局限和建议，因为高风险主张通常集中在这些位置；再回读方法和证据。
 3. 按 [claim-schema.md](references/claim-schema.md) 把复合句拆成保持上下文的原子主张；不要仅按关键词或只审查“创新点”。
 4. 按 [strength-calibration.md](references/strength-calibration.md) 对照高风险措辞；需要判断证据覆盖和验证缺口时读取 [audit-workflow.md](references/audit-workflow.md)。
@@ -65,7 +65,7 @@ description: "审计数学建模论文中的主张—证据链，逐项检查主
 
 ### 6. 生成缺口与人工确认队列
 
-每条问题写清证据锚点、为何重要、主张与证据差距、建议验收标准和置信度。把“加实验”和“改写为较弱主张”分开列出，不替人选择成本更高的路径。核心主张若 `unverified`/`contradicted` 或含未经验证的强词，阻断论文/结论冻结。
+每条问题写清证据锚点、为何重要、主张与证据差距、建议验收标准和置信度。结构化 finding 以仓库 [`schemas/finding.schema.json`](../../schemas/finding.schema.json) 为共同 envelope，并写明与已有登记的去重关系。把“加实验”和“改写为较弱主张”分开列出，不替人选择成本更高的路径。核心主张若 `unverified`/`contradicted` 或含未经验证的强词，阻断论文/结论冻结。
 
 ## 最低交付物
 
@@ -73,7 +73,8 @@ description: "审计数学建模论文中的主张—证据链，逐项检查主
 
 1. `claim_evidence_matrix.csv`：一行一条原子主张，字段契约见 [claim-schema.md](references/claim-schema.md)；
 2. `claim_evidence_audit.md`：审查范围、主要发现、P0/P1 阻断项、证据缺口、需降级措辞、待执行验证和未评估范围；
-3. `human_confirmation_queue.md` 或等价交接块：主张强度、补证据/限缩/保留的待决策项。
+3. `claim_evidence_findings.jsonl`：遵守共享 `finding.schema.json` 的结构化发现；
+4. `human_confirmation_queue.md` 或等价交接块：主张强度、补证据/限缩/保留的待决策项。
 
 如共享状态中已存在矩阵，优先更新而不是建立第二份。没有足够材料时可以生成部分审查，但必须写明覆盖率和未读取来源。
 
