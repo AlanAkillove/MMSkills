@@ -1,6 +1,6 @@
 # 运行档位
 
-运行档位只压缩过程材料和审查透镜的组织方式，不取消题意、假设、模型、实验、结论、AI 披露和最终提交的人类决策门，也不把“更快”解释为“少做证据核验”。选用档位时由 Agent 提出适配理由，由团队确认 `profile_id` 后写入 `pipeline_state`。
+运行档位只压缩过程材料和审查透镜的组织方式，不取消题意、假设、模型、实验、结论、AI 披露和最终提交的 `core_decision` 人类决策门，也不把“更快”解释为“少做证据核验”。`review_checkpoint`（如 terminology、figure audit）可以由档位延后：Agent 可以继续，但最终采用前仍须人核对。选用档位时由 Agent 提出适配理由，由团队确认 `profile_id` 后写入 `pipeline_state`。编排器读取 YAML 后生成 `effective_stage_policy`；canonical 依赖图不会被档位改写。
 
 | profile | 适用场景 | 主要压缩方式 |
 | --- | --- | --- |

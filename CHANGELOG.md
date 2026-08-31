@@ -6,11 +6,21 @@
 
 ### Added
 
+- 编排器现在把 canonical 阶段图与运行档位合成为 `effective_stage_policy`：`contest-fast` 会按 `max_post_draft_lenses` 选择审查透镜，并把未选中阶段标为 `skipped-with-policy`，但不改 canonical 依赖；
+- 路由入口先用 `pipeline-state.schema.json` 做 Draft 2020-12 校验，再检查 human-confirmed/decision_id、skipped/reason、current_stage 和 depends_on 冲突；
+- finding 合并改为按 `canonical_issue_key` 分组，union 全部证据锚点和关联 ID，并在 open/resolved 或 human_status 冲突时进入 `needs_human`；
+- 阶段注册表增加 `gate_type`（`core_decision` / `review_checkpoint` / `none`），profile 不能取消核心决策门；
+- 增加 Codex 行为 runner `tests/behavioral/run_host_case.py`：可规范化已有响应或在显式 `--execute` 时调用宿主，缺失宿主记为 `not_run` 而非通过。
 - 统一阶段注册表 `schemas/stage-registry.json`，将 `distinctiveness_coach` 纳入默认模型前路径，并修正文档、路由脚本与终检顺序漂移；
 - 增加 pipeline state、decision、evidence、finding、model、experiment 和 AI use event 的机器可读 schema，以及跨审查 finding 去重/冲突协议和合并脚本；
 - 增加 `research-full`、`contest-standard`、`contest-fast` 运行档位，明确在时间压缩下仍不可移除的人工门和证据；
 - 增加候选模型人工门、全题目选题、背景熟悉防跳模和跨审查去重的行为级回归场景与正反响应 fixtures；
 - 明确项目定位为通用流程架构 + CUMCM-first 规则实现，避免把单赛事规则误写成通用规范。
+
+### Changed
+
+- 根 README 流程蓝图与 canonical registry 对齐为选题 → 文献/理解确认 → 问题地图；
+- run-profile schema 收紧透镜枚举，并增加 registry 交叉校验，避免 `problem_familiarisation` 这类拼写错误通过。
 
 - 初始化开源项目骨架；
 - 建立全流程数模技能的总架构、反同质化设计、质量模型和分板块调研计划；

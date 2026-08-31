@@ -10,7 +10,19 @@
 - 反同质化与 AI 披露设计草案。
 - 中性 TeX 论文模板、赛事格式映射和 TeX/PDF 版式预检 skill（本轮新增）。
 
-## 阶段 0.5：架构收敛与行为回归（当前迭代）
+## 阶段 0.6：合同运行时效力（当前迭代）
+
+架构本身保持冻结。本阶段把 ADR 0004 的合同接到运行时：
+
+1. `canonical graph + run profile = effective_stage_policy`，档位真正改变 ready 集合和产物投影；
+2. `route_pipeline.validate_state()` 先跑 schema，再跑跨字段语义检查；
+3. finding 合并按 `canonical_issue_key` 分组并 union 锚点，冲突不得静默覆盖；
+4. registry 区分 `core_decision` 与 `review_checkpoint`；
+5. Codex 行为 runner 已接入，但 CI 仍只用 fixture；真实宿主结果稳定前 compatibility 保持 `fixture_only`。
+
+本阶段完成仍不等于 0.2 beta。进入 beta 候选前，需要在脱敏真实项目上比较 `contest-standard` 与 `contest-fast` 的耗时、人工打断、重复 finding 和返工量。
+
+## 阶段 0.5：架构收敛与行为回归
 
 GPT 评审指出，当前主要风险不是技能数量不足，而是阶段/字段重复、行为验证不足和完整流程的时间成本。因此本阶段先冻结共同基础：
 

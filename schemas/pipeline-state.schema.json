@@ -21,6 +21,21 @@
     "project_id": {"type": "string", "minLength": 1},
     "mode": {"enum": ["compose", "revise", "audit", "disclose", "final_check"]},
     "run_profile": {"enum": ["research-full", "contest-standard", "contest-fast"]},
+    "selected_lenses": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "substantive",
+          "claim_evidence",
+          "terminology",
+          "figure_table",
+          "ai_pattern",
+          "anti_homogenization",
+          "reader_experience"
+        ]
+      },
+      "uniqueItems": true
+    },
     "entry_status": {"enum": ["confirmed", "ambiguous", "unknown"]},
     "current_stage": {"type": "string", "minLength": 1},
     "stages": {
@@ -48,6 +63,11 @@
             "inputs": {"type": "array", "items": {"type": "string"}},
             "outputs": {"type": "array", "items": {"type": "string"}},
             "human_gate": {"enum": ["required", "optional", "not_applicable"]},
+            "gate_type": {"enum": ["core_decision", "review_checkpoint", "none"]},
+            "human_status": {
+              "enum": ["unreviewed", "needs-human-confirmation", "human-confirmed", "rejected", "unknown"]
+            },
+            "decision_id": {"type": ["string", "null"]},
             "last_run_at": {"type": ["string", "null"]},
             "source_snapshot_id": {"type": ["string", "null"]},
             "evidence_status": {"enum": ["confirmed", "partial", "unknown", "conflict"]},

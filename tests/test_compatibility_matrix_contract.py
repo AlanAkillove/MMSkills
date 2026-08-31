@@ -18,4 +18,6 @@ def test_compatibility_matrix_is_capability_based_and_conservative():
     assert {host["host_id"] for host in hosts} == {"codex", "claude-code", "gemini-cli", "generic-agent"}
     for host in hosts:
         assert host["status"] == "fixture_only"
+        if host["host_id"] == "codex":
+            assert host.get("behavior_runner") == "tests/behavioral/run_host_case.py"
         assert "report_missing_capabilities" in host["smoke_actions"] or "verify_artifact" in host["smoke_actions"]

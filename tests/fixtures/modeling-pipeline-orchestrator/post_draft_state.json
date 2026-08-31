@@ -1,0 +1,33 @@
+{
+  "schema_version": "0.1",
+  "project_id": "fixture-post-draft",
+  "mode": "audit",
+  "run_profile": "research-full",
+  "entry_status": "confirmed",
+  "current_stage": "draft",
+  "last_snapshot_id": "SNAP-POST-001",
+  "artifacts": [],
+  "gates": [],
+  "open_issues": [],
+  "event_log": [],
+  "updated_at": "2026-08-31T12:00:00Z",
+  "stages": {
+    "rules_profile": {"status": "passed", "reason": "fixture rules profile"},
+    "topic_selection": {"status": "skipped", "reason": "single-topic fixture"},
+    "literature_evidence": {"status": "passed", "reason": "orientation complete"},
+    "problem_familiarization": {"status": "passed", "reason": "understanding confirmed in fixture"},
+    "problem_intake": {"status": "passed", "reason": "question map confirmed in fixture"},
+    "distinctiveness_coach": {"status": "passed", "reason": "anchor ledger confirmed in fixture"},
+    "assumption_ledger": {"status": "passed", "reason": "assumptions confirmed in fixture"},
+    "data_audit": {"status": "passed", "reason": "data contract confirmed in fixture"},
+    "model_architect": {"status": "passed", "reason": "model choice confirmed in fixture"},
+    "experiment_validator": {"status": "passed", "reason": "experiments confirmed in fixture"},
+    "paper_architect": {"status": "passed", "reason": "blueprint confirmed in fixture"},
+    "figure_design": {"status": "passed", "reason": "figure design confirmed in fixture"},
+    "figure_table": {"status": "passed", "reason": "figure audit complete in fixture"},
+    "claim_evidence": {"status": "passed", "reason": "claim matrix complete in fixture"},
+    "terminology": {"status": "passed", "reason": "terminology ledger complete in fixture"},
+    "draft": {"status": "passed", "reason": "draft exists in fixture"},
+    "ai_disclosure": {"status": "passed", "reason": "disclosure already recorded in fixture"}
+  }
+}

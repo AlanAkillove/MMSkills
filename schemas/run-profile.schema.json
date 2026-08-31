@@ -6,12 +6,73 @@
   "required": ["profile_id", "label", "purpose", "principles_preserved", "artifact_policy", "review_policy", "human_gates"],
   "properties": {
     "profile_id": {"enum": ["research-full", "contest-standard", "contest-fast"]},
-    "label": {"type": "string"},
-    "purpose": {"type": "string"},
+    "label": {"type": "string", "minLength": 1},
+    "purpose": {"type": "string", "minLength": 1},
     "principles_preserved": {"type": "array", "items": {"type": "string"}, "minItems": 1},
-    "artifact_policy": {"type": "object", "required": ["state", "checkpoint", "event_granularity"], "additionalProperties": true},
-    "review_policy": {"type": "object", "required": ["lenses", "max_post_draft_lenses"], "additionalProperties": true},
-    "human_gates": {"type": "array", "items": {"type": "string"}, "minItems": 1}
+    "artifact_policy": {
+      "type": "object",
+      "required": ["state", "checkpoint", "event_granularity"],
+      "properties": {
+        "state": {"type": "string", "minLength": 1},
+        "checkpoint": {"type": "string", "minLength": 1},
+        "event_granularity": {"type": "string", "minLength": 1},
+        "retain_raw_local_logs": {"type": "boolean"},
+        "forbidden_compression": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1}
+        }
+      },
+      "additionalProperties": false
+    },
+    "review_policy": {
+      "type": "object",
+      "required": ["lenses", "max_post_draft_lenses"],
+      "properties": {
+        "lenses": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "enum": [
+              "substantive",
+              "claim_evidence",
+              "terminology",
+              "figure_table",
+              "ai_pattern",
+              "anti_homogenization",
+              "reader_experience"
+            ]
+          }
+        },
+        "conditional_lenses": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "substantive",
+              "claim_evidence",
+              "terminology",
+              "figure_table",
+              "ai_pattern",
+              "anti_homogenization",
+              "reader_experience"
+            ]
+          }
+        },
+        "max_post_draft_lenses": {
+          "oneOf": [
+            {"type": "integer", "minimum": 1},
+            {"const": "all"}
+          ]
+        },
+        "selection_rule": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "human_gates": {
+      "type": "array",
+      "items": {"type": "string", "pattern": "^[a-z][a-z0-9_]*$"},
+      "minItems": 1,
+      "uniqueItems": true
+    }
   },
-  "additionalProperties": true
+  "additionalProperties": false
 }

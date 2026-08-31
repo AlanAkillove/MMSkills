@@ -18,10 +18,10 @@
 ## 去重与合并
 
 1. 每个专项审查开始前先读取当前 `finding_register.jsonl`（没有则明确记录“尚未建立”）。
-2. 新发现先按“底层问题 + 版本范围”生成 `canonical_issue_key`，再比较已有 finding 的锚点、主张/术语/图表 ID 和证据状态。
-3. `new` 表示没有对应底层问题；`duplicate` 表示同一问题和同一证据，不得新建第二条开放问题；`supplement` 表示提供了新的透镜或证据；`upgrade/downgrade` 表示严重性或范围有证据变化；`conflict` 表示事实、范围或严重性不能合并。
-4. 合并时保留所有原始 `finding_id`、来源 skill、证据锚点和版本；不得因为“看起来相同”静默删除或覆盖较早记录。
-5. 只有在没有事实冲突、且人工确认了处理方式后，才把 canonical finding 标记为 `resolved`。自动脚本只能合并记录和报告冲突，不能替人关闭问题或提升结论。
+2. 新发现先按“底层问题 + 版本范围”生成 `canonical_issue_key`，再比较已有 finding 的锚点、主张/术语/图表 ID 和证据状态。分组主键是 `canonical_issue_key`；锚点、透镜和关联 ID 用于判断 `duplicate` / `supplement` / `conflict`，不能把不同锚点拆成两个底层问题。
+3. `new` 表示没有对应底层问题；`duplicate` 表示同一问题和同一证据，不得新建第二条开放问题；`supplement` 表示提供了新的透镜或证据；`upgrade/downgrade` 表示严重性或范围有证据变化；`conflict` 表示事实、范围、status、human_status 或严重性不能合并。
+4. 合并时保留所有原始 `finding_id`、来源 skill、证据锚点和版本；对锚点、claim/term/figure ID 做 union。不得因为“看起来相同”静默删除或覆盖较早记录。
+5. 若 severity、status、human_status 或验收标准不一致，要分别记录；`open` 与 `resolved`、互相冲突的 human_status 不得被首条记录静默覆盖。只有在没有事实冲突、且人工确认了处理方式后，才把 canonical finding 标记为 `resolved`。自动脚本只能合并记录和报告冲突，不能替人关闭问题或提升结论。
 
 ## 与报告的关系
 

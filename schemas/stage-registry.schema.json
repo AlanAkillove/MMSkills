@@ -3,7 +3,7 @@
   "$id": "https://github.com/AlanAkillove/MMSkills/schemas/stage-registry.schema.json",
   "title": "MathModelingSkills canonical pipeline stage registry",
   "type": "object",
-  "required": ["schema_version", "default_order", "stages"],
+  "required": ["schema_version", "default_order", "stages", "review_lenses"],
   "properties": {
     "schema_version": {"type": "string"},
     "description": {"type": "string"},
@@ -13,11 +13,24 @@
       "minItems": 1,
       "uniqueItems": true
     },
+    "review_lenses": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "object",
+        "required": ["stage", "timing"],
+        "properties": {
+          "stage": {"type": "string", "pattern": "^[a-z][a-z0-9_]*$"},
+          "timing": {"enum": ["pre_draft", "post_draft"]}
+        },
+        "additionalProperties": false
+      }
+    },
     "stages": {
       "type": "object",
       "additionalProperties": {
         "type": "object",
-        "required": ["skill", "depends_on", "human_gate", "phase"],
+        "required": ["skill", "depends_on", "human_gate", "gate_type", "phase"],
         "properties": {
           "skill": {"type": "string", "minLength": 1},
           "depends_on": {
@@ -26,6 +39,7 @@
             "uniqueItems": true
           },
           "human_gate": {"enum": ["required", "optional", "not_applicable"]},
+          "gate_type": {"enum": ["core_decision", "review_checkpoint", "none"]},
           "phase": {"type": "string", "minLength": 1},
           "notes": {"type": "string"}
         },

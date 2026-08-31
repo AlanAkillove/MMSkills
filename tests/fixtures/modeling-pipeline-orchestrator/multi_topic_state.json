@@ -5,6 +5,11 @@
   "entry_status": "confirmed",
   "current_stage": "topic_selection",
   "last_snapshot_id": "SNAP-MULTI-001",
+  "artifacts": [],
+  "gates": [],
+  "open_issues": [],
+  "event_log": [],
+  "updated_at": "2026-08-31T12:00:00Z",
   "stages": {
     "rules_profile": {"status": "passed", "reason": "fixture profile verified"}
   }

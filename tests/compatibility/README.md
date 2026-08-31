@@ -10,4 +10,4 @@
 4. 是否保留人工门、未知状态和失败状态；
 5. 若宿主不能执行脚本或读取历史会话，是否明确报告 `partial`/`blocked`，而不是伪造 `verified`。
 
-矩阵中的 `fixture_only` 是仓库契约测试状态，不是对宿主当前版本的兼容性承诺。
+矩阵中的 `fixture_only` 是仓库契约测试状态，不是对宿主当前版本的兼容性承诺。Codex 已有 `tests/behavioral/run_host_case.py`，但没有真实稳定结果前不得把状态改成 `verified`。

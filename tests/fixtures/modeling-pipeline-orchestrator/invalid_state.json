@@ -3,8 +3,13 @@
   "project_id": "fixture-project",
   "mode": "compose",
   "entry_status": "unknown",
-  "current_stage": "unknown",
+  "current_stage": "rules_profile",
+  "artifacts": [],
+  "gates": [],
+  "open_issues": [],
+  "event_log": [],
+  "updated_at": "2026-08-31T12:00:00Z",
   "stages": {
-    "not-a-real-stage": {"status": "passed"}
+    "not_a_real_stage": {"status": "passed"}
   }
 }

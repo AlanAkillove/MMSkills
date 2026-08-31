@@ -27,7 +27,7 @@ description: "按数模论文全流程的阶段依赖、证据状态和人工决
 2. 读取最近的 process-freezer manifest，验证快照、hash 和谱系；
 3. 读取 rules profile 和阶段产物索引，确认比赛/年份范围；
 4. 读取 issue log、decision log、人工确认队列和各 skill 的最后状态；
-5. 读取 `run_profile`（`research-full`、`contest-standard` 或 `contest-fast`）及其 artifact/lens 策略；若用户未确认档位，只提出候选，不默认替用户选择；
+5. 读取 `run_profile`（`research-full`、`contest-standard` 或 `contest-fast`）及其 artifact/lens 策略；若用户未确认档位，只提出候选，不默认替用户选择。编排器必须把 canonical 阶段图与档位合成 `effective_stage_policy`：不改依赖，只决定哪些审查阶段是 `selected` / `skipped-with-policy` / `not_selected`，以及哪些人工门是阻断性的 `core_decision`、哪些是可延后的 `review_checkpoint`；
 6. 读取已有 `finding_register.jsonl`，把专项报告中的共同问题按 [finding-protocol.md](references/finding-protocol.md) 去重、补充或升级；
 7. 只有在依赖满足时才读取相应专项 skill 的 SKILL.md/references；不要一开始加载所有长文；
 8. 生成运行计划、阻断列表和人类确认队列，写回状态时保留旧状态和变更记录。
@@ -65,9 +65,9 @@ RULES_PROFILE
 
 `LITERATURE_EVIDENCE` 的 orientation 产物和 `PROBLEM_FAMILIARIZATION` 的理解快照必须先通过人工理解门，之后才允许进入正式 `PROBLEM_INTAKE`、假设、数据处理和模型架构。后续若需要逐项引用核验，再以 citation-audit 模式重新运行文献 skill。
 
-默认阶段 ID、skill、依赖、人工门和阶段顺序以仓库根目录的 [`schemas/stage-registry.json`](../../schemas/stage-registry.json) 为唯一来源；本页流程图仅作阅读索引。`DISTINCTIVENESS_COACH` 在写作前读取题目锚点和问题地图，先登记真实差异化路径与放弃理由，再进入模型架构；它不能替团队制造“创新点”。
+默认阶段 ID、skill、依赖、`gate_type` 和阶段顺序以仓库根目录的 [`schemas/stage-registry.json`](../../schemas/stage-registry.json) 为唯一来源；本页流程图仅作阅读索引。`DISTINCTIVENESS_COACH` 在写作前读取题目锚点和问题地图，先登记真实差异化路径与放弃理由，再进入模型架构；它不能替团队制造“创新点”。
 
-`research-full`、`contest-standard`、`contest-fast` 只改变中间产物粒度和审查透镜组合，不能移除核心人工门、证据锚点、失败记录、AI 使用事实或最终冻结。具体策略见 [run-profiles.md](references/run-profiles.md)。
+`research-full`、`contest-standard`、`contest-fast` 只改变中间产物粒度和审查透镜组合，不能移除 `core_decision` 人工门、证据锚点、失败记录、AI 使用事实或最终冻结。`review_checkpoint` 可以由档位延后到最终采用前再核对，但不能被解释成“已经通过”。具体策略见 [run-profiles.md](references/run-profiles.md)。路由脚本会输出 `effective_stage_policy`；canonical `depends_on` 保持不变。
 
 ## 工作流
 
@@ -85,7 +85,7 @@ RULES_PROFILE
 
 ### 4. 管理人工决策门
 
-至少在题意、关键假设、模型取舍、数据处理、实验充分性、差异化路径、核心主张/结论、AI 披露和最终提交前暂停。编排器只创建 queue 和提醒，不能把用户未回复当作确认。
+`core_decision` 阶段（选题、题意/理解、假设、数据口径、模型、实验、结论、AI 披露、最终提交）在所有档位都必须暂停等待人确认。`review_checkpoint`（术语、图表、阅读体验、AI 模板化等）可以由档位延后：Agent 可以继续，但结果在最终采用前必须由人核对。编排器只创建 queue 和提醒，不能把用户未回复当作确认。
 
 ### 5. 处理返工和并行冲突
 
@@ -116,7 +116,7 @@ project_state/
 └── run_profile.yaml          # 已由人确认的运行档位和压缩策略
 ~~~
 
-脚本 route_pipeline.py 只读取结构化状态并生成计划，不修改论文、模型、数据和状态；任何状态写回都应保留事件记录并经过 process-freezer。
+脚本 route_pipeline.py 只读取结构化状态并生成计划，不修改论文、模型、数据和状态；入口先按 `pipeline-state.schema.json` 校验，再检查跨字段语义。任何状态写回都应保留事件记录并经过 process-freezer。
 
 ## 风险与停止条件
 
@@ -134,5 +134,7 @@ project_state/
 - references/finding-protocol.md：跨审查 finding 的共同字段、去重和冲突协议。
 - references/gates-and-handoff.md：人工门、冲突、上下文压缩和交接。
 - references/research-basis.md：架构与开源实践的迁移边界。
+- references/run-profiles.md：完整、标准和快速运行档位，以及档位如何生成 effective_stage_policy。
 - ../../schemas/stage-registry.json：唯一阶段注册表；`schemas/*.schema.json` 是机器可读字段契约。
 - ../../profiles/README.md：完整、标准和快速运行档位。
+- scripts/pipeline_runtime.py：schema 校验、档位策略和 ready 集合；scripts/route_pipeline.py 是只读 CLI。

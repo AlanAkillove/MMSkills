@@ -10,12 +10,23 @@ ROOT = Path(__file__).resolve().parents[1]
 SKILL = ROOT / "skills" / "modeling-pipeline-orchestrator"
 FIXTURES = ROOT / "tests" / "fixtures" / "modeling-pipeline-orchestrator"
 SCRIPT = SKILL / "scripts" / "route_pipeline.py"
+RUNTIME = SKILL / "scripts" / "pipeline_runtime.py"
 REGISTRY = ROOT / "schemas" / "stage-registry.json"
+sys.path.insert(0, str(SKILL / "scripts"))
+from pipeline_runtime import (  # noqa: E402
+    build_effective_stage_policy,
+    ready_stages,
+    validate_state,
+)
 
 
-def run_route(input_path: Path, output_path: Path) -> subprocess.CompletedProcess[str]:
+def run_route(
+    input_path: Path,
+    output_path: Path,
+    *extra: str,
+) -> subprocess.CompletedProcess[str]:
     return subprocess.run(
-        [sys.executable, str(SCRIPT), "--input", str(input_path), "--output", str(output_path)],
+        [sys.executable, str(SCRIPT), "--input", str(input_path), "--output", str(output_path), *extra],
         text=True,
         capture_output=True,
         check=False,
@@ -31,6 +42,9 @@ def test_skill_has_router_only_and_human_gate_boundary():
         "needs_human",
         "不能把用户未回复当作确认",
         "不修改论文、模型、数据和状态",
+        "core_decision",
+        "review_checkpoint",
+        "effective_stage_policy",
     ):
         assert phrase in text
 
@@ -42,6 +56,7 @@ def test_graph_and_contract_references_exist():
         SKILL / "references" / "gates-and-handoff.md",
         SKILL / "references" / "research-basis.md",
         SCRIPT,
+        RUNTIME,
     ):
         assert path.exists(), path
     graph = (SKILL / "references" / "dependency-graph.md").read_text(encoding="utf-8")
@@ -60,6 +75,7 @@ def test_route_finds_ready_stages_without_mutating_input(tmp_path: Path):
     assert "figure_design" in text
     assert "ai_disclosure" in text
     assert "does not confirm mathematical correctness" in text
+    assert "Canonical dependencies are unchanged" in text
     assert source.read_text(encoding="utf-8") == before
 
 
@@ -80,6 +96,8 @@ def test_pre_model_dependencies_keep_intake_after_familiarization():
     assert stages["problem_intake"]["depends_on"] == ["problem_familiarization", "topic_selection"]
     assert stages["distinctiveness_coach"]["depends_on"] == ["problem_intake", "problem_familiarization"]
     assert "distinctiveness_coach" in registry["default_order"]
+    assert stages["topic_selection"]["gate_type"] == "core_decision"
+    assert stages["terminology"]["gate_type"] == "review_checkpoint"
 
 
 def test_pre_model_graph_is_topologically_ordered():
@@ -109,6 +127,19 @@ def test_route_reports_blocked_stage_and_rejects_unknown_stage(tmp_path: Path):
     assert "unknown stage" in invalid.stderr
 
 
+def test_route_rejects_schema_invalid_and_human_confirmed_without_decision(tmp_path: Path):
+    schema_invalid = run_route(FIXTURES / "invalid_schema_state.json", tmp_path / "schema.md")
+    assert schema_invalid.returncode != 0
+    assert "schema" in schema_invalid.stderr
+
+    confirmed = run_route(
+        FIXTURES / "invalid_confirmed_without_decision.json",
+        tmp_path / "confirmed.md",
+    )
+    assert confirmed.returncode != 0
+    assert "decision_id" in confirmed.stderr
+
+
 def test_route_uses_human_gate_action_when_no_stage_is_ready(tmp_path: Path):
     output = tmp_path / "needs-human.md"
     result = run_route(FIXTURES / "needs_human_state.json", output)
@@ -122,23 +153,80 @@ def test_route_uses_human_gate_action_when_no_stage_is_ready(tmp_path: Path):
 def test_route_rejects_unknown_run_profile(tmp_path: Path):
     source = FIXTURES / "initial_state.json"
     output = tmp_path / "unknown-profile.md"
-    result = subprocess.run(
-        [
-            sys.executable,
-            str(SCRIPT),
-            "--input",
-            str(source),
-            "--output",
-            str(output),
-            "--profile",
-            "made-up-profile",
-        ],
-        text=True,
-        capture_output=True,
-        check=False,
-    )
+    result = run_route(source, output, "--profile", "made-up-profile")
     assert result.returncode != 0
     assert "unknown run profile" in result.stderr
+
+
+def test_contest_fast_changes_effective_graph_without_rewriting_dependencies(tmp_path: Path):
+    source = FIXTURES / "post_draft_state.json"
+    full_output = tmp_path / "full.md"
+    fast_output = tmp_path / "fast.md"
+    policy_json = tmp_path / "fast_policy.json"
+    full = run_route(source, full_output, "--profile", "research-full")
+    fast = run_route(
+        source,
+        fast_output,
+        "--profile",
+        "contest-fast",
+        "--policy-json",
+        str(policy_json),
+    )
+    assert full.returncode == 0, full.stderr
+    assert fast.returncode == 0, fast.stderr
+    assert "paper_review" in full.stdout
+    assert "ai_pattern" in full.stdout
+    assert "anti_homogenization" in full.stdout
+    assert "reader" in full.stdout
+    assert "READY:" in fast.stdout
+    assert "paper_review" in fast.stdout
+    assert "reader" in fast.stdout
+    assert "ai_pattern" not in fast.stdout.split("READY:", 1)[1]
+    assert "anti_homogenization" not in fast.stdout.split("READY:", 1)[1]
+    policy = json.loads(policy_json.read_text(encoding="utf-8"))
+    assert policy["canonical_dependencies_unchanged"] is True
+    assert policy["stages"]["naturalizer"]["depends_on"] == [
+        "paper_review",
+        "ai_pattern",
+        "anti_homogenization",
+        "reader",
+    ]
+    assert policy["stages"]["ai_pattern"]["execution"] == "skipped-with-policy"
+    assert policy["stages"]["anti_homogenization"]["execution"] == "skipped-with-policy"
+    assert policy["stages"]["paper_review"]["execution"] == "selected"
+    assert policy["stages"]["reader"]["execution"] == "selected"
+    assert policy["stages"]["model_architect"]["blocking"] is True
+    assert policy["stages"]["terminology"]["blocking"] is False
+    fast_text = fast_output.read_text(encoding="utf-8")
+    assert "compact" in fast_text
+    assert "Deferred review checkpoints" in fast_text
+
+
+def test_effective_policy_treats_unselected_lenses_as_satisfied_for_dependents():
+    state = json.loads((FIXTURES / "post_draft_state.json").read_text(encoding="utf-8"))
+    state["run_profile"] = "contest-fast"
+    state["stages"]["paper_review"] = {"status": "passed", "reason": "fixture substantive lens"}
+    state["stages"]["reader"] = {"status": "passed", "reason": "fixture reader lens"}
+    policy = build_effective_stage_policy(state)
+    ready = ready_stages(state, policy=policy)
+    assert "naturalizer" in ready
+    assert "ai_pattern" not in ready
+    assert policy["stages"]["naturalizer"]["depends_on"] == [
+        "paper_review",
+        "ai_pattern",
+        "anti_homogenization",
+        "reader",
+    ]
+
+
+def test_validate_state_rejects_registry_dependency_conflict():
+    state = json.loads((FIXTURES / "initial_state.json").read_text(encoding="utf-8"))
+    state["stages"]["problem_intake"] = {
+        "status": "not_started",
+        "depends_on": ["model_architect"],
+    }
+    errors = validate_state(state)
+    assert any("depends_on conflicts with the registry" in item for item in errors)
 
 
 def test_negative_fixtures_are_explicit():
@@ -147,5 +235,7 @@ def test_negative_fixtures_are_explicit():
         ("不能作为通过条件", "expected-behavior.md"),
         ("未知 stage", "expected-behavior.md"),
         ("题意解释被阻断", "README.md"),
+        ("schema 必填", "README.md"),
+        ("contest-fast", "README.md"),
     ):
         assert phrase in (FIXTURES / name).read_text(encoding="utf-8")

@@ -1,0 +1,10 @@
+{
+  "schema_version": "0.1",
+  "project_id": "fixture-project",
+  "mode": "compose",
+  "entry_status": "confirmed",
+  "current_stage": "rules_profile",
+  "stages": {
+    "rules_profile": {"status": "passed"}
+  }
+}

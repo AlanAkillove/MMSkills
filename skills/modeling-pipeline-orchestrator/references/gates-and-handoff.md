@@ -1,8 +1,15 @@
 # 人工门、冲突和交接
 
-## 必停门
+## 必停门与核对点
 
-编排器至少在以下节点把任务置为 needs_human：
+注册表用 `gate_type` 区分两类人工门：
+
+- `core_decision`：没有人工确认不能继续，例如选题、题意/理解、假设、数据口径、模型、实验、结论、AI 披露和最终提交；
+- `review_checkpoint`：Agent 可以继续运行，但结果在最终采用前必须由人核对，例如 terminology、figure audit、AI pattern 和 reader。
+
+档位只能压缩后一类，不能把 `core_decision` 改成自动通过。用户未回复、agent 自述“应该没问题”或文件存在，均不能替代确认。
+
+编排器至少在以下 `core_decision` 节点把任务置为 needs_human：
 
 1. 全部候选题目是否已盘点、主选/备选以及选题依据；
 2. 题面对象和子问题解释；

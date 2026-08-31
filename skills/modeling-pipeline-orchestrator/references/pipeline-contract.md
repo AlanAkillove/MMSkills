@@ -36,6 +36,7 @@ depends_on: []
 inputs: []
 outputs: []
 human_gate: required | optional | not_applicable
+gate_type: core_decision | review_checkpoint | none
 last_run_at:
 source_snapshot_id:
 evidence_status: confirmed | partial | unknown | conflict

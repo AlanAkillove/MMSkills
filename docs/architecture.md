@@ -141,7 +141,7 @@ project_state/
 
 ## 5. 人类决策门
 
-以下节点默认必须由人确认，Agent 只能提出候选和风险：
+注册表把人工门分成 `core_decision` 和 `review_checkpoint`。以下节点是 `core_decision`，Agent 只能提出候选和风险，没有人工确认不能继续：
 
 1. 全部题目的比较范围、主选/备选和选题依据；
 2. 题意和子问题的最终解释；
@@ -156,7 +156,7 @@ project_state/
 10. AI 使用详情、采纳/修改描述和最终提交文件；
 11. 官方 TeX/Word 模板、格式开关、PDF 页面和最终可提交版本。
 
-确认应写入 `decision_log.md`，不能只留在一次不可追溯的口头对话中。
+审稿意见是否采纳、术语/图表/阅读体验等 `review_checkpoint` 可以由运行档位延后，但最终采用前仍须人核对。确认应写入 `decision_log.md`，不能只留在一次不可追溯的口头对话中。
 
 ## 6. 上下文与长文处理
 
@@ -186,7 +186,7 @@ project_state/
 
 共享机器可读契约位于 [`schemas/`](../schemas/)，其中 `stage-registry.json` 是阶段图的唯一来源，`finding.schema.json` 是跨审查共同问题的 envelope。Markdown 模板服务于讨论，不能替代结构化状态；修改共享字段时必须同步更新 skill、fixtures 和迁移说明。
 
-项目可按 [`profiles/`](../profiles/) 选择 `research-full`、`contest-standard` 或 `contest-fast`。档位只压缩中间产物和审查组合，不移除核心人工门、失败证据、未决事项、AI 使用事实或最终冻结。
+项目可按 [`profiles/`](../profiles/) 选择 `research-full`、`contest-standard` 或 `contest-fast`。档位只压缩中间产物和审查组合，不移除 `core_decision`、失败证据、未决事项、AI 使用事实或最终冻结。`review_checkpoint` 可以被档位延后，但不能被当成已经通过。编排器将 canonical 阶段图与档位合成为 `effective_stage_policy`。
 
 ## 9. 研究与实现顺序
 
