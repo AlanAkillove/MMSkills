@@ -59,7 +59,10 @@
 
 ## 6. 与其他 skill 的关系
 
+- 在 `modeling-topic-selection` 阶段先比较全场题目，避免不同题目被同一套建模路径覆盖；
+- 在 `modeling-problem-familiarization` 阶段从背景地图和文献迁移边界中建立共同的题目语义；
 - 在 `modeling-problem-intake` 阶段建立题目特征；
+- 在 `modeling-literature-evidence` 的 orientation 模式中记录文献启发与本题差异；
 - 在 `modeling-model-architect` 阶段记录模型取舍；
 - 在 `modeling-experiment-validator` 阶段验证差异化主张；
 - 在 `modeling-paper-architect` 阶段组织独特证据链；

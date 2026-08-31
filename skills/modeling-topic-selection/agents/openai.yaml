@@ -1,0 +1,4 @@
+interface:
+  display_name: "数模选题分析"
+  short_description: "比较多道赛题的任务难度、团队适配、验证风险与时间成本"
+  default_prompt: "使用 $modeling-topic-selection 对本场比赛的全部赛题做选题分析并生成待人工确认的比较简报。"

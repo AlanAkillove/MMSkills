@@ -1,6 +1,6 @@
 ---
 name: modeling-pipeline-orchestrator
-description: "按数模论文全流程的阶段依赖、证据状态和人工决策门生成可续接的运行计划，路由题意、数据、模型、实验、写作、审查、反同质化、自然化、披露与终检等专项 skill；只编排和阻断，不替人决定核心内容。"
+description: "按数模论文全流程的阶段依赖、证据状态和人工决策门生成可续接的运行计划，先路由多题选题、题意与背景熟悉、文献学习，再路由数据、模型、实验、写作、审查、反同质化、自然化、披露与终检；只编排和阻断，不替人决定核心内容。"
 ---
 
 # 数模全流程编排器
@@ -38,9 +38,11 @@ description: "按数模论文全流程的阶段依赖、证据状态和人工决
 
 ~~~
 RULES_PROFILE
+  -> TOPIC_SELECTION
+  -> LITERATURE_EVIDENCE (orientation mode)
+  -> PROBLEM_FAMILIARIZATION
   -> PROBLEM_INTAKE
-  -> ASSUMPTION_LEDGER
-  -> (LITERATURE_EVIDENCE || DATA_AUDIT)
+  -> (ASSUMPTION_LEDGER || DATA_AUDIT)
   -> MODEL_ARCHITECT
   -> EXPERIMENT_VALIDATOR
   -> PAPER_ARCHITECT
@@ -56,7 +58,9 @@ RULES_PROFILE
   -> PROCESS_FREEZER
 ~~~
 
-括号中的阶段可以在依赖满足时并行，但合并前必须保留各自独立报告。修稿入口可以从已有冻结快照开始，但先验证快照；披露入口可以直接路由到规则 profile、历史授权和 AI disclosure，再由 final-preflight 汇总。
+`TOPIC_SELECTION` 在一场包含多个题目时必须比较全部题目；只有一道题或已有人类确认的既有选题，才可以带理由标为 `skipped`。括号中的阶段可以在依赖满足时并行，但合并前必须保留各自独立报告。修稿入口可以从已有冻结快照开始，但先验证快照；披露入口可以直接路由到规则 profile、历史授权和 AI disclosure，再由 final-preflight 汇总。
+
+`LITERATURE_EVIDENCE` 的 orientation 产物和 `PROBLEM_FAMILIARIZATION` 的理解快照必须先通过人工理解门，之后才允许进入正式 `PROBLEM_INTAKE`、假设、数据处理和模型架构。后续若需要逐项引用核验，再以 citation-audit 模式重新运行文献 skill。
 
 ## 工作流
 
@@ -92,6 +96,14 @@ project_state/
 ├── run_plan.md               # 当前可执行步骤和人工门
 ├── gate_queue.md             # 待作者/团队确认的决定
 ├── impact_map.md             # 变化到受影响 skill 的映射
+├── topic_cards.md            # 多题比较卡片
+├── topic_comparison.md       # 分项比较和证据未知
+├── topic_selection_brief.md  # 选题讨论与人工门
+├── question_map.md           # 题意事实地图
+├── problem_background_map.md # 题目背景和对象关系
+├── literature_orientation_ledger.md # 文献学习与迁移边界
+├── understanding_checkpoint.md # 多轮理解记录
+├── familiarization_open_questions.md # 未决理解问题
 └── handoff.md                # process-freezer 生成或复核的续接包
 ~~~
 

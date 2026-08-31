@@ -44,9 +44,28 @@
 
 ## 2. 题意、模型和数据块（P0/P1）
 
+### 2.0 `modeling-topic-selection` 与 `modeling-problem-familiarization`
+
+这两个 skill 是正式建模前的前置块，分别解决“选哪道题”和“是否真正读懂选定题目”。它们不把背景学习、文献吸收和模型选型揉成一次性回答。
+
+- `modeling-topic-selection`
+  - 输入：全场题面、题图、表格、附件、规则 profile、版本/hash、团队成员能力、时间和计算资源；
+  - 输出：每题 `topic_card`、`topic_comparison.md`、`topic_selection_brief.md` 和待人确认的主选/备选决策；
+  - 比较：题意/背景学习负担、数据准备、建模前置、验证可行性、计算和时间成本、团队匹配、证据可得性、结果不确定性、真实差异化空间；
+  - 人类门：团队确认比较范围、主选/备选、反转条件和最早验证任务；单题必须显式记录 `not_applicable`，不能静默跳过；
+  - 反模式：只读标题、模型流行度、黑箱总分、获奖预测、默认推荐或“有创新所以选它”。
+- `modeling-problem-familiarization`
+  - 输入：已确认选题、`question_map`、完整题面/附件、orientation 文献账本、团队问题和术语资料；
+  - 输出：四层 `problem_background_map.md`、`literature_orientation_ledger.md`、多轮 `understanding_checkpoint.md` 和开放问题；
+  - 方法：按现实背景—对象关系—测量/数据—任务语义组织内容，每轮由 Agent 说明、团队复述、证据核对、纠正和 checkpoint 组成；
+  - 人类门：团队能复述对象、子问、关键边界、术语/单位和核心来源的支持/不支持范围；确认只解锁假设、数据和模型阶段，不等于采用模型；
+  - 反模式：把摘要当精读、把方法先例当适用性、在理解未确认时定模/补目标函数/写贡献、用术语堆叠掩盖结构误解。
+
+这两个阶段接入总流程后的顺序为：`topic-selection → literature-evidence(orientation) → problem-familiarization → problem-intake → assumption/data → model-architect`。`modeling-literature-evidence` 的 orientation 模式负责来源核验和思想卡片，题目熟悉 skill 负责把这些材料转成可理解、可复述的共同知识，正式 `problem-intake` 再把已确认理解整理成问题地图；后续 citation-audit 仍可独立重跑。
+
 ### 2.1 `modeling-problem-intake`
 
-- 目标：把题面转成对象、关系、子问题、变量、目标、约束、边界和歧义；
+- 目标：在背景/文献理解门后把题面转成对象、关系、子问题、变量、目标、约束、边界和歧义；如为早期事实索引，只能标为 draft；
 - 关键方法：文字与图示分离；直接事实、合理推断和待确认问题分层；先列反例/极端情形；
 - 输出：`question_map.md`、对象/变量表、歧义清单、题目特有事实清单；
 - 人类门：确认题意解释和不确定边界；

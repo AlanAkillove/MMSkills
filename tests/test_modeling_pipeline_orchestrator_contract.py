@@ -43,7 +43,7 @@ def test_graph_and_contract_references_exist():
     ):
         assert path.exists(), path
     graph = (SKILL / "references" / "dependency-graph.md").read_text(encoding="utf-8")
-    for stage in ("problem_intake", "model_architect", "figure_design", "paper_review", "ai_disclosure", "final_preflight"):
+    for stage in ("topic_selection", "problem_intake", "literature_evidence", "problem_familiarization", "model_architect", "figure_design", "paper_review", "ai_disclosure", "final_preflight"):
         assert stage in graph
 
 
@@ -59,6 +59,42 @@ def test_route_finds_ready_stages_without_mutating_input(tmp_path: Path):
     assert "ai_disclosure" in text
     assert "does not confirm mathematical correctness" in text
     assert source.read_text(encoding="utf-8") == before
+
+
+def test_multi_topic_entry_routes_to_selection_before_intake(tmp_path: Path):
+    output = tmp_path / "multi-topic.md"
+    result = run_route(FIXTURES / "multi_topic_state.json", output)
+    assert result.returncode == 0, result.stderr
+    assert "READY: topic_selection, ai_disclosure" in result.stdout
+    text = output.read_text(encoding="utf-8")
+    assert "Run topic_selection through modeling-topic-selection" in text
+
+
+def test_pre_model_dependencies_keep_intake_after_familiarization():
+    source = (SKILL / "scripts" / "route_pipeline.py").read_text(encoding="utf-8")
+    assert '"literature_evidence", ("modeling-literature-evidence", ["topic_selection"]' in source
+    assert '"problem_familiarization", ("modeling-problem-familiarization", ["literature_evidence", "topic_selection"]' in source
+    assert '"problem_intake", ("modeling-problem-intake", ["problem_familiarization", "topic_selection"]' in source
+
+
+def test_pre_model_graph_is_topologically_ordered():
+    source = (SKILL / "scripts" / "route_pipeline.py").read_text(encoding="utf-8")
+    positions = {
+        stage: source.index(f'("{stage}",')
+        for stage in (
+            "topic_selection",
+            "literature_evidence",
+            "problem_familiarization",
+            "problem_intake",
+            "assumption_ledger",
+            "data_audit",
+            "model_architect",
+        )
+    }
+    assert positions["topic_selection"] < positions["literature_evidence"]
+    assert positions["literature_evidence"] < positions["problem_familiarization"]
+    assert positions["problem_familiarization"] < positions["problem_intake"]
+    assert positions["problem_intake"] < positions["assumption_ledger"] < positions["model_architect"]
 
 
 def test_route_reports_blocked_stage_and_rejects_unknown_stage(tmp_path: Path):

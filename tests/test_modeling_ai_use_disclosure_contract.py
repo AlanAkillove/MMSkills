@@ -36,6 +36,12 @@ def test_supporting_references_and_scripts_exist():
         assert path.exists(), path
 
 
+def test_event_schema_covers_the_new_pre_model_stages():
+    schema = (SKILL / "references" / "event-schema.md").read_text(encoding="utf-8")
+    for phrase in ("topic_selection", "literature_evidence", "problem_familiarization"):
+        assert phrase in schema
+
+
 def test_fixture_separates_adoption_edit_and_verification():
     data = json.loads((FIXTURES / "final_input.json").read_text(encoding="utf-8"))
     assert data["confirmation"]["status"] == "confirmed"

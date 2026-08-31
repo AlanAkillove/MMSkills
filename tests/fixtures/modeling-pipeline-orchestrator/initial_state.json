@@ -6,6 +6,7 @@
   "current_stage": "rules_profile",
   "last_snapshot_id": "SNAP-001",
   "stages": {
-    "rules_profile": {"status": "passed", "reason": "fixture profile verified"}
+    "rules_profile": {"status": "passed", "reason": "fixture profile verified"},
+    "topic_selection": {"status": "skipped", "reason": "fixture represents an already selected single topic"}
   }
 }

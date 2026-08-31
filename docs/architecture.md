@@ -16,8 +16,11 @@ MathModelingSkills 是一个面向数学建模论文生产过程的 Agent skill 
 ```text
 INTAKE
   -> RULES_PROFILE
+  -> TOPIC_SELECTION
+  -> LITERATURE_ORIENTATION
+  -> PROBLEM_FAMILIARIZATION
   -> QUESTION_MAP
-  -> DATA_AND_SOURCE_AUDIT
+  -> (ASSUMPTION_LEDGER || DATA_AUDIT)
   -> BASELINE
   -> MODEL_CANDIDATES
   -> HUMAN_MODEL_GATE
@@ -46,6 +49,8 @@ INTAKE
 
 ### 3.2 研究与建模层
 
+- `modeling-topic-selection`
+- `modeling-problem-familiarization`
 - `modeling-problem-intake`
 - `modeling-rules-profile`
 - `modeling-literature-evidence`
@@ -85,7 +90,14 @@ INTAKE
 project_state/
 ├── project_profile.yaml
 ├── rules_profile.yaml
+├── topic_cards.md
+├── topic_comparison.md
+├── topic_selection_brief.md
 ├── question_map.md
+├── problem_background_map.md
+├── literature_orientation_ledger.md
+├── understanding_checkpoint.md
+├── familiarization_open_questions.md
 ├── data_dictionary.md
 ├── assumption_ledger.md
 ├── decision_log.md
@@ -115,6 +127,9 @@ project_state/
 - 每条重要主张都有 `claim_id`、证据位置、证据强度和适用边界；
 - 每个模型候选都有选择理由、放弃理由和人类决策者；
 - 每个候选模型都有面向用户的用途、输入/输出、分项评估、代价、风险、未知、验证优先级和最小理解校验记录；
+- 每场多题比赛都有全题目卡片、分项比较、主选/备选和人工选题记录；单题或已有选题必须显式记录不适用理由；
+- 选题后的背景地图记录现实对象、对象关系、测量/数据过程和子问语义；核心文献以 `literature_insight_id` 记录可迁移思想与不可迁移边界；
+- 多轮理解以 `round_id`、团队复述、差异、纠正和 `decision_id` 续接；理解确认只解锁正式建模，不等于模型采用；
 - 每个实验都有数据版本、代码入口、参数、随机种子或不适用说明；
 - 每个术语都有定义、首次出现位置、是否必要以及是否与已有术语冲突；
 - 每项差异化设计都有题目依据、技术功能、验证证据和人类决策记录；
@@ -125,16 +140,18 @@ project_state/
 
 以下节点默认必须由人确认，Agent 只能提出候选和风险：
 
-1. 题意和子问题的最终解释；
-2. 关键建模假设及其适用范围；
-3. 候选模型、目标函数、约束和评价指标的取舍；
-3a. 团队是否通过本题对象复述理解候选模型的用途、关键假设、主要代价/风险和待验证点；
-4. 数据清洗、异常值处理、样本切分和外部资料采纳；
-5. 实验是否足以支撑主张；
-6. 哪些结构、指标、图表或叙事方式真正体现本题特征；
-7. 论文中的主要结论、创新性表述和局限性；
-8. AI 使用详情、采纳/修改描述和最终提交文件。
-9. 官方 TeX/Word 模板、格式开关、PDF 页面和最终可提交版本。
+1. 全部题目的比较范围、主选/备选和选题依据；
+2. 题意和子问题的最终解释；
+3. 背景、对象关系、术语/单位和核心文献迁移边界；
+4. 关键建模假设及其适用范围；
+5. 候选模型、目标函数、约束和评价指标的取舍；
+5a. 团队是否通过本题对象复述理解候选模型的用途、关键假设、主要代价/风险和待验证点；
+6. 数据清洗、异常值处理、样本切分和外部资料采纳；
+7. 实验是否足以支撑主张；
+8. 哪些结构、指标、图表或叙事方式真正体现本题特征；
+9. 论文中的主要结论、创新性表述和局限性；
+10. AI 使用详情、采纳/修改描述和最终提交文件；
+11. 官方 TeX/Word 模板、格式开关、PDF 页面和最终可提交版本。
 
 确认应写入 `decision_log.md`，不能只留在一次不可追溯的口头对话中。
 
@@ -165,9 +182,10 @@ project_state/
 ## 8. 研究与实现顺序
 
 1. 先冻结共享 schema、质量模型、反同质化检查项和规则适配接口；
-2. 再实现最小闭环：题意 → 证据 → 论文 → 审查 → 自然化 → 预检；
-3. 在写作前接入差异化设计、模型选择和作者决策记录；
-4. 然后接入实验/支撑材料和 AI 使用披露；
-5. 最后根据真实论文运行结果拆分或合并 skills。
+2. 再实现前置闭环：全题目盘点 → 选题人工门 → 题意地图 → 文献学习 → 多轮理解确认；
+3. 再实现最小论文闭环：题意 → 证据 → 论文 → 审查 → 自然化 → 预检；
+4. 在写作前接入差异化设计、模型选择和作者决策记录；
+5. 然后接入实验/支撑材料和 AI 使用披露；
+6. 最后根据真实论文运行结果拆分或合并 skills。
 
 这样可以避免先写一批互相重复、无法共享状态的提示词。

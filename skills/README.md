@@ -17,7 +17,9 @@ modeling-ai-use-disclosure
 
 ## 已实现
 
-- [`modeling-problem-intake`](modeling-problem-intake/)：将题面整理为带证据锚点的问题地图，专门处理图示/几何关系、边界条件、歧义和长题面续接。
+- [`modeling-topic-selection`](modeling-topic-selection/)：在多题比赛开始时逐题盘点并比较题意、背景、资源、时间、验证和差异化风险，保留主选/备选的人类决策门。
+- [`modeling-problem-familiarization`](modeling-problem-familiarization/)：在选题后分轮学习题目背景、对象关系、测量过程、术语和文献迁移边界，通过复述纠错形成理解快照。
+- [`modeling-problem-intake`](modeling-problem-intake/)：在共同理解确认后将题面整理为带证据锚点的问题地图，专门处理图示/几何关系、边界条件、歧义和长题面续接。
 - [`modeling-assumption-ledger`](modeling-assumption-ledger/)：登记题面条件、团队假设、推导条件和计算便利条件，追踪影响、边界、验证与人工确认。
 - [`modeling-claim-evidence-audit`](modeling-claim-evidence-audit/)：逐项核对论文主张、证据类型、范围和措辞强度，分离补证据与限缩主张。
 - [`modeling-terminology-auditor`](modeling-terminology-auditor/)：维护概念—术语—符号—单位映射，识别同义漂移和高级感包装。
@@ -31,7 +33,7 @@ modeling-ai-use-disclosure
 - [`modeling-data-audit`](modeling-data-audit/)：审计数据来源、口径、单位、质量、切分泄漏、授权和可复现性。
 - [`modeling-model-architect`](modeling-model-architect/)：先建立可解释基线，再登记候选模型的适配、复杂度、验证和团队取舍。
 - [`modeling-experiment-validator`](modeling-experiment-validator/)：登记基线、对照、敏感性、边界、不确定性和复现实验，防止只报最好结果。
-- [`modeling-literature-evidence`](modeling-literature-evidence/)：围绕题意、方法、数据和主张建立来源清单与可核查证据链，阻断搜索摘要和虚构引用。
+- [`modeling-literature-evidence`](modeling-literature-evidence/)：以 orientation 或 citation-audit 模式围绕题意、背景、方法、数据和主张建立来源清单与可核查证据链，阻断搜索摘要和虚构引用。
 - [`modeling-paper-architect`](modeling-paper-architect/)：将题目、证据和主张组织为章节/段落契约，避免固定目录与清单式拼接。
 - [`modeling-figure-designer`](modeling-figure-designer/)：从读者任务、证据角色和题目特征出发设计并制作可读、可复现、适合正文排版的图表与模型结构图。
 - [`modeling-figure-table-auditor`](modeling-figure-table-auditor/)：逐图/表核对证据角色、数据/单位/来源、正文主张、版本和渲染可读性。

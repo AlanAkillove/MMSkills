@@ -2,13 +2,15 @@
 
 这是当前技能目录和优先级记录。优先级依据“对后续返工的影响 × 可跨论文复用性 × 可测试性”确定。反同质化不是最后的装饰检查，而是从题意拆解和模型选择阶段开始的横切能力。
 
-当前进度：上述 23 个技能与新增的 `modeling-tex-paper-production` 已完成首轮调研和实现；TeX skill 的契约测试、模板编译和 PDF 渲染验证随本次变更执行。后续转入真实项目维护、更多赛事 profile 和发布准备。
+当前进度：现有技能与新增的 `modeling-topic-selection`、`modeling-problem-familiarization` 已完成首轮设计和实现；前置选题、文献 orientation 和多轮理解阶段的真实项目回归仍需补做。TeX skill 的契约测试、模板编译和 PDF 渲染验证随对应变更执行。
 
 ## P0：先做最小闭环
 
 | 候选 skill | 作用 | 关键产物 |
 |---|---|---|
 | `modeling-pipeline-orchestrator` | 识别阶段、管理状态、触发人工确认 | `pipeline_state.yaml` |
+| `modeling-topic-selection` | 比较全场题目并形成主选/备选人工决策 | `topic_cards.md` + `topic_selection_brief.md` |
+| `modeling-problem-familiarization` | 分轮学习题目背景、对象关系与文献边界 | `problem_background_map.md` + `understanding_checkpoint.md` |
 | `modeling-problem-intake` | 把题面拆成任务、变量、目标、约束和歧义 | `question_map.md` |
 | `modeling-assumption-ledger` | 登记假设、理由、影响、验证与确认状态 | `assumption_ledger.md` |
 | `modeling-claim-evidence-audit` | 绑定主张、证据、边界和验证入口 | `claim_evidence_matrix.csv` |
@@ -31,7 +33,7 @@
 | `modeling-ai-pattern-reviewer` | 识别模板化痕迹并给出证据化重写建议 | `ai_pattern_report.md` |
 | `modeling-reader-experience-auditor` | 以不同读者路径检查逻辑、导航、视觉和信息负担 | `reader_audit.md` |
 | `modeling-ai-use-disclosure` | 从会话/日志整理赛事适配的 AI 使用详情 PDF | `AI工具使用详情.pdf` |
-| `modeling-literature-evidence` | 围绕题意、方法、数据和主张建立可核查来源链 | `source_register.csv` + `citation_evidence_matrix.csv` |
+| `modeling-literature-evidence` | 以 orientation/citation-audit 两种模式围绕背景、题意、方法、数据和主张建立可核查来源链 | `source_register.csv` + `literature_orientation_ledger.md` / `citation_evidence_matrix.csv` |
 | `modeling-process-freezer` | 冻结阶段快照、hash、谱系和人工签核 | `freeze_manifest.json` + `handoff.md` |
 | `modeling-pipeline-orchestrator` | 按依赖和人工门路由全流程 | `pipeline_state.yaml` + `run_plan.md` |
 | `modeling-tex-paper-production` | 按赛事 profile 生成、迁移、编译、渲染和审计 TeX 论文 | `main.tex` + `tex_build_manifest.yaml` + `tex_layout_audit.md` |

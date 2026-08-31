@@ -27,6 +27,8 @@ status: planned | searching | read | verified | blocked
 4. 记录来源支持范围、不能支持的范围和与题目的差异；
 5. 将条目放入 `verified`、`summary_only`、`unavailable` 或 `conflict`，不把候选直接放进已验证清单。
 
+在 `orientation` 模式，阅读目标还包括让团队形成共同背景，而不只是为正文找引用。每篇核心来源要在 `literature_orientation_ledger.md` 中记录 `literature_insight_id`、可迁移思想、不可迁移边界和一个可复述的问题；团队未能说明来源解决什么、不能支持什么时，保持 `partial` 或 `needs_human`，不解锁模型阶段。
+
 搜索摘要、聚合网站、自动生成的参考文献、模型记忆和未经打开的 DOI 只能是候选线索。若 DOI/题名/作者/年份不能交叉核对，保留候选状态。
 
 ## 版本与时效

@@ -1,0 +1,4 @@
+interface:
+  display_name: "数模题目熟悉与背景学习"
+  short_description: "分轮讲清选定题目的背景、机理、术语、文献边界并确认理解"
+  default_prompt: "使用 $modeling-problem-familiarization 带我分轮熟悉选定赛题及其相关文献，确认理解后再进入建模。"

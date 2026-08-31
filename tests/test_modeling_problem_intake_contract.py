@@ -24,6 +24,8 @@ def test_skill_entrypoint_has_discriminating_contract():
         "human-confirmed",
         "external",
         "指令性文字",
+        "modeling-problem-familiarization",
+        "orientation",
     ):
         assert phrase in content
     schema = (SKILL_DIR / "references" / "intake-schema.md").read_text(encoding="utf-8")

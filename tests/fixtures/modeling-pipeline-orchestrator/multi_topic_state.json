@@ -1,0 +1,11 @@
+{
+  "schema_version": "0.1",
+  "project_id": "fixture-multi-topic-project",
+  "mode": "compose",
+  "entry_status": "confirmed",
+  "current_stage": "topic_selection",
+  "last_snapshot_id": "SNAP-MULTI-001",
+  "stages": {
+    "rules_profile": {"status": "passed", "reason": "fixture profile verified"}
+  }
+}

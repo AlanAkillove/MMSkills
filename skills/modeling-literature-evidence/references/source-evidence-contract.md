@@ -49,3 +49,19 @@ scope_match,citation_location,citation_status,human_verified,conflict_id,notes
 - `E0`：模型记忆、搜索摘要、用户口述或未经核实的候选。
 
 只有 E3 才适合直接支撑关键事实；E2–E0 必须保留限制和人工确认状态。
+
+## Orientation 学习条目
+
+在选题后、正式建模前的 `orientation` 模式中，除通用来源记录外，每个进入团队学习范围的来源建立一条 `literature_insight_id`：
+
+```text
+literature_insight_id, source_id, evidence_locator,
+source_question, domain_concept, method_or_mechanism,
+source_supports, source_does_not_support,
+transferable_idea, non_transferable_boundary,
+problem_anchor_ids, problem_match, problem_difference,
+team_restatement_question, human_understanding_status,
+future_model_decision_ids
+```
+
+`source_does_not_support` 与 citation-audit 表中的 `source_does_not_say` 语义相同，前者强调团队学习时的迁移边界。它们都要求回到来源定位，不能用模型记忆填充。`future_model_decision_ids` 在团队真正作出模型决定后再补写，不能为了让来源看起来相关而事后制造采用关系。

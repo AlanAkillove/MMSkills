@@ -14,11 +14,13 @@ from typing import Any, Dict, List, Tuple
 STAGE_GRAPH = OrderedDict(
     [
         ("rules_profile", ("modeling-rules-profile", [], "required")),
-        ("problem_intake", ("modeling-problem-intake", ["rules_profile"], "required")),
-        ("assumption_ledger", ("modeling-assumption-ledger", ["problem_intake"], "required")),
-        ("literature_evidence", ("modeling-literature-evidence", ["problem_intake"], "required")),
-        ("data_audit", ("modeling-data-audit", ["problem_intake"], "required")),
-        ("model_architect", ("modeling-model-architect", ["problem_intake", "assumption_ledger", "data_audit"], "required")),
+        ("topic_selection", ("modeling-topic-selection", ["rules_profile"], "required")),
+        ("literature_evidence", ("modeling-literature-evidence", ["topic_selection"], "required")),
+        ("problem_familiarization", ("modeling-problem-familiarization", ["literature_evidence", "topic_selection"], "required")),
+        ("problem_intake", ("modeling-problem-intake", ["problem_familiarization", "topic_selection"], "required")),
+        ("assumption_ledger", ("modeling-assumption-ledger", ["problem_intake", "problem_familiarization"], "required")),
+        ("data_audit", ("modeling-data-audit", ["problem_intake", "problem_familiarization"], "required")),
+        ("model_architect", ("modeling-model-architect", ["problem_intake", "problem_familiarization", "assumption_ledger", "data_audit"], "required")),
         ("experiment_validator", ("modeling-experiment-validator", ["model_architect"], "required")),
         ("paper_architect", ("modeling-paper-architect", ["problem_intake", "model_architect", "experiment_validator"], "required")),
         ("figure_design", ("modeling-figure-designer", ["paper_architect", "experiment_validator"], "required")),

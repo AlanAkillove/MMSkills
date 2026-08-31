@@ -20,7 +20,7 @@ description: "从题意、假设、差异化账本、模型注册、实验和主
 ## 输入与读取顺序
 
 1. 固定题面/图示、目标赛事/年份、论文版本/hash 和篇幅/提交规则 profile；
-2. 读取 `question_map`、`assumption_ledger`、`distinctiveness_ledger` 和模型 registry；
+2. 读取 `question_map`、`problem_background_map`、`literature_orientation_ledger`、`assumption_ledger`、`distinctiveness_ledger` 和模型 registry；
 3. 读取数据 manifest/audit、实验 registry/验证矩阵和失败/限制记录；
 4. 读取主张—证据矩阵、术语账本、图表注册、代码/支撑材料入口和已有草稿；
 5. 记录未读材料、冲突、尚未人工确认的核心决定和写作资源/分工。

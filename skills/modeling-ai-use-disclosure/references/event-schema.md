@@ -11,7 +11,7 @@
 | `event_id` | 稳定事件 ID | 不含姓名和密钥，创建后不随措辞修改而变化 |
 | `event_family` | 交互所属事件族 | `problem_understanding`、`literature_or_source`、`solution_candidate`、`code_or_computation`、`figure_or_table`、`result_interpretation`、`structure_planning`、`language_polish`、`format_check`、`disclosure` 或 `other` |
 | `source_ids` | 原始证据 | 一个或多个 `source_id`；至少有一个定位或明确为 `E0` |
-| `stage` | 论文阶段 | `problem_intake`、`assumption`、`data`、`model`、`experiment`、`writing`、`revision`、`formatting`、`disclosure`、`unknown` |
+| `stage` | 论文/项目阶段 | `topic_selection`、`problem_intake`、`literature_evidence`、`problem_familiarization`、`assumption`、`data`、`model`、`experiment`、`writing`、`revision`、`formatting`、`disclosure`、`unknown` |
 | `tool` | 工具身份 | `name`、`developer`、`version_or_model`、`identity_status` |
 | `purpose` | 当次使用目的 | 具体到任务，不写“辅助论文”这类空泛词 |
 | `input_scope` | 提供给 AI 的材料范围 | 文件/段落/问题/数据的摘要；不得保存秘密和未授权原文 |

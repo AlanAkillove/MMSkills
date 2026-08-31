@@ -7,6 +7,10 @@
   "last_snapshot_id": "SNAP-003",
   "stages": {
     "rules_profile": {"status": "passed", "reason": "fixture profile verified"},
+    "rules_profile": {"status": "passed", "reason": "fixture profile verified"},
+    "topic_selection": {"status": "skipped", "reason": "fixture represents an already selected single topic"},
+    "literature_evidence": {"status": "passed", "reason": "orientation evidence was reviewed in this fixture"},
+    "problem_familiarization": {"status": "needs_human", "reason": "team understanding checkpoint needs confirmation"},
     "problem_intake": {"status": "needs_human", "reason": "题意解释需要确认"},
     "ai_disclosure": {"status": "needs_human", "reason": "授权历史范围需要确认"}
   }

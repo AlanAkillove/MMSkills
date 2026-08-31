@@ -7,6 +7,7 @@
   "last_snapshot_id": "SNAP-002",
   "stages": {
     "rules_profile": {"status": "passed", "reason": "fixture profile verified"},
+    "topic_selection": {"status": "skipped", "reason": "fixture represents an already selected single topic"},
     "problem_intake": {"status": "blocked", "reason": "题面图示关系未确认"}
   }
 }

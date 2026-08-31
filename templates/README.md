@@ -6,7 +6,13 @@
 
 - `project_profile.yaml`：项目与赛事上下文；
 - `rules_profile.yaml`：目标赛事规则、来源、日期和适用范围；
+- `topic_cards.md`：一场比赛的全题目卡片、工作负担、团队匹配和风险；
+- `topic_selection_brief.md`：多题分项比较、主选/备选讨论和人工选题门；
 - `assumption_ledger.md`：假设、理由、影响、验证与确认状态；
+- `problem_background_map.md`：选定题目的现实背景、对象关系、测量数据和任务语义；
+- `literature_orientation_ledger.md`：背景/方法文献的思想卡片、可迁移和不可迁移边界；
+- `understanding_checkpoint.md`：多轮说明、团队复述、纠正和理解确认；
+- `familiarization_open_questions.md`：题目熟悉阶段的未决问题和解锁条件；
 - `decision_log.md`：人类做出的关键选择；
 - `claim_evidence_matrix.csv`：主张—证据—边界映射；
 - `terminology_ledger.md`：术语、定义、首次出现、替换和禁用候选；

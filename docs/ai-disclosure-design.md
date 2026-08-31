@@ -61,9 +61,9 @@ tool:
   name: null
   model_or_version: null
   developer: null
-stage: intake | research | data | modeling | coding | experiment | figure | writing | review | formatting | disclosure | unknown
+stage: topic_selection | intake | literature_orientation | problem_familiarization | research | data | modeling | coding | experiment | figure | writing | review | formatting | disclosure | unknown
 action:
-  type: question_analysis | literature_search | source_summary | data_organization | model_candidate | code_generation | debugging | experiment_design | figure_generation | language_editing | formatting | review | other
+  type: topic_selection | question_analysis | background_orientation | literature_search | source_summary | data_organization | model_candidate | code_generation | debugging | experiment_design | figure_generation | language_editing | formatting | review | other
   purpose: null
   prompt_excerpt: null
   prompt_status: verbatim | partial | summarized | unavailable

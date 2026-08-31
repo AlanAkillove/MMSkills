@@ -28,6 +28,8 @@ def test_entrypoint_is_baseline_first_and_human_led():
         "understanding_check",
         "model_candidate_cards.md",
         "model_decision_brief.md",
+        "problem_familiarization",
+        "literature_orientation_ledger",
         "P0",
         "P1",
     ):
