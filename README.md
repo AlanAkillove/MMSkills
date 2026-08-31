@@ -84,6 +84,18 @@ tmp/          本地临时文件，不纳入版本控制
 - 面向具体赛事的披露 PDF 生成
 - 人类确认、版本冻结与交付清单
 
+## Agent 安装
+
+本项目地址：[`https://github.com/AlanAkillove/MMSkills`](https://github.com/AlanAkillove/MMSkills)
+
+如果要让 Agent 安装或接入本项目，请先阅读[跨 Agent 安装教程与安装提示词](docs/agent-skill-installation.md)。教程中的提示词可以直接复制给当前 Agent：
+
+```text
+请将 https://github.com/AlanAkillove/MMSkills.git 接入当前 Agent；先判断你当前支持的 skill、插件或项目指令规范，再按教程选择适配方式并报告 copied、discovered、activated、verified 状态。不要把 Codex 的目录格式当成通用标准，也不要自动运行脚本或替我决定数学建模的核心内容。
+```
+
+Agent 应先根据自身宿主能力选择项目级、用户级、会话级或仅提示词方式；不能因为仓库地址可访问就声称技能已经被当前应用发现、启用或验证。
+
 ## 当前工作方式
 
 本项目按“总设计 → 分板块调研 → 契约冻结 → 技能实现 → fixtures 测试 → 真实项目只读回归 → 发布准备”的顺序推进。当前已完成全流程首轮实现和一轮脱敏真实项目回归，后续重点是维护技能契约、扩充赛事 profile，并继续避免把真实项目内容写回技能库。

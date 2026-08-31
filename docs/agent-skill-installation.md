@@ -6,12 +6,32 @@
 
 安装和适配不得改变数学建模的人工决策边界：Agent 可以复制、链接、转换和验证技能文件，但不能因为安装完成就自动运行论文流程、替用户决定题意/假设/模型/结论，也不能把“已复制”说成“已被当前 Agent 发现并启用”。
 
-## 一、给用户直接复制的安装提示词
+## 项目源与安装入口
 
-用户可以把下面的提示词连同本仓库的本地路径或 Git 地址交给任意 Agent。尖括号内容应由用户替换；Agent 不得自行猜测路径、平台或安装范围。
+本项目的公开 Git 源地址是：
 
 ```text
-请将 <MathModelingSkills 的本地路径或 Git 地址> 接入当前 Agent，使我能够按需调用其中的数学建模 skills。
+https://github.com/AlanAkillove/MMSkills.git
+```
+
+用户可以把该地址交给当前 Agent 的原生 skill installer、插件/扩展安装器，或作为普通 Git 源地址由 Agent 获取到一个本地只读副本。获取源代码不等于完成宿主安装；后续仍必须执行能力探测、依赖闭包检查和发现/激活验证。
+
+如果宿主要求用户先取得本地副本，可以使用：
+
+```text
+git clone https://github.com/AlanAkillove/MMSkills.git
+```
+
+这条命令只负责获取源代码，不是跨平台的 skill 安装命令。安装 Agent 必须根据当前宿主决定目标路径、目录层级和是否需要适配；不要把仓库根目录直接当成每个平台的 skill 目录。
+
+## 一、给用户直接复制的安装提示词
+
+用户可以把下面的提示词交给任意 Agent。默认使用本项目的公开 Git 地址；如果用户已有本地副本，可以把第一行的地址替换为已授权的本地路径。
+
+```text
+请将 https://github.com/AlanAkillove/MMSkills.git 接入当前 Agent，使我能够按需调用其中的数学建模 skills。
+
+如果我提供的是本地副本，则只读取该已授权路径；不要自行寻找或上传其他项目文件。
 
 请严格按以下流程执行：
 1. 先识别你当前运行的 Agent 应用/CLI/IDE、版本、可用工具和权限，并检查你是否原生支持 Agent Skills、插件/扩展、项目级 instructions，或只能读取一段提示词。不要凭经验假定自己支持某个平台。
@@ -132,7 +152,7 @@ skills/<skill-name>/SKILL.md
 4. 是否能保留脚本、资源、权限和版本信息；
 5. 是否有列出、刷新、启用、禁用、卸载和回滚机制。
 
-如果答案不足以确认，选择 `prompt-only` 或 `blocked`，不要为了“看起来安装成功”创造未经文档支持的目录或配置。
+如果答案不足以确认，选择 `prompt-only` 或 `blocked`，不要为了“看起来安装成功”创造未经文档支持的目录或配置。对于本项目，默认源地址是 `https://github.com/AlanAkillove/MMSkills.git`，但源地址不改变宿主适配要求。
 
 ## 六、技能范围与作用域
 
@@ -193,7 +213,7 @@ verified   = 通过无害 smoke test，确认入口、引用、权限和预期�
 推荐报告格式：
 
 ```yaml
-source: <local path or URL>
+source: https://github.com/AlanAkillove/MMSkills.git
 source_revision: <tag, commit, or hash; unknown if unavailable>
 host: <product and version>
 scope: project | user | session | unknown

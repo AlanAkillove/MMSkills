@@ -11,10 +11,13 @@ def test_readme_links_to_the_cross_agent_installation_prompt():
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
     assert "docs/agent-skill-installation.md" in readme
     assert "安装提示词" in readme
+    assert "## Agent 安装" in readme
+    assert "https://github.com/AlanAkillove/MMSkills" in readme
 
 
 def test_guide_requires_capability_detection_and_host_adaptation():
     content = GUIDE.read_text(encoding="utf-8")
+    assert "https://github.com/AlanAkillove/MMSkills.git" in content
     for phrase in (
         "SKILL.md",
         "agents/openai.yaml",
