@@ -4,7 +4,7 @@
 
 本项目将 Agent 定位为数学建模团队的协作工具：人类负责核心建模判断与最终提交，Agent 负责问题理解、资料核验、数据审计、候选方案整理、实验记录、论文写作辅助、审稿式检查、语言自然化、格式预检和 AI 使用披露，并把这些工作组织成可追踪、可复核、可移交的流程。
 
-> 当前状态：23 个 skills 已通过契约校验和反例测试；此前 22 个技能已完成一轮脱敏真实项目只读回归，新图表设计技能待纳入下一轮回归。规则 profile、披露 PDF 与最终冻结产物仍需按具体项目由人类确认。
+> 当前状态：24 个 skills 已完成首轮契约/结构验证；规则 profile、TeX/PDF 渲染、披露 PDF 与最终冻结产物仍需按具体项目由人类确认。
 
 ## 设计原则
 
@@ -76,6 +76,7 @@ tmp/          本地临时文件，不纳入版本控制
 - 中文学术表达自然化
 - 阅读体验与信息架构审查
 - 最终格式和提交预检
+- TeX 源稿生产、赛事版式适配、编译和 PDF 页面预检
 
 ### 过程与披露
 
@@ -111,12 +112,14 @@ Agent 应先根据自身宿主能力选择项目级、用户级、会话级或�
 - [反同质化设计草案](docs/anti-homogenization-design.md)
 - [质量模型与问题分类](docs/quality-model.md)
 - [跨 Agent 安装教程与安装提示词](docs/agent-skill-installation.md)
+- [TeX 模板设计与赛事排版调研](docs/tex-template-design.md)
+- [TeX 通用模板](templates/tex/README.md)
 
 ## 贡献与使用
 
 请先阅读 [CONTRIBUTING.md](CONTRIBUTING.md)。涉及竞赛规则、AI 使用或隐私的变更，需要同时更新来源、适用范围、人工确认点和测试 fixtures；规则条目只有在完成人工核验后，才能写入对应赛事 profile。
 
-本地最小验证：`python -m pip install -r requirements-dev.txt`，然后运行 `python -m pytest -q` 和 `python -m compileall -q skills tests`。AI 详情 PDF 还需按对应 skill 的 fixtures 命令做结构和视觉检查。
+本地最小验证：`python -m pip install -r requirements-dev.txt`，然后运行 `python -m pytest -q` 和 `python -m compileall -q skills tests`。TeX 还需运行 `python skills/modeling-tex-paper-production/scripts/check_tex_template.py templates/tex/main.tex`，在本地 TeX 环境可用时编译并渲染 PDF；AI 详情 PDF 还需按对应 skill 的 fixtures 命令做结构和视觉检查。
 
 如果要直接让 Agent 安装本项目，请先使用[跨 Agent 安装教程与安装提示词](docs/agent-skill-installation.md)。教程要求 Agent 先判断当前应用支持的 skill、插件或项目指令规范，再选择适配方式；不默认把 Codex 的目录和元数据当成所有 Agent 的通用格式。
 

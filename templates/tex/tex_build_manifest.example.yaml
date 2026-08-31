@@ -1,0 +1,43 @@
+schema_version: "0.1"
+status: draft
+profile_id: "[目标赛事 profile ID]"
+entrypoint: "main.tex"
+
+engine:
+  name: "xelatex"
+  version: "unknown"
+  distribution: "unknown"
+  operating_system: "unknown"
+  packages_or_class: []
+  fonts: []
+
+build:
+  primary_command: "latexmk -xelatex -interaction=nonstopmode -file-line-error main.tex"
+  fallback_command: "xelatex -interaction=nonstopmode -halt-on-error main.tex"
+  bibliography_tool: "none"
+  passes: "unknown"
+
+inputs:
+  - path: "main.tex"
+    role: "entrypoint"
+    sha256: "unknown"
+  - path: "references.bib"
+    role: "verified bibliography or empty database"
+    sha256: "unknown"
+  - path: "figures/"
+    role: "registered figure inputs"
+    sha256: "unknown"
+
+outputs:
+  paper_pdf:
+    path: "paper.pdf"
+    sha256: "unknown"
+    pages: "unknown"
+    size_bytes: "unknown"
+    render_status: "unassessed"
+
+human_confirmation:
+  status: pending
+  decision_id: unknown
+  confirmed_by: unknown
+  confirmed_at: unknown

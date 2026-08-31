@@ -66,6 +66,7 @@ INTAKE
 - `modeling-anti-homogenization-auditor`
 - `modeling-paper-naturalizer`
 - `modeling-reader-experience-auditor`
+- `modeling-tex-paper-production`
 - `modeling-final-preflight`
 
 ### 3.4 过程与合规层
@@ -99,6 +100,8 @@ project_state/
 ├── figure_design_manifest.yaml
 ├── distinctiveness_ledger.md
 ├── figure_table_registry.md
+├── tex_build_manifest.yaml
+├── tex_layout_audit.md
 ├── issue_log.md
 ├── ai_logs/
 │   ├── usage.jsonl
@@ -131,6 +134,7 @@ project_state/
 6. 哪些结构、指标、图表或叙事方式真正体现本题特征；
 7. 论文中的主要结论、创新性表述和局限性；
 8. AI 使用详情、采纳/修改描述和最终提交文件。
+9. 官方 TeX/Word 模板、格式开关、PDF 页面和最终可提交版本。
 
 确认应写入 `decision_log.md`，不能只留在一次不可追溯的口头对话中。
 

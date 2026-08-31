@@ -35,6 +35,7 @@
 - 完成第二十三个生产级技能 `modeling-figure-designer` 的入口、图表设计契约、选图规则、视觉系统、制作/交接流程、开源实践依据和脱敏正反例，并完成契约验证。
 - 增强 `modeling-model-architect` 的用户决策支持：为候选模型增加通俗用途、分项评估、证据/未知、验证优先级、候选卡片和决策简报，并用理解确认门阻止总分、单一推荐和沉默同意替代人类决策。
 - 增加跨 Agent 安装教程与可复制安装提示词：先探测宿主能力，再在原生标准目录、宿主适配器、插件/扩展、项目 instructions、单条提示词和阻断状态之间选择；补充依赖闭包、权限、安全、验证、manifest、升级与回滚要求。
+- 增加 `modeling-tex-paper-production` 与 `templates/tex/`：从既有数模 TeX 实例提炼中性写作骨架，按 CUMCM、COMAP、MathorCup 和研究生数模的差异拆分赛事 profile，补充 XeLaTeX 构建、PDF 渲染、许可证、匿名、页数、AI 声明和版式审计边界。
 - 将安装教程和 README 安装入口切换为公开仓库 `https://github.com/AlanAkillove/MMSkills`，补充 Git 获取源代码与项目级短安装提示词，同时保留跨宿主适配边界。
 - 修正通用规则模板和 CUMCM 2026 profile 的 0.2 schema 对齐、YAML 引号与保守 `draft` 状态；补充编排器无 ready 阶段的安全动作测试。
 - 增加开发依赖清单和 GitHub Actions 质量工作流，覆盖契约测试、YAML 解析、Python 编译和披露 PDF 草稿校验。

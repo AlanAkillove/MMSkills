@@ -11,9 +11,14 @@
 | CUMCM-RULE-2026 | [全国大学生数学建模竞赛参赛规则（2026年修订稿）](https://www.mcm.edu.cn/html_cn/node/9d8e511fe7a1447b35f53a82c908e2e0.html) | 官方组委会规则 | 对原创性、真实性、准确性负全部责任；竞赛期间不得与队外人员讨论赛题，不得在指定交流平台浏览、发布或讨论赛题内容 | 竞赛纪律和平台范围不能移植到其他赛事 |
 | CUMCM-REVIEW-2025 | [全国大学生数学建模竞赛赛区评阅工作规范（2025年修订稿）](https://www.mcm.edu.cn/html_cn/node/011a3fefdb4951a8cb595400f44ec3df.html) | 官方组委会评阅规范 | 评阅前统一评阅要点；每篇论文至少由 3 位评委独立评阅；对突出创新点、相似度和疑似抄袭进行单独处理；匿名和回避制度保护公平性 | 评阅流程、相似度阈值和送审比例是 CUMCM 赛区规则，不应直接当作其他赛事或 AI 来源判断 |
 | CUMCM-FORMAT-2026 | [全国大学生数学建模竞赛论文格式规范（2026年修订稿）](https://www.mcm.edu.cn/html_cn/node/4cd596519c9eb9fbd866398f6df0caa3.html)；项目持有者提供的本地副本（路径不写入公开仓库） | 官方格式规范 | 纸质/电子版、摘要页、正文页数、附录、支撑材料、代码、文件大小和身份信息隔离需要在提交前自动检查 | 页数、文件名、页面结构和压缩限制只适用于该规范 |
+| CUMCM-FORMAT-PDF-2026 | [全国大学生数学建模竞赛论文格式规范（2026年修订稿）PDF](https://www.mcm.edu.cn/upload_cn/node/775/cQMeL0YY905244c8bd4b9af832f1699446d8385e.pdf) | 官方规范原始 PDF | 通过文本抽取与页面渲染核对 A4、2.5 cm、摘要页/正文/附录、电子版首页和文件大小等条款 | PDF 为当届版本快照；赛区附加要求和后续修订仍需复核 |
 | STAT-AI-2026 | [全国大学生统计建模大赛生成式人工智能（AI）工具使用规范（试行）](https://www.cmathc.org.cn/tjjmds/news/416.html)；官方站点索引见 [ai-learning.net](https://www.ai-learning.net/gyds/) | 赛事组委会内容的公开转载/索引 | 明确列出可使用范围与禁止范围；禁止 AI 直接生成核心选题、假设、研究框架、调查方案和论文正文；要求填写 AI 使用情况表，并可能核查完整交互日志 | 该页面版权说明为转载网站，正式实现前需取得组委会原始附件/官方提交表并记录来源等级 |
 | GRAD-AI-2025 | [“华为杯”第二十二届中国研究生数学建模竞赛人工智能工具及输出使用规定（2025）](https://www.cmathc.org.cn/mcm/tz/316.html) | 赛事组委会规则的公开转载 | 强调“先理解、再使用”，最终文字用队伍自身语言表述；不能确认来源的模型、公式和数据应标注并存在不被认可风险；代码、数据分析和必要时的输入/后处理策略需说明 | 这是 2025 规则；2026 参赛前不能默认沿用 |
 | MATHOR-AI-2026 | [MathorCup 2026 AI 工具使用规定（试行）](https://m.saikr.com/contest/notice_detail/39401) | 赛事页面公开的组委会通知 | 要求声明、工具引用、支撑材料详情；对代码、分析结果、图表和参数优化等 AI 贡献提出局部注释要求 | 页面由赛氪承载；需以赛事官方附件和当届通知复核 |
+| COMAP-FORMAT-2027 | [COMAP MCM/ICM Contest Rules, Registration and Instructions](https://www.contest.comap.com/undergraduate/contests/mcm/instructions.html) | 官方竞赛说明 | Summary Sheet 首页、目录与读者导向、英文可读字号、控制号页眉、匿名、PDF 和当届页数限制；要求根据当届说明组织附录和问题特定部分 | 2027 说明中的日期、页数定义和提交流程不能自动迁移到其他年份或赛事 |
+| COMAP-SUMMARY-TEX | [COMAP 官方 LaTeX Summary Sheet](https://www.contest.comap.com/undergraduate/contests/mcm/flyer/MCM-ICM_Summary.tex) | 官方模板资源 | 可借鉴 Summary Sheet、控制号和首面信息顺序的源稿入口 | 官方 `.tex` 不是本项目代码；内容、版权和当届要求不能照搬 |
+| GRAD-FORMAT-2025 | [中国研究生数学建模竞赛第二十二届开赛公告](https://cpipc.acge.org.cn/cw/contestNews/detail/4/2c90801b9914a68201994b1403512e96?page=1) | 官方平台赛事通知 | 官方封皮、统一摘要页、匿名范围和模板优先级必须按当届附件执行 | 页面为 2025 届通知；不代表 2026 或未来届次 |
+| MATHOR-FORMAT-2023 | [第十三届 MathorCup 高校数学建模挑战赛论文模板、论文格式及提交规范](https://www.mathorcup.org/detail/2414) | 组委会历史公开格式页面 | 第一页摘要/题目/关键词、第二页目录、正文页码、无页眉、中文、正文约 30 页和支撑材料等历史实践 | 历史届次，不得替代当前届次公告 |
 
 ## B. 国际赛事与出版伦理
 
@@ -48,6 +53,10 @@
 | RESEARCH-COPILOT | [research-co-pilot peer-review](https://github.com/Marazii/research-co-pilot/blob/main/skills/peer-review/SKILL.md) | 先重建主张、承重论证和证据链；精确锚定原文；篇幅随证据量变化；明确置信边界 | 数模要额外复核题面对象和算法实现 |
 | AI-REVIEW | [Ai-Review](https://github.com/NeuroDong/Ai-Review/blob/main/ai-review-skills/SKILL.md) | 分结构阅读、深层一致性和批判评估；不做作者身份猜测；证据层级明确 | 不采用“自动评分替代审稿”的做法 |
 | SCI-WRITER | [SCI-writer-skill](https://github.com/ZhangYuanJie-SJTU/SCI-writer-skill/blob/main/SKILL.md) | 候选模型/写作前的确认门；术语账本；先处理结构和证据再处理句子；写作—审查—修订循环；合规交通灯 | 不复制其超大单体设计，改为数模专用的小 skill + 共享契约 |
+| CUMCMTHESIS-OPEN | [latexstudio/CUMCMThesis](https://github.com/latexstudio/CUMCMThesis) | 将赛事类排版选项、承诺/编号页和编译入口集中管理；提供 README 和许可文件 | 不把旧版 CUMCM 专用 class 当成通用模板；本项目不分发来源/许可/版本未核验的 class 和字体 |
+| MCMTHESIS-CTAN | [mcmthesis on CTAN](https://ctan.org/pkg/mcmthesis) | 面向 MCM/ICM 的文档类与说明文档，体现“随发行版管理依赖、模板配文档”的实践 | 不复制官方/第三方实现；COMAP 当届规则优先 |
+| ICMMCM-OPEN | [harveymuddcollege/icmmcm](https://github.com/harveymuddcollege/icmmcm) | 将控制号、summary、页眉和空白模板作为可配置接口 | 不把英文 MCM/ICM 结构用于中文赛事，也不将其样式当作通用美学 |
+| GBT7714-OPEN | [gbt7714-bibtex-style](https://github.com/zepinglee/gbt7714-bibtex-style) | GB/T 7714-2015 BibTeX 样式、版本和 LPPL 信息可作为中文引用适配的依据 | 只有目标规则、发行版和许可证都确认时才切换，不在通用模板中静默捆绑 `.bst` |
 
 ## E. 图表设计与制作
 

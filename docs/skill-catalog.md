@@ -2,7 +2,7 @@
 
 这是当前技能目录和优先级记录。优先级依据“对后续返工的影响 × 可跨论文复用性 × 可测试性”确定。反同质化不是最后的装饰检查，而是从题意拆解和模型选择阶段开始的横切能力。
 
-当前进度：`modeling-problem-intake`、`modeling-assumption-ledger`、`modeling-claim-evidence-audit`、`modeling-terminology-auditor`、`modeling-ai-pattern-reviewer`、`modeling-paper-naturalizer`、`modeling-paper-reviewer`、`modeling-distinctiveness-coach`、`modeling-anti-homogenization-auditor`、`modeling-reader-experience-auditor`、`modeling-rules-profile`、`modeling-data-audit`、`modeling-model-architect`、`modeling-experiment-validator`、`modeling-literature-evidence`、`modeling-paper-architect`、`modeling-figure-designer`、`modeling-figure-table-auditor`、`modeling-support-materials-auditor`、`modeling-final-preflight`、`modeling-ai-use-disclosure`、`modeling-process-freezer` 与 `modeling-pipeline-orchestrator` 已完成首轮调研、实现、反例 fixture 和契约验证；后续转入真实项目维护、更多赛事 profile 和发布准备。
+当前进度：上述 23 个技能与新增的 `modeling-tex-paper-production` 已完成首轮调研和实现；TeX skill 的契约测试、模板编译和 PDF 渲染验证随本次变更执行。后续转入真实项目维护、更多赛事 profile 和发布准备。
 
 ## P0：先做最小闭环
 
@@ -34,12 +34,13 @@
 | `modeling-literature-evidence` | 围绕题意、方法、数据和主张建立可核查来源链 | `source_register.csv` + `citation_evidence_matrix.csv` |
 | `modeling-process-freezer` | 冻结阶段快照、hash、谱系和人工签核 | `freeze_manifest.json` + `handoff.md` |
 | `modeling-pipeline-orchestrator` | 按依赖和人工门路由全流程 | `pipeline_state.yaml` + `run_plan.md` |
+| `modeling-tex-paper-production` | 按赛事 profile 生成、迁移、编译、渲染和审计 TeX 论文 | `main.tex` + `tex_build_manifest.yaml` + `tex_layout_audit.md` |
 
 ## P2：扩展完整工程链
 
 - 主要数模赛事规则适配器
 - 本地日志采集和脱敏工具
-- PDF/Word/LaTeX 交付验证工具
+- Word 交付验证与 PDF 正文/附录分段计数工具
 
 ## 不建议单独做成 skill 的功能
 

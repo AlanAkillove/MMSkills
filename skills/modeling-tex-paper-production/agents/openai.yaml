@@ -1,0 +1,4 @@
+interface:
+  display_name: "数模论文 TeX 生产与排版预检"
+  short_description: "按赛事规则生成、编译并核验数模论文 TeX 交付稿"
+  default_prompt: "使用 $modeling-tex-paper-production 为这篇数模论文建立并预检可提交的 TeX 版本。"

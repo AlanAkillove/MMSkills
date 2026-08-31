@@ -135,6 +135,15 @@
 - 输出：图表注册表、证据角色、可读性/碰撞/数值一致性报告；
 - 反模式：图表只做装饰、颜色表示不清、正文重复数字而不解释、图表与模型脱节。
 
+### 4.5 `modeling-tex-paper-production`
+
+- 目标：将已确认的数模论文结构、公式、图表、引用和附录组织成可复核的 TeX/PDF 交付稿，并按赛事 profile 适配首页、目录、页眉页脚、页数、匿名、代码和 AI 声明；
+- 输入：赛事/年份规则 profile、论文蓝图、主张—证据矩阵、术语账本、图表 manifest、AI 使用记录、现有 TeX/Word/PDF、字体和编译环境；
+- 输出：通用 `templates/tex/main.tex`、项目 TeX 源稿、构建 manifest、版式审计、渲染抽查和人工确认队列；
+- 人工门：选择官方模板或中性模板、确认开关和章节删留、确认页数/匿名/AI/支撑材料边界、确认最终 PDF；
+- 反模式：把某一赛事模板用于其他赛事、复制未授权 class/字体/Logo、用负间距/缩字号/透明文字绕过规则、编译成功即宣称论文合规；
+- 边界：TeX 版式检查不替代数学、数据、引用、术语、图表事实、赛事规则和 AI 使用记录审查。
+
 ## 5. 术语、审稿和自然化块（P1）
 
 ### 5.1 `modeling-terminology-auditor`
@@ -227,7 +236,7 @@ distinctiveness-coach ─> paper-architect ─> figure-designer ─> figure-tabl
                                           naturalizer
                                                 │
                                                 v
-                              support-materials + final-preflight
+                              tex-paper-production + support-materials + final-preflight
                                                 │
                                                 v
                                        ai-use-disclosure

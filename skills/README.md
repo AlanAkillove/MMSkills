@@ -40,6 +40,7 @@ modeling-ai-use-disclosure
 - [`modeling-ai-use-disclosure`](modeling-ai-use-disclosure/)：从明确授权的会话/日志抽取 AI 使用事件，核对规则与人工控制，并生成可验证的 AI 使用详情 PDF。
 - [`modeling-process-freezer`](modeling-process-freezer/)：用 append-only 快照、SHA-256、状态谱系和人工签核保存长会话与改稿过程。
 - [`modeling-pipeline-orchestrator`](modeling-pipeline-orchestrator/)：按阶段依赖、证据状态和人工门生成全流程运行计划，不替人作核心决定。
+- [`modeling-tex-paper-production`](modeling-tex-paper-production/)：按赛事 profile 建立、迁移、编译、渲染和预检数学建模论文 TeX 交付稿。
 
 ## 最低契约
 

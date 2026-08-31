@@ -1,0 +1,44 @@
+schema_version: "0.1"
+profile_id: "example-tex-format"
+status: draft
+competition:
+  name: "[目标赛事名称]"
+  year: "[年份]"
+  division: "[组别/赛区，如适用]"
+  official_sources: []
+layout:
+  engine: "xelatex"
+  language: "zh-CN"
+  paper_size: "A4"
+  margins: "[官方值或 unknown]"
+  first_page: "[abstract_or_summary / cover / official_template / unknown]"
+  table_of_contents: "unknown"
+  header: "unknown"
+  footer_page_number: "unknown"
+  main_text_page_limit: "unknown"
+  appendix_page_limit: "unknown"
+  page_count_definition: "unknown"
+  official_template: "unknown"
+  official_class_license: "unknown"
+submission:
+  paper_format: ["PDF"]
+  paper_max_size_mb: "unknown"
+  file_naming: "unknown"
+  supporting_materials: "unknown"
+  identity_anonymization: "unknown"
+ai_disclosure:
+  required_if_ai_used: "unknown"
+  required_if_ai_not_used: "unknown"
+  statement_location: "unknown"
+  detail_file: "unknown"
+  raw_prompt_output_required: "unknown"
+  human_review_required: "unknown"
+bibliography:
+  citation_style: "unknown"
+  language_and_order: "unknown"
+human_confirmation:
+  required: true
+  status: pending
+  decision_id: unknown
+  confirmed_by: unknown
+  confirmed_at: unknown

@@ -17,3 +17,4 @@
 - `figure_storyboard.md`：多面板证据角色、视觉顺序、正文承接和删留决定；
 - `figure_design_manifest.yaml`：图表来源、转换、面板、导出、版本和交接状态；
 - `ai_use_event.yaml`：单条 AI 使用事件的结构化记录；字段、枚举和证据等级见 `skills/modeling-ai-use-disclosure/references/event-schema.md`。
+- `tex/`：中性数学建模论文 TeX 骨架、赛事 profile 示例和 XeLaTeX 构建说明。
