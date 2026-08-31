@@ -1,0 +1,2 @@
+claim_id,claim_text,claim_type,claim_role,section,location,qualifiers,scope,claim_strength,evidence_ids,evidence_type,evidence_locator,evidence_status,evidence_scope,related_model,related_experiment,related_figure,validation_gap,verdict,severity,audit_confidence,proposed_action,human_verified,decision_id,notes
+C-001,"示例主张",comparative,core,results,loc-1,"当前数据和参数","当前测试范围",observed,E-001,experiment,table-1,direct,"当前数据",M-001,X-001,F-001,,supported-within-scope,P2,high,retain,false,,"仅用于模板示例"

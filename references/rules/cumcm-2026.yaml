@@ -1,0 +1,240 @@
+schema_version: "0.2"
+profile_id: "cumcm-2026"
+status: draft
+competition:
+  name: "全国大学生数学建模竞赛"
+  year: 2026
+  stage: "当届赛区附加通知尚未提供"
+sources:
+  - source_id: CUMCM-AI-2026-CN
+    title: "全国大学生数学建模竞赛人工智能工具使用规定（2026年试行）"
+    url_or_path: "https://www.mcm.edu.cn/html_cn/node/fef94648f2836ab6cc81586f4c38512b.html"
+    authority: official_organizing_committee
+    published_at: "2026-08-03"
+    effective_from: "2026-09-01"
+    effective_to: unknown
+    accessed_at: "2026-08-31"
+    content_hash: unknown
+    language: zh-CN
+    completeness: complete
+    evidence_anchors:
+      - locator: "官方网页正文"
+        excerpt_or_summary: "AI 非必需；核心建模与分析由参赛队主导；对 AI 参与完成的内容逐项人工审查与核实。"
+      - locator: "官方网页正文/支撑材料要求"
+        excerpt_or_summary: "使用 AI 时提交 AI工具使用详情.pdf，说明工具、用途与环节、提示与过程、采纳/人工修改/核验情况。"
+    limitations: "2026 年试行规定；需在比赛前重新核验赛区通知和提交系统说明。"
+  - source_id: CUMCM-RULE-2026
+    title: "全国大学生数学建模竞赛参赛规则（2026年修订稿）"
+    url_or_path: "https://www.mcm.edu.cn/html_cn/node/9d8e511fe7a1447b35f53a82c908e2e0.html"
+    authority: official_organizing_committee
+    published_at: "2026-03-03"
+    effective_from: unknown
+    effective_to: unknown
+    accessed_at: "2026-08-31"
+    content_hash: unknown
+    language: zh-CN
+    completeness: complete
+    evidence_anchors:
+      - locator: "官方网页正文/竞赛纪律"
+        excerpt_or_summary: "参赛队对作品的原创性、真实性和准确性负责；竞赛期间不得与队外人员讨论赛题。"
+    limitations: "平台列表和当届公告仍需在比赛窗口内核对。"
+  - source_id: CUMCM-FORMAT-2026
+    title: "全国大学生数学建模竞赛论文格式规范（2026年修订稿）"
+    url_or_path: "https://www.mcm.edu.cn/html_cn/node/4cd596519c9eb9fbd866398f6df0caa3.html"
+    authority: official_organizing_committee
+    published_at: "2026-03-03"
+    effective_from: unknown
+    effective_to: unknown
+    accessed_at: "2026-08-31"
+    content_hash: unknown
+    language: zh-CN
+    completeness: complete
+    evidence_anchors:
+      - locator: "官方网页/格式规范"
+        excerpt_or_summary: "电子论文首页为摘要页；正文不超过 30 页；附录页数不限；电子论文和支撑材料有文件大小、匿名和内容要求。"
+    limitations: "本地 PDF 与官网副本的 hash 尚未在运行时自动比对。"
+  - source_id: CUMCM-FORMAT-LOCAL-2026
+    title: "项目本地格式规范副本"
+    url_or_path: "local://user-provided/cumcm-2026-format.pdf"
+    authority: user_provided
+    published_at: unknown
+    effective_from: unknown
+    effective_to: unknown
+    accessed_at: "2026-08-31"
+    content_hash: unknown
+    language: zh-CN
+    completeness: complete
+    evidence_anchors:
+      - locator: "PDF 第 1-2 页及正文格式条款"
+        excerpt_or_summary: "已做文本抽取和页面渲染抽查；作为用户提供的本地参考，不自动覆盖官方网页。"
+    limitations: "本地副本的来源真实性和是否为最新版本仍需人工确认。"
+rules:
+  - rule_id: CUMCM-AI-CORE-LEADERSHIP
+    category: ai
+    title: "核心建模与分析由参赛队主导"
+    requirement: "AI 可以作为辅助工具，但核心建模与分析须由参赛队主导，并对 AI 参与内容进行人工审查与核实。"
+    condition: "参赛队在竞赛过程中使用了 AI 工具时适用。"
+    exceptions: []
+    applies_to: [paper, code, data, ai_tools]
+    status: confirmed
+    certainty: high
+    source_ids: [CUMCM-AI-2026-CN]
+    evidence_anchors:
+      - locator: "CUMCM-AI-2026-CN/官方网页正文"
+        excerpt_or_summary: "核心建模与分析须由参赛队主导。"
+    verification_action: "逐项核对 AI 事件的用途、采纳状态、人工修改和核验记录。"
+    human_question: "哪些核心解释、假设、模型和结论由队伍最终决定？"
+    decision_id: unknown
+  - rule_id: CUMCM-AI-DISCLOSURE
+    category: ai
+    title: "AI 使用声明与详情文件"
+    requirement: "使用 AI 时在参考文献前声明，并在支撑材料中提交名为 AI工具使用详情.pdf 的 PDF。"
+    condition: "参赛队使用过 AI 工具时适用。"
+    exceptions: ["语言润色的采纳/修改/核验细节按官方条文的例外说明处理，但工具、用途和过程边界不能被臆测。"]
+    applies_to: [paper, support_materials, ai_tools]
+    status: confirmed
+    certainty: high
+    source_ids: [CUMCM-AI-2026-CN]
+    evidence_anchors:
+      - locator: "CUMCM-AI-2026-CN/声明与支撑材料条款"
+        excerpt_or_summary: "详情应包括工具名称/版本或型号、具体使用目的和环节、主要提示方式与使用过程说明、输出采纳/人工修改/核验情况。"
+    verification_action: "运行披露事件校验器，并由作者确认完整范围、未知项和最终 PDF。"
+    human_question: "授权历史是否覆盖所有项目会话和本地 AI 记录？"
+    decision_id: unknown
+  - rule_id: CUMCM-AI-RESPONSIBILITY
+    category: ethics
+    title: "真实性、准确性与未核验 AI 输出责任"
+    requirement: "不得故意隐瞒或虚假声明 AI 使用，不得将未经必要人工审查核实的 AI 核心建模与分析内容直接作为成果提交。"
+    condition: "所有提交作品均适用。"
+    exceptions: []
+    applies_to: [paper, support_materials, code, data, ai_tools]
+    status: confirmed
+    certainty: high
+    source_ids: [CUMCM-AI-2026-CN, CUMCM-RULE-2026]
+    evidence_anchors:
+      - locator: "CUMCM-AI-2026-CN/违规后果条款"
+        excerpt_or_summary: "故意隐瞒、虚假声明或未审查核实的核心 AI 内容可能导致取消评奖资格。"
+    verification_action: "将披露记录、论文声明、代码和结果的人工核验状态互相对照。"
+    human_question: "队伍是否愿意对每一项核心输出承担责任并完成核验？"
+    decision_id: unknown
+  - rule_id: CUMCM-CONFIDENTIALITY
+    category: confidentiality
+    title: "竞赛期间的赛题保密与交流边界"
+    requirement: "竞赛期间不得与队外人员讨论赛题，也不得在规则列明的平台浏览、发布或讨论相关内容。"
+    condition: "竞赛窗口内适用。"
+    exceptions: []
+    applies_to: [paper, data, ai_tools]
+    status: confirmed
+    certainty: high
+    source_ids: [CUMCM-RULE-2026]
+    evidence_anchors:
+      - locator: "CUMCM-RULE-2026/竞赛纪律"
+        excerpt_or_summary: "官方规则对队外交流和指定平台行为作出限制。"
+    verification_action: "在比赛窗口内按目标赛区和当届公告复核工具、平台和协作边界。"
+    human_question: "本次使用的工具、会话和数据是否落在允许的竞赛协作范围内？"
+    decision_id: unknown
+  - rule_id: CUMCM-PAPER-ANONYMITY
+    category: confidentiality
+    title: "电子论文、附录和支撑材料匿名"
+    requirement: "提交文件不得显示参赛者身份、学校和赛区等身份信息；电子论文应去除不应提交的承诺书和编号专用页。"
+    condition: "提交论文、附录和支撑材料时适用。"
+    exceptions: []
+    applies_to: [paper, support_materials]
+    status: confirmed
+    certainty: high
+    source_ids: [CUMCM-FORMAT-2026, CUMCM-FORMAT-LOCAL-2026]
+    evidence_anchors:
+      - locator: "CUMCM-FORMAT-2026/电子版和匿名条款"
+        excerpt_or_summary: "电子论文首页应为摘要页，身份页不进入电子版；提交文件不得显示身份、学校和赛区信息。"
+    verification_action: "对最终 PDF、附录和压缩包进行身份字段扫描和人工抽查。"
+    human_question: "提交系统要求的身份页与电子论文/支撑包的范围是否已区分？"
+    decision_id: unknown
+  - rule_id: CUMCM-PAPER-LIMITS
+    category: paper
+    title: "正文页数、附录和文件大小"
+    requirement: "电子论文首页为摘要页，正文不超过 30 页，附录页数不限；论文和支撑材料分别遵守对应文件大小限制。"
+    condition: "使用 2026 年论文格式规范提交时适用。"
+    exceptions: []
+    applies_to: [paper, support_materials]
+    status: confirmed
+    certainty: high
+    source_ids: [CUMCM-FORMAT-2026, CUMCM-FORMAT-LOCAL-2026]
+    evidence_anchors:
+      - locator: "CUMCM-FORMAT-2026/论文和支撑材料条款"
+        excerpt_or_summary: "正文页数与附录、PDF/Word 文件大小以及支撑压缩包大小分别规定。"
+    verification_action: "按 profile 明确区分摘要、正文、附录和支撑材料后运行 final preflight。"
+    human_question: "目标提交系统如何计算正文页数和文件大小？"
+    decision_id: unknown
+scope:
+  applies_to: [paper, support_materials, code, data, ai_tools]
+  contest_window: "以当届报名须知和开赛公告为准"
+  local_additional_rules: unknown
+ai_policy:
+  ai_required: false
+  ai_use_permitted: true
+  core_modeling_and_analysis: "must_be_team_led"
+  ai_participation_review: "manual_review_and_verification_for_each_ai_involved_content"
+  allowed_uses:
+    - "AI 可作为题意讨论、代码辅助、结果核验、图表修改或语言润色等辅助工具，但每项用途须按官方细则和本队记录核对。"
+  restricted_or_unknown_uses:
+    - "任何未经队伍主导、人工审查和核验的核心建模或分析内容。"
+    - "官方规则和赛区附加通知没有明确覆盖的用途。"
+  prohibited_or_violation_triggers:
+    - "故意隐瞒 AI 使用。"
+    - "虚假 AI 使用声明。"
+    - "将未经必要人工审查核实的 AI 核心建模或分析输出直接提交。"
+disclosure:
+  required_if_ai_used: true
+  required_if_no_ai_used: true
+  declaration:
+    location: "before_references"
+    used: "本参赛队在竞赛过程中使用了AI工具，主要用于〖简要用途，如语言润色、代码调试等〗，详细使用情况见支撑材料。"
+    unused: "本参赛队在竞赛过程中未使用任何AI工具。"
+  detail_file:
+    required_if_ai_used: true
+    filename: "AI工具使用详情.pdf"
+    format: PDF
+    location: support_materials
+    required_fields:
+      - "AI tool name, version, or model"
+      - "Specific purpose and stage"
+      - "Principal prompting approach and usage process"
+      - "Principal adoption, manual modification, and verification of AI outputs, except language polishing"
+  full_raw_log_required: "not_stated"
+  citation_of_ai_in_references: "not_stated"
+submission:
+  paper:
+    electronic_first_page: "abstract_page"
+    omit_from_electronic_version: [commitment_page, id_page]
+    main_text_page_limit: 30
+    appendix: "unlimited_pages_and_included_in_paper"
+    file_format: [PDF, Word]
+    recommended_format: PDF
+    max_size_mb: 20
+  support_materials:
+    single_archive: true
+    formats: [RAR, ZIP]
+    max_size_mb: 20
+    must_include: [runnable_source_code, necessary_self_obtained_data, large_intermediate_charts_when_needed]
+    file_list_in_appendix: true
+  identity_anonymization:
+    required: true
+    applies_to: [paper, appendix, support_materials]
+    forbidden_identity_fields: [participant_identity, school, region]
+enforcement:
+  responsibility: "参赛队对提交作品的原创性、真实性和准确性负责。"
+  false_disclosure_or_unverified_core_ai_output: "可能取消评奖资格"
+  interpretation_authority: "全国大学生数学建模竞赛组委会"
+implementation_notes:
+  - "本 profile 是有来源的 CUMCM 2026 适配器，不是通用 AI 政策。"
+  - "当前状态为 draft：赛区/学校附加通知、实际提交系统和最终作者确认尚未纳入。"
+  - "2026 年 AI 规定自 2026-09-01 起试行；比赛前必须重新核验官方网页、赛区通知和提交系统。"
+  - "unknown、conflict、stale 和未签核的关键字段不得被编排器解释为合规通过。"
+change_log: []
+human_confirmation:
+  required: true
+  status: pending
+  person: unknown
+  date: unknown
+  scope: "目标赛区、附加通知、提交系统和 AI 披露范围尚未完成确认"
+  decision_id: unknown

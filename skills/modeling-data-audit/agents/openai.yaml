@@ -1,0 +1,3 @@
+interface:
+  display_name: "数模数据审计"
+  short_description: "核对数据口径、质量、泄漏与可复现性"

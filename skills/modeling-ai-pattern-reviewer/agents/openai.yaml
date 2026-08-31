@@ -1,0 +1,3 @@
+interface:
+  display_name: "数学建模模板化痕迹审查"
+  short_description: "识别可观察的模板化信号而不做 AI 归因"

@@ -1,0 +1,3 @@
+interface:
+  display_name: "数模 AI 使用详情披露"
+  short_description: "从授权会话与日志生成可核查的 AI 使用详情 PDF"

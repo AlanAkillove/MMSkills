@@ -1,0 +1,3 @@
+interface:
+  display_name: "数模全流程编排器"
+  short_description: "按依赖和人工门安排数模论文全流程"

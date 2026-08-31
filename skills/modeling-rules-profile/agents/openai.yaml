@@ -1,0 +1,3 @@
+interface:
+  display_name: "数模赛事规则配置"
+  short_description: "把官方规则转为带版本与证据的 profile"

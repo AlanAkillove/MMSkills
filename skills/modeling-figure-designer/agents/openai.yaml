@@ -1,0 +1,4 @@
+interface:
+  display_name: "数模图表设计与制作"
+  short_description: "从论点与数据出发制作清晰可读的数模图表"
+  default_prompt: "使用 $modeling-figure-designer 为这篇数模论文设计并制作一组可复现、适合正文排版的图表。"

@@ -1,0 +1,3 @@
+interface:
+  display_name: "数模模型架构"
+  short_description: "分层解释候选模型，呈现适配度、代价与风险，保留人工取舍"

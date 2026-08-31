@@ -1,0 +1,3 @@
+interface:
+  display_name: "数模过程冻结与续接"
+  short_description: "用快照、哈希和人工签核保存可回溯项目状态"

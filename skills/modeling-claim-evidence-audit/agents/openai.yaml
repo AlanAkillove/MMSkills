@@ -1,0 +1,3 @@
+interface:
+  display_name: "主张—证据审查"
+  short_description: "核对论文主张强度与证据边界"

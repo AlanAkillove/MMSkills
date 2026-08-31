@@ -1,0 +1,12 @@
+{
+  "schema_version": "0.1",
+  "project_id": "fixture-project",
+  "mode": "revise",
+  "entry_status": "confirmed",
+  "current_stage": "problem_intake",
+  "last_snapshot_id": "SNAP-002",
+  "stages": {
+    "rules_profile": {"status": "passed", "reason": "fixture profile verified"},
+    "problem_intake": {"status": "blocked", "reason": "题面图示关系未确认"}
+  }
+}

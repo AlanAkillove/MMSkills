@@ -1,0 +1,3 @@
+interface:
+  display_name: "数模图表审计"
+  short_description: "核对图表证据、数值单位、正文和视觉可读性"

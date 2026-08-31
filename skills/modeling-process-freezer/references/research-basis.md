@@ -1,0 +1,9 @@
+# 研究与设计依据
+
+- 项目总架构和人工决策门：../../../docs/architecture.md；
+- 项目实施路线图和上下文续接目标：../../../docs/implementation-roadmap.md；
+- 项目质量模型：../../../docs/quality-model.md；
+- 可复现研究与审稿中的证据、版本和透明性原则：../../../docs/research/source-register.md；
+- 参考开源学术 skills 的 manifest、分阶段路由和交接设计，但不复制其期刊标准或固定流程。
+
+本 skill 只建立项目状态完整性，不把文件哈希误当作数学证明、实验复现或赛事合规证明；这些分别由模型/实验/预检/规则 skills 负责。

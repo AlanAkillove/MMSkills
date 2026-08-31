@@ -1,0 +1,32 @@
+figure_design:
+  figure_id: FIG-0001
+  status: brief
+  mode: plot
+  figure_question: null
+  reader_task: null
+  evidence_role: null
+  question_ids: []
+  claim_ids: []
+  evidence_ids: []
+  experiment_ids: []
+  source_data_ids: []
+  source_code_entry: null
+  input_manifest_hash: null
+  transformations: []
+  chart_type: null
+  rejected_chart_types: []
+  panel_plan: []
+  visual_system:
+    target_physical_size: null
+    aspect_ratio: null
+    palette_semantics: {}
+    non_color_channels: []
+    typography: null
+  export_formats: [svg, pdf, png]
+  source_files: []
+  render_files: []
+  output_hashes: {}
+  page_render_checked: false
+  unresolved_items: []
+  human_decision_id: null
+  human_status: unreviewed

@@ -1,0 +1,80 @@
+schema_version: 0.2
+profile_id: competition-year
+status: draft
+competition:
+  name: "赛事全称"
+  year: unknown
+  stage: unknown
+sources:
+  - source_id: SRC-0001
+    title: "官方规则或格式文件标题"
+    url_or_path: unknown
+    authority: official_organizing_committee
+    published_at: unknown
+    effective_from: unknown
+    effective_to: unknown
+    accessed_at: unknown
+    content_hash: unknown
+    language: zh-CN
+    completeness: unknown
+    evidence_anchors: []
+    limitations: unknown
+rules:
+  - rule_id: RULE-0001
+    category: paper
+    title: "可检查的规则标题"
+    requirement: "写清要求，不写推测"
+    condition: "适用条件"
+    exceptions: []
+    applies_to: [paper]
+    status: unknown
+    certainty: low
+    source_ids: [SRC-0001]
+    evidence_anchors: []
+    verification_action: "打开来源并核对原文/页码/段落"
+    human_question: "需要作者确认的适用范围"
+    decision_id: unknown
+scope:
+  applies_to: [paper, support_materials, code, data, ai_tools]
+  contest_window: unknown
+  local_additional_rules: unknown
+ai_policy:
+  ai_required: unknown
+  ai_use_permitted: unknown
+  core_modeling_and_analysis: unknown
+  ai_participation_review: unknown
+  allowed_uses: []
+  restricted_or_unknown_uses: []
+  prohibited_or_violation_triggers: []
+disclosure:
+  required_if_ai_used: unknown
+  required_if_no_ai_used: unknown
+  declaration:
+    location: unknown
+    used: unknown
+    unused: unknown
+  detail_file:
+    required_if_ai_used: unknown
+    filename: unknown
+    format: unknown
+    location: unknown
+    required_fields: []
+  full_raw_log_required: unknown
+  citation_of_ai_in_references: unknown
+submission:
+  paper: {}
+  support_materials: {}
+  identity_anonymization: {}
+enforcement:
+  responsibility: unknown
+  false_disclosure_or_unverified_core_ai_output: unknown
+  interpretation_authority: unknown
+implementation_notes: []
+change_log: []
+human_confirmation:
+  required: true
+  status: pending
+  person: unknown
+  date: unknown
+  scope: unknown
+  decision_id: unknown

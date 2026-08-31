@@ -1,0 +1,10 @@
+{
+  "schema_version": "0.1",
+  "project_id": "fixture-project",
+  "mode": "compose",
+  "entry_status": "unknown",
+  "current_stage": "unknown",
+  "stages": {
+    "not-a-real-stage": {"status": "passed"}
+  }
+}

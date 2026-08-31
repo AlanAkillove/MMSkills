@@ -1,0 +1,3 @@
+interface:
+  display_name: "数学建模假设账本"
+  short_description: "登记假设依据、影响、边界与确认状态"

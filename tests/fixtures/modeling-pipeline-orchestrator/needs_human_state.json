@@ -1,0 +1,13 @@
+{
+  "schema_version": "0.1",
+  "project_id": "fixture-project",
+  "mode": "audit",
+  "entry_status": "confirmed",
+  "current_stage": "problem_intake",
+  "last_snapshot_id": "SNAP-003",
+  "stages": {
+    "rules_profile": {"status": "passed", "reason": "fixture profile verified"},
+    "problem_intake": {"status": "needs_human", "reason": "题意解释需要确认"},
+    "ai_disclosure": {"status": "needs_human", "reason": "授权历史范围需要确认"}
+  }
+}

@@ -1,0 +1,3 @@
+interface:
+  display_name: "数学建模论文审稿角色"
+  short_description: "按证据锚点审查数模论文，不替作者改稿"

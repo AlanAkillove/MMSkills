@@ -1,0 +1,73 @@
+{
+  "title": "AI 工具使用详情（示例）",
+  "competition": {"name": "示例数学建模竞赛", "year": 2026},
+  "profile_id": "fixture-demo-2026",
+  "profile_source": "tests/fixtures/modeling-ai-use-disclosure/profile.md",
+  "status": "human-confirmed",
+  "record_completeness": "complete",
+  "scope": "仅包含一个经授权的示例任务及其可见消息；未包含其他项目或未授权附件。",
+  "prepared_at": "2026-08-31",
+  "tools": [
+    {"name": "ChatGPT 网页端", "developer": "OpenAI", "version_or_model": "fixture-model-1.0", "identity_status": "confirmed"}
+  ],
+  "events": [
+    {
+      "event_id": "EV-001",
+      "event_family": "structure_planning",
+      "stage": "writing",
+      "purpose": "根据团队已经确定的问题分解整理章节顺序候选",
+      "input_scope": "团队提供的自有提纲摘要，不含未公开身份信息",
+      "output_summary": "给出两个章节组织方案",
+      "adoption": "partially_adopted",
+      "human_modification": "substantial",
+      "human_verification": "author_reviewed",
+      "substantive_risk": "supporting",
+      "evidence_level": "E3",
+      "record_status": "confirmed",
+      "source_ids": ["SRC-001"],
+      "source_locator": "fixture-task/message-04",
+      "artifact_refs": ["outline-v1"],
+      "rule_refs": ["disclosure.detail_fields"],
+      "notes": "示例记录；未把候选方案当作团队最终决定。"
+    },
+    {
+      "event_id": "EV-002",
+      "event_family": "language_polish",
+      "stage": "revision",
+      "purpose": "压缩重复表达并修复指代不清的句子",
+      "input_scope": "团队已有结果段落的可见文本",
+      "output_summary": "提出若干句式调整建议",
+      "adoption": "adopted_after_edit",
+      "human_modification": "rewrote",
+      "human_verification": "checked_against_source",
+      "substantive_risk": "language_only",
+      "evidence_level": "E3",
+      "record_status": "confirmed",
+      "source_ids": ["SRC-002"],
+      "source_locator": "fixture-task/message-08",
+      "artifact_refs": ["paper/section-results"],
+      "rule_refs": ["disclosure.language_polish"],
+      "notes": "数值、术语和结论均以原始结果及作者确认版本为准。"
+    }
+  ],
+  "examples": [
+    {
+      "event_id": "EV-001",
+      "prompt_status": "complete",
+      "output_summary": "输出章节组织候选，团队保留其中一部分并重新排列。",
+      "follow_up": "作者根据问题分解和证据位置重写提纲。"
+    },
+    {
+      "event_id": "EV-002",
+      "prompt_status": "summary_only",
+      "output_summary": "输出句式调整建议，原始提示不在 PDF 中展示。",
+      "follow_up": "作者逐句对照原结果、术语表和数据表后修改。"
+    }
+  ],
+  "human_control": "问题解释、关键假设、模型路径、数据处理、实验设计、结果判断和最终结论由团队决定并核验；AI 只提供结构与语言层面的辅助。",
+  "unknowns": [],
+  "conflicts": [],
+  "privacy_note": "已去除姓名、账号、密钥、私人地址、未授权队员信息、隐藏提示和隐藏思维过程；保留事件定位与产物关联所需的最小信息。",
+  "confirmation": {"status": "confirmed", "person": "fixture-author", "date": "2026-08-31", "decision_id": "CONF-001", "scope": "确认上述范围内的工具、事件、采用、修改、核验和隐私处理记录。"},
+  "render_status": "checked"
+}

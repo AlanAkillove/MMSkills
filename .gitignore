@@ -1,0 +1,32 @@
+# Local runtime and temporary files
+tmp/
+local/
+runs/
+output/
+build/
+dist/
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+.env.*
+
+# Potentially sensitive work products
+private/
+raw_conversations/
+ai_logs/raw/
+*.chat.json
+*.conversation.json
+*.session.json
+
+# OS/editor files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Keep deliberate placeholder files
+!.gitkeep

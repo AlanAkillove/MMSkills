@@ -1,0 +1,30 @@
+schema_version: 0.2
+event_id: EV-0001
+event_family: structure_planning
+source_ids:
+  - SRC-0001
+source_locator: project-or-thread/message-or-file-location
+timestamp: unknown
+tool:
+  name: unknown
+  developer: unknown
+  version_or_model: unknown
+  identity_status: unknown
+stage: unknown
+purpose: "用一句具体的话说明 AI 被用于什么任务"
+input_scope: "只写经授权的材料范围，不粘贴密钥、私人信息、隐藏提示或隐藏思维过程"
+output_summary: "只写可披露的输出摘要；不能把摘要冒充原始提示或原始输出"
+prompt_status: summary_only
+output_status: summary_only
+adoption: unclear
+human_modification: unknown
+human_modification_note: unknown
+human_verification: unknown
+verification_note: unknown
+substantive_risk: unknown
+record_status: proposed
+evidence_level: E0
+artifact_refs: []
+rule_refs: []
+human_confirmation: pending
+notes: "未知必须保持 unknown，并进入人工确认队列；不要根据论文结果反推工具版本或采用状态。"

@@ -1,0 +1,11 @@
+{
+  "profile_id": "fixture-demo-2026",
+  "status": "draft",
+  "record_completeness": "partial",
+  "scope": "范围未确认",
+  "tools": [],
+  "events": [],
+  "human_control": "unknown",
+  "confirmation": {"status": "pending"},
+  "render_status": "not_rendered"
+}

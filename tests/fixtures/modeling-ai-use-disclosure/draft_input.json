@@ -1,0 +1,48 @@
+{
+  "title": "AI 工具使用详情（示例草稿）",
+  "competition": {"name": "示例数学建模竞赛", "year": 2026},
+  "profile_id": "fixture-demo-2026",
+  "profile_source": "tests/fixtures/modeling-ai-use-disclosure/profile.md",
+  "status": "draft",
+  "record_completeness": "partial",
+  "scope": "仅包含一个经授权的示例任务及其可见消息；未包含其他项目或未授权附件。",
+  "prepared_at": "2026-08-31",
+  "tools": [
+    {"name": "ChatGPT 网页端", "developer": "OpenAI", "version_or_model": "unknown", "identity_status": "partially_known"}
+  ],
+  "events": [
+    {
+      "event_id": "EV-001",
+      "event_family": "structure_planning",
+      "stage": "writing",
+      "purpose": "根据团队已经确定的问题分解整理章节顺序候选",
+      "input_scope": "团队提供的自有提纲摘要，不含未公开身份信息",
+      "output_summary": "给出两个章节组织方案",
+      "adoption": "partially_adopted",
+      "human_modification": "substantial",
+      "human_verification": "author_reviewed",
+      "substantive_risk": "supporting",
+      "evidence_level": "E3",
+      "record_status": "confirmed",
+      "source_ids": ["SRC-001"],
+      "source_locator": "fixture-task/message-04",
+      "artifact_refs": ["outline-v1"],
+      "rule_refs": ["disclosure.detail_fields"],
+      "notes": "示例记录；未把候选方案当作团队最终决定。"
+    }
+  ],
+  "examples": [
+    {
+      "event_id": "EV-001",
+      "prompt_status": "complete",
+      "output_summary": "输出章节组织候选，团队保留其中一部分并重新排列。",
+      "follow_up": "作者根据问题分解和证据位置重写提纲。"
+    }
+  ],
+  "human_control": "问题解释、模型路径和最终结构由团队决定；此事件只作为提纲辅助，未直接决定模型或结论。",
+  "unknowns": ["工具的具体模型版本尚未从授权记录确认。"],
+  "conflicts": [],
+  "privacy_note": "示例已去除姓名、账号、密钥和隐藏内容。",
+  "confirmation": {"status": "pending", "person": "unknown", "date": "unknown", "decision_id": "unknown", "scope": "pending"},
+  "render_status": "not_rendered"
+}
