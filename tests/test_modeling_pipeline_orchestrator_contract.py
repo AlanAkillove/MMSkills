@@ -95,16 +95,24 @@ def test_multi_topic_entry_routes_to_selection_before_intake(tmp_path: Path):
 def test_pre_model_dependencies_keep_intake_after_familiarization():
     registry = json.loads(REGISTRY.read_text(encoding="utf-8"))
     stages = registry["stages"]
-    assert stages["literature_evidence"]["depends_on"] == ["topic_selection"]
-    assert stages["problem_familiarization"]["depends_on"] == ["literature_evidence", "topic_selection"]
-    assert stages["problem_intake"]["depends_on"] == ["problem_familiarization", "topic_selection"]
-    assert stages["distinctiveness_coach"]["depends_on"] == ["problem_intake", "problem_familiarization"]
+    assert stages["literature_evidence"]["execution_requires"] == []
+    assert stages["literature_evidence"]["recommended_after"] == ["topic_selection"]
+    assert stages["problem_familiarization"]["execution_requires"] == []
+    assert stages["problem_familiarization"]["adoption_requires"] == ["topic_selection"]
+    assert stages["problem_intake"]["execution_requires"] == []
+    assert stages["problem_intake"]["adoption_requires"] == ["topic_selection"]
+    assert stages["distinctiveness_coach"]["execution_requires"] == []
     assert "distinctiveness_coach" in registry["default_order"]
     assert stages["topic_selection"]["gate_type"] == "core_decision"
     assert stages["terminology"]["gate_type"] == "review_checkpoint"
     assert stages["paper_architect"]["human_gate"] == "optional"
+    assert stages["data_audit"]["gate_type"] == "review_checkpoint"
     assert stages["draft"]["skill"] == "modeling-paper-writer"
     assert stages["draft"]["depends_on"] == []
+    assert stages["model_architect"]["execution_requires"] == []
+    assert stages["model_architect"]["adoption_requires"] == ["problem_intake"]
+    assert "literature_evidence" in stages["model_architect"]["recommended_after"]
+    assert "data_audit" in stages["model_architect"]["recommended_after"]
     assert "paper_architect" in stages["draft"]["recommended_after"]
     assert "experiment_validator" in stages["draft"]["recommended_after"]
     assert "claim_evidence" in stages["draft"]["recommended_after"]
@@ -309,3 +317,34 @@ def test_explicit_draft_intent_can_bootstrap_without_state_artifact(tmp_path: Pa
     assert result.stdout.startswith("WROTE:")
     assert "READY: draft" in result.stdout
     assert "Intent target: draft" in output.read_text(encoding="utf-8")
+
+
+def test_explore_model_intent_is_ready_without_pre_model_ledgers():
+    state = json.loads((FIXTURES / "initial_state.json").read_text(encoding="utf-8"))
+    state["user_intent"] = {"goal": "model", "action": "explore"}
+    policy = build_effective_stage_policy(state)
+    ready = ready_stages(state, policy=policy)
+    assert ready[0] == "model_architect"
+    assert policy["intent"]["action"] == "explore"
+    assert policy["stages"]["model_architect"]["execution_requires"] == []
+
+
+def test_adoption_action_waits_for_intake_before_freezing_a_model():
+    state = json.loads((FIXTURES / "initial_state.json").read_text(encoding="utf-8"))
+    state["user_intent"] = {"goal": "model", "action": "adopt"}
+    policy = build_effective_stage_policy(state)
+    ready = ready_stages(state, policy=policy)
+    assert "model_architect" not in ready
+    state["stages"]["problem_intake"] = {"status": "passed", "reason": "fixture intake adopted"}
+    policy = build_effective_stage_policy(state)
+    assert "model_architect" in ready_stages(state, policy=policy)
+
+
+def test_working_depth_is_the_user_facing_alias_of_collaboration_mode():
+    state = json.loads((FIXTURES / "post_draft_state.json").read_text(encoding="utf-8"))
+    state["working_depth"] = "light"
+    policy = build_effective_stage_policy(state)
+    assert policy["working_depth"] == "light"
+    assert policy["collaboration_mode"] == "light"
+    assert policy["persist_artifacts"] == "optional"
+    assert policy["stages"]["paper_architect"]["artifact_projection"] == "compact"

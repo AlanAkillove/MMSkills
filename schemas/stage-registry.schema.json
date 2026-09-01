@@ -7,6 +7,13 @@
   "properties": {
     "schema_version": {"type": "string"},
     "description": {"type": "string"},
+    "action_levels": {
+      "type": "array",
+      "items": {
+        "enum": ["explain", "explore", "propose", "execute_reversible", "adopt", "freeze", "submit"]
+      },
+      "uniqueItems": true
+    },
     "default_order": {
       "type": "array",
       "items": {"type": "string", "pattern": "^[a-z][a-z0-9_]*$"},
@@ -30,10 +37,15 @@
       "type": "object",
       "additionalProperties": {
         "type": "object",
-        "required": ["skill", "depends_on", "human_gate", "gate_type", "phase"],
+        "required": ["skill", "execution_requires", "human_gate", "gate_type", "phase"],
         "properties": {
           "skill": {"type": "string", "minLength": 1},
-          "depends_on": {
+          "execution_requires": {
+            "type": "array",
+            "items": {"type": "string"},
+            "uniqueItems": true
+          },
+          "adoption_requires": {
             "type": "array",
             "items": {"type": "string"},
             "uniqueItems": true
@@ -41,6 +53,12 @@
           "recommended_after": {
             "type": "array",
             "items": {"type": "string", "pattern": "^[a-z][a-z0-9_]*$"},
+            "uniqueItems": true
+          },
+          "depends_on": {
+            "description": "Deprecated alias of execution_requires; if present it must match.",
+            "type": "array",
+            "items": {"type": "string"},
             "uniqueItems": true
           },
           "human_gate": {"enum": ["required", "optional", "not_applicable"]},

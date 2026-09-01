@@ -2,6 +2,23 @@
 
 本文件记录可复用技能和共享契约的变化。
 
+## [0.2.1] - 2026-09-01
+
+### Changed
+
+- 阶段依赖拆成 `execution_requires` / `adoption_requires` / `recommended_after`；文献、题目熟悉、差异化和完整数据审计不再硬阻断探索性建模。
+- 人工确认按动作分级：解释、探索和建议可以继续；adopt / freeze / overwrite / submit 才硬确认。`data_audit` 降为 review checkpoint。
+- 用户可感知参数收敛为 `working_depth`；`collaboration_mode` 保留为别名。默认先回答用户，完整账本仅在留痕、`full` 或最终交付时落盘。
+- 缩短模型架构、数据审计、题目熟悉和编排器的 `SKILL.md`，把 SOP 移入 `references/`。
+- 默认 TeX 改为纯排版入口，固定正文章节移到 `examples/generic-paper-scaffold.tex`。
+- 成文检查的列表风险改为按叙事性章节的连续列表判断，不再使用全文 item 绝对阈值。
+- CUMCM 2026 AI 规则按官网与本地 PDF 再核验：声明在参考文献前；详情 PDF 可附典型交互示例；**不再**要求参考文献列 AI 工具、正文标注或参考文献后的未使用声明。2025 对应条款登记为已替代。
+
+### Added
+
+- ADR 0007，以及脱敏的论文成文回归样本与人工量表。
+- CUMCM 2026 AI 政策契约测试：禁止把 2025 的参考文献列工具/正文标注带入当届。
+
 ## [0.2.0] - 2026-09-01
 
 ### Changed

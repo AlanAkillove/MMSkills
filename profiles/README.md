@@ -9,4 +9,4 @@
 | `contest-fast` | light | 时间紧或只需快速形成可审查初稿 | 一个续接包承载中间摘要、每类审查保留必要证据链、只压缩低风险文档颗粒度 |
 
 三个档位都必须保留：全题目选题范围、背景/文献学习与理解确认、问题地图、关键假设、候选模型与人类取舍、数据/实验证据、主张边界、题目特异性、最终规则/格式检查、AI 使用真实记录和最终人类冻结。若压缩后无法追溯到原材料，应回退到更完整档位。
-状态中的 `collaboration_mode` 可以在单次任务中覆盖 profile 的默认协作强度：`light` 压缩可选审查和中间产物，`full` 展开审查和独立产物，`adaptive` 采用 profile 默认；这些覆盖都不改变核心依赖和人工门。
+用户可感知的工作强度是 `working_depth = light | standard | full`；`collaboration_mode` 是兼容别名（`adaptive` 采用 profile 默认）。这些覆盖都不改变 `execution_requires`，也不取消核心采用门。

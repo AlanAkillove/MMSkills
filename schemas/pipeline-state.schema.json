@@ -22,11 +22,13 @@
     "mode": {"enum": ["compose", "revise", "audit", "disclose", "final_check"]},
     "run_profile": {"enum": ["research-full", "contest-standard", "contest-fast"]},
     "collaboration_mode": {"enum": ["adaptive", "light", "standard", "full"]},
+    "working_depth": {"enum": ["light", "standard", "full"]},
     "user_intent": {
       "type": "object",
       "required": ["goal"],
       "properties": {
         "goal": {"enum": ["understand", "explore", "select_topic", "literature", "model", "experiment", "draft", "revise", "audit", "disclose", "final_check", "release", "unknown"]},
+        "action": {"enum": ["explain", "explore", "propose", "execute_reversible", "adopt", "freeze", "submit"]},
         "requested_stage": {"type": ["string", "null"]},
         "scope": {"enum": ["question", "subproblem", "section", "paper", "project", "unknown"]},
         "urgency": {"enum": ["low", "normal", "high", "unknown"]},

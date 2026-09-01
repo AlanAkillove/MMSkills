@@ -33,7 +33,6 @@ human_gates:
   - problem_familiarization
   - problem_intake
   - assumption_ledger
-  - data_audit
   - model_architect
   - experiment_validator
   - ai_disclosure

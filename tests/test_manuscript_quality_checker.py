@@ -34,7 +34,7 @@ def test_checker_blocks_process_residue_and_reports_reading_risks(tmp_path: Path
         + "具体结果。" * 220
         + r"""
 \end{abstract}
-\section{结果}
+\section{结论}
 本节已求解，使用 ASM-01 和表\ref{tab:missing}。
 \begin{itemize}
 \item 第一项
@@ -57,6 +57,41 @@ def test_checker_blocks_process_residue_and_reports_reading_risks(tmp_path: Path
     assert {"draft-marker", "internal-id", "broken-reference", "list-density"} <= categories
     assert "defensive-meta-cluster" in categories
     assert "abstract_paragraphs" in payload["reference_comparison"]["metrics"]
+
+
+def test_checker_accepts_assumption_lists_outside_narrative_sections(tmp_path: Path):
+    manuscript = tmp_path / "assumptions.tex"
+    manuscript.write_text(
+        r"""\begin{document}
+\begin{abstract}
+第一段交代对象与任务。
+
+第二段给出方法和限制。
+\end{abstract}
+\section{模型假设}
+\begin{enumerate}
+\item 假设一
+\item 假设二
+\item 假设三
+\item 假设四
+\item 假设五
+\item 假设六
+\item 假设七
+\item 假设八
+\item 假设九
+\item 假设十
+\item 假设十一
+\item 假设十二
+\end{enumerate}
+\label{sec:assumptions}
+详见第\ref{sec:assumptions}节。
+\end{document}
+""",
+        encoding="utf-8",
+    )
+    result = run_checker(manuscript)
+    assert result.returncode == 0, result.stdout + result.stderr
+    assert "STATUS: pass" in result.stdout
 
 
 def test_checker_accepts_clean_small_manuscript(tmp_path: Path):

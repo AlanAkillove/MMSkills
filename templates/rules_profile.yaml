@@ -61,6 +61,8 @@ disclosure:
     required_fields: []
   full_raw_log_required: unknown
   citation_of_ai_in_references: unknown
+  in_text_annotation_of_ai_content: unknown
+  unused_declaration_after_references: unknown
 submission:
   paper: {}
   support_materials: {}

@@ -10,7 +10,19 @@
 - 反同质化与 AI 披露设计草案。
 - 中性 TeX 论文模板、赛事格式映射和 TeX/PDF 版式预检 skill（本轮新增）。
 
-## 阶段 0.7：意图优先与成文质量回归（本轮完成）
+## 阶段 0.8：去流程中心化与 2026 AI 规则对齐（本轮完成）
+
+0.2.1 针对“意图优先仍只是排序、SKILL 仍像 SOP、2025 AI 细则被带入 2026”做瘦身迭代，不新增 skill：
+
+1. `depends_on` 拆成 `execution_requires` / `adoption_requires` / `recommended_after`；探索性建模不再被文献、熟悉、差异化或完整数据审计硬阻断；
+2. 确认挂到动作：explain/explore/propose 可继续，adopt/freeze/submit 才硬确认；用户可感知参数收敛为 `working_depth`；
+3. 缩短模型、数据、熟悉和编排器的 `SKILL.md`，完整 SOP 移入 `references/`；默认先回答用户再按需落盘；
+4. 默认 TeX 只保留排版，正文章节示例移到 `examples/`；列表密度按叙事性章节判断；
+5. 增加脱敏论文回归量表；CUMCM 2026 AI 规则明确不再要求参考文献列 AI 工具或正文标注。
+
+对应决策见 [`docs/adr/0007-thin-skills-and-action-gates.md`](adr/0007-thin-skills-and-action-gates.md)。真实宿主写作回放仍未替代机械测试。
+
+## 阶段 0.7：意图优先与成文质量回归（已完成）
 
 本轮针对真实项目试跑暴露的“流程先于用户目标”和“论文仍像流程产物”问题完成一次版本迭代：
 

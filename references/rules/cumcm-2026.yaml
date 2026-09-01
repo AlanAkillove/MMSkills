@@ -13,16 +13,48 @@ sources:
     published_at: "2026-08-03"
     effective_from: "2026-09-01"
     effective_to: unknown
-    accessed_at: "2026-08-31"
+    accessed_at: "2026-09-01"
     content_hash: unknown
     language: zh-CN
     completeness: complete
     evidence_anchors:
-      - locator: "官方网页正文"
-        excerpt_or_summary: "AI 非必需；核心建模与分析由参赛队主导；对 AI 参与完成的内容逐项人工审查与核实。"
-      - locator: "官方网页正文/支撑材料要求"
-        excerpt_or_summary: "使用 AI 时提交 AI工具使用详情.pdf，说明工具、用途与环节、提示与过程、采纳/人工修改/核验情况。"
+      - locator: "官方网页正文第3条"
+        excerpt_or_summary: "参考文献之前设置“AI工具使用声明”，未使用与使用二选一固定句式。"
+      - locator: "官方网页正文第4条"
+        excerpt_or_summary: "使用 AI 时提交 AI工具使用详情.pdf：工具名称/版本或型号、目的和环节、主要提示方式与过程（可附典型交互示例）、采纳/人工修改/核验（语言润色除外）。"
+      - locator: "官方网页正文第6条"
+        excerpt_or_summary: "自 2026-09-01 试行；此前相关规定与本规定不一致的，以本规定为准。"
     limitations: "2026 年试行规定；需在比赛前重新核验赛区通知和提交系统说明。"
+  - source_id: CUMCM-AI-2026-LOCAL
+    title: "全国大学生数学建模竞赛人工智能工具使用规定（2026年试行）本地 PDF 副本"
+    url_or_path: "local://user-provided/cumcm-2026-ai-policy.pdf"
+    authority: user_provided
+    published_at: "2026-08-03"
+    effective_from: "2026-09-01"
+    effective_to: unknown
+    accessed_at: "2026-09-01"
+    content_hash: "sha256:4cf6f30cdd37d6ef2cdb3439c5dba4d9f207c12d6aafe24419e81f3c69acf59a"
+    language: zh-CN
+    completeness: complete
+    evidence_anchors:
+      - locator: "本地 PDF 第 1 页 / 与官网正文对照"
+        excerpt_or_summary: "与官网 2026 试行规定条款一致：声明在参考文献前、详情 PDF、核心由队伍主导；未要求参考文献列 AI 工具或正文标注生成内容。"
+    limitations: "本地副本路径不写入公开仓库；以官网正文为解释依据，PDF 仅作交叉核验。"
+  - source_id: CUMCM-AI-2025-CN
+    title: "全国大学生数学建模竞赛人工智能工具使用规定（2025年试行）"
+    url_or_path: "https://www.mcm.edu.cn/html_cn/node/eebcfb6dc37fd2de9603dc16026fdf01.html"
+    authority: official_organizing_committee
+    published_at: "2025-08-12"
+    effective_from: "2025-09-01"
+    effective_to: "2026-08-31"
+    accessed_at: "2026-09-01"
+    content_hash: unknown
+    language: zh-CN
+    completeness: complete
+    evidence_anchors:
+      - locator: "官方网页正文第2、4条（已失效，仅作版本对照）"
+        excerpt_or_summary: "2025 曾要求未使用声明放在参考文献之后；使用时正文标注、参考文献列出 AI 工具，并提交含关键交互记录的详情 PDF。"
+    limitations: "已被 2026 试行规定第 6 条替代；不得作为 2026 当届执行依据。"
   - source_id: CUMCM-RULE-2026
     title: "全国大学生数学建模竞赛参赛规则（2026年修订稿）"
     url_or_path: "https://www.mcm.edu.cn/html_cn/node/9d8e511fe7a1447b35f53a82c908e2e0.html"
@@ -100,6 +132,22 @@ rules:
         excerpt_or_summary: "详情应包括工具名称/版本或型号、具体使用目的和环节、主要提示方式与使用过程说明、输出采纳/人工修改/核验情况。"
     verification_action: "运行披露事件校验器，并由作者确认完整范围、未知项和最终 PDF。"
     human_question: "授权历史是否覆盖所有项目会话和本地 AI 记录？"
+    decision_id: unknown
+  - rule_id: CUMCM-AI-NO-2025-BIBLIOGRAPHY-OR-BODY-MARK
+    category: ai
+    title: "2026 不再要求参考文献列 AI 工具或正文标注生成内容"
+    requirement: "不得把 2025 年“正文相应位置标注 AI 生成内容、参考文献列出所用 AI 工具、未使用声明放在参考文献之后、必须附关键交互记录全文”自动带入 2026 提交材料。2026 只要求参考文献前的二选一声明，以及使用 AI 时的支撑材料详情 PDF。"
+    condition: "目标年份为 2026 的 CUMCM 提交适用。"
+    exceptions: []
+    applies_to: [paper, support_materials, ai_tools]
+    status: confirmed
+    certainty: high
+    source_ids: [CUMCM-AI-2026-CN, CUMCM-AI-2026-LOCAL, CUMCM-AI-2025-CN]
+    evidence_anchors:
+      - locator: "CUMCM-AI-2026-CN/第3、4、6条"
+        excerpt_or_summary: "2026 正文未要求 bibliography 引用 AI 或文内标注；第 6 条规定此前不一致规定以 2026 为准。"
+    verification_action: "检查 .bib 和正文是否误加 AI 工具文献条目或“此处由 AI 生成”标注；声明是否在参考文献之前且句式与原文一致。"
+    human_question: "论文声明和详情 PDF 是否已按 2026 原文，而不是按 2025 细则补了参考文献或正文标注？"
     decision_id: unknown
   - rule_id: CUMCM-AI-RESPONSIBILITY
     category: ethics
@@ -198,10 +246,22 @@ disclosure:
     required_fields:
       - "AI tool name, version, or model"
       - "Specific purpose and stage"
-      - "Principal prompting approach and usage process"
+      - "Principal prompting approach and usage process; typical interaction examples allowed"
       - "Principal adoption, manual modification, and verification of AI outputs, except language polishing"
-  full_raw_log_required: "not_stated"
-  citation_of_ai_in_references: "not_stated"
+  full_raw_log_required: false
+  typical_interaction_examples_allowed: true
+  citation_of_ai_in_references: false
+  in_text_annotation_of_ai_content: false
+  unused_declaration_after_references: false
+  superseded_prior_year_requirements:
+    year: 2025
+    source_id: CUMCM-AI-2025-CN
+    items:
+      - "未使用 AI 时在参考文献之后声明"
+      - "使用 AI 生成的内容在正文相应位置标注"
+      - "在参考文献中列出所用 AI 工具及固定著录格式"
+      - "详情 PDF 必须附关键交互记录（重要提示词与回复）全文"
+    superseded_by: "CUMCM-AI-2026-CN 第6条"
 submission:
   paper:
     electronic_first_page: "abstract_page"
@@ -229,8 +289,12 @@ implementation_notes:
   - "本 profile 是有来源的 CUMCM 2026 适配器，不是通用 AI 政策。"
   - "当前状态为 draft：赛区/学校附加通知、实际提交系统和最终作者确认尚未纳入。"
   - "2026 年 AI 规定自 2026-09-01 起试行；比赛前必须重新核验官方网页、赛区通知和提交系统。"
+  - "2025 年试行规定中的参考文献列工具、正文标注、参考文献后未使用声明、强制关键交互记录，不得写入 2026 执行字段。"
   - "unknown、conflict、stale 和未签核的关键字段不得被编排器解释为合规通过。"
-change_log: []
+change_log:
+  - date: "2026-09-01"
+    change: "对照官网正文与用户提供的 2026 PDF，将 citation_of_ai_in_references 和正文标注明确为 false，并登记被替代的 2025 条款。"
+    source_ids: [CUMCM-AI-2026-CN, CUMCM-AI-2026-LOCAL, CUMCM-AI-2025-CN]
 human_confirmation:
   required: true
   status: pending

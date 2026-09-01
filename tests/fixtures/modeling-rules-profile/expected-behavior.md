@@ -6,6 +6,6 @@
 - 搜索摘要：只能作为线索，状态 `unknown`，要求打开官方正文；
 - 跨赛事复制：拒绝套用，要求目标赛事官方来源；
 - 来源冲突：保留双方 source ID、适用范围和问题，状态 `conflict`，不选最严格/最宽松；
-- 旧版 profile：标 `stale`，重新核验后才能 verified；
+- 旧版 profile：标 `stale`，重新核验后才能 verified；沿用 2025“参考文献列出 AI 工具/正文标注”给 2026 提交属于 stale/version_conflict；
 - 任何 unknown/conflict/stale 未关闭时不能做正式合规保证；
 - 每条规则要有来源 ID、发布日期/访问日期、hash 和页码/条款/行号 evidence anchor。

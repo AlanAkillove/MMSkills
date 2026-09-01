@@ -124,86 +124,9 @@
   \clearpage
 \fi
 
-% ---------- 正文骨架 ----------
-% 章节数量和顺序应由题目、证据和目标读者决定；可删除不承担当读者任务的章节。
-\section{问题重述与任务分解}
-\subsection{问题背景}
-% 只保留理解后续模型所需的背景、对象关系和实际约束。
-
-\subsection{问题重述}
-% 将实际子问题改写为可检验的任务，明确输入、输出、目标、约束和评价指标。
-% 只有天然需要并列呈现时才使用 enumerate；不要为了凑数量添加问题。
-
-\section{总体分析与建模路线}
-% 用连续段落说明各子问题之间的依赖、关键决策和证据来源。需要流程图时再加入。
-
-% \begin{figure}[H]
-%   \centering
-%   \includegraphics[width=0.88\textwidth]{model-workflow.pdf}
-%   \caption{从题目输入到模型输出的分析流程；图中每个节点应能回到问题地图、实验注册或主张证据。}
-%   \label{fig:model-workflow}
-% \end{figure}
-
-\section{数据、假设与符号}
-\subsection{数据来源与预处理}
-% 记录数据来源、字段、单位、缺失/异常处理、样本范围、切分和版本。
-
-\subsection{模型假设}
-% 每条实际采用的假设写出依据、影响、适用范围和验证方式。
-
-\subsection{符号说明}
-\begin{table}[H]
-  \centering
-  \caption{主要符号、含义与单位}
-  \label{tab:notation}
-  \begin{tabularx}{0.94\textwidth}{c X c | c X c}
-    \toprule
-    符号 & 含义 & 单位 & 符号 & 含义 & 单位 \\
-    \midrule
-    % 在此添加实际使用且会在正文反复出现的符号；不需要的列或表可删除。
-    \bottomrule
-  \end{tabularx}
-\end{table}
-
-\section{子问题一：模型建立与求解}
-\subsection{模型选择与变量关系}
-% 说明本模型回答的具体问题、输入输出和适用边界，再给出变量关系。
-
-\subsection{数学模型}
-% 在首次出现时定义实际符号、单位和范围。只为需要回引的公式编号。
-
-\subsection{求解过程与结果}
-% 说明实际算法、参数、停止条件或解析求解条件，并报告与主张对应的结果。
-
-\begin{table}[H]
-  \centering
-  \caption{子问题一的主要结果}
-  \label{tab:subproblem-one}
-  \begin{tabular}{lccc}
-    \toprule
-    % 按实际结果添加列和行；不需要的表格可以删除。
-    \bottomrule
-  \end{tabular}
-\end{table}
-
-\section{子问题二：预测、优化或扩展}
-% 按实际题目改写标题和内容；不存在的子问题或模型不要保留。
-
-\section{结果验证与稳健性}
-% 将重要结论与实际验证证据绑定；没有证据时降低结论强度或明确未知。
-
-\subsection{模型验证}
-% 区分拟合、预测、解释、最优性和稳健性，记录异常与未覆盖范围。
-
-\subsection{敏感性与边界}
-% 写出影响最大的变量、扰动范围、结果变化和适用条件；不要无证据外推。
-
-\section{讨论、局限与结论}
-\subsection{模型特点与局限}
-% 只总结已经展示的特点；说明局限影响的主张和最小补充证据。
-
-\subsection{结论}
-% 按实际子问题回答，给出必要的数值、条件和边界，并回指正文证据。
+% 正文结构由题目和证据决定，不要沿用任何固定章节清单。
+% 需要一份通用示例骨架时，见仓库 examples/generic-paper-scaffold.tex。
+\input{body.tex}
 
 % ---------- 规则驱动的 AI 声明 ----------
 \ifmmIncludeAIStatement

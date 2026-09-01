@@ -82,6 +82,40 @@ def add_finding(
     )
 
 
+NARRATIVE_SECTION = re.compile(
+    r"(问题分析|总体分析|建模路线|结果解释|结论|讨论)"
+)
+SECTION_SPLIT = re.compile(r"\\(?:sub)*section\*?\{([^}]+)\}")
+
+
+def narrative_list_risk(text: str) -> Optional[Dict[str, Any]]:
+    """Flag lists that are doing narrative work, not a global item count.
+
+    Assumptions, algorithm steps and parameter tables may reasonably use lists.
+    Consecutive lists in analysis, route, result-explanation, discussion or
+    conclusion sections are the high-signal reading risk.
+    """
+
+    parts = SECTION_SPLIT.split(text)
+    hottest: Optional[Dict[str, Any]] = None
+    for index in range(1, len(parts), 2):
+        title = parts[index]
+        body = parts[index + 1] if index + 1 < len(parts) else ""
+        if not NARRATIVE_SECTION.search(title):
+            continue
+        environments = len(re.findall(r"\\begin\{(?:itemize|enumerate)\}", body))
+        items = len(re.findall(r"\\item\b", body))
+        if environments >= 2 and items >= 3:
+            candidate = {
+                "title": title,
+                "environments": environments,
+                "items": items,
+            }
+            if hottest is None or items > hottest["items"]:
+                hottest = candidate
+    return hottest
+
+
 def extract_abstract(text: str) -> Optional[str]:
     match = re.search(r"\\begin\{abstract\}(.*?)\\end\{abstract\}", text, re.S)
     return match.group(1).strip() if match else None
@@ -205,17 +239,23 @@ def check_manuscript(path: Path, reference: Optional[Path] = None) -> Dict[str, 
             lines=line_numbers(text, [match for match in ref_matches if match.group(1) in missing_refs]),
         )
 
-    itemize = len(re.findall(r"\\begin\{itemize\}", text))
-    enumerate_count = len(re.findall(r"\\begin\{enumerate\}", text))
-    list_items = len(re.findall(r"\\item\b", text))
-    if itemize >= 3 or enumerate_count >= 7 or list_items >= 10:
+    narrative_lists = narrative_list_risk(text)
+    if narrative_lists:
         add_finding(
             findings,
             finding_id="MQL-009",
             category="list-density",
             severity="P2",
-            message=f"列表信息可能过密（itemize={itemize}, enumerate={enumerate_count}, items={list_items}），需检查是否用分点替代了论文段落",
-            suggestion="仅保留真正并列的任务、假设、参数或结果；路线、解释和论证优先改为连续段落。此项是阅读提示，不是绝对禁用列表。",
+            message=(
+                f"叙事性章节「{narrative_lists['title']}」连续使用列表"
+                f"（environments={narrative_lists['environments']}, "
+                f"items={narrative_lists['items']}），需检查是否用分点替代了论证"
+            ),
+            suggestion=(
+                "假设、算法步骤、参数等真正并列的对象可以保留列表；"
+                "问题分析、路线、结果解释、讨论和结论优先写成连续段落。"
+                "此项按章节位置判断，不把全文 item 数写成固定上限。"
+            ),
         )
 
     metrics = style_metrics(text)
@@ -224,7 +264,7 @@ def check_manuscript(path: Path, reference: Optional[Path] = None) -> Dict[str, 
     status = "blocked" if p1 else "needs_review" if p2 else "pass"
     return {
         "tool": "check_manuscript_quality",
-        "tool_version": "0.2",
+        "tool_version": "0.2.1",
         "input": str(path),
         "status": status,
         "severity_counts": {"P1": p1, "P2": p2},

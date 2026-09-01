@@ -4,7 +4,8 @@
 
 ## 直接依据
 
-- 中国大学生数学建模竞赛 2026 年 AI 使用规则：<https://www.mcm.edu.cn/html_cn/node/fef94648f2836ab6cc81586f4c38512b.html>
+- 中国大学生数学建模竞赛 2026 年 AI 使用规则：<https://www.mcm.edu.cn/html_cn/node/fef94648f2836ab6cc81586f4c38512b.html>（2026-09-01 再核验；此前 2025 试行规定已失效）
+- 2025 年试行规定（仅作对照，不得执行）：<https://www.mcm.edu.cn/html_cn/node/eebcfb6dc37fd2de9603dc16026fdf01.html>
 - 中国大学生数学建模竞赛 2026 年论文格式规范：<https://www.mcm.edu.cn/html_cn/node/4cd596519c9eb9fbd866398f6df0caa3.html>
 - 项目内规则 profile：`../../../references/rules/cumcm-2026.yaml`
 - 项目内历史会话读取协议：`../../../references/ai-use-history-protocol.md`

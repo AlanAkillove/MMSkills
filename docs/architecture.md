@@ -36,7 +36,7 @@ RULES_PROFILE
   -> PROCESS_FREEZER
 ```
 
-上图是编排器推荐图的阅读索引；阶段 ID、硬依赖、软建议、人工边界和顺序以 [`schemas/stage-registry.json`](../schemas/stage-registry.json) 为唯一来源。`TOPIC_SELECTION`、`LITERATURE_EVIDENCE` 和 `PROBLEM_FAMILIARIZATION` 不应被合并成一个“背景分析”阶段：它们分别解决全题目选取、来源学习和团队理解确认。用户明确要求局部工作时，可以从目标阶段或最近硬前置开始。
+上图是编排器推荐图的阅读索引；阶段 ID、执行依赖、采用依赖、软建议、人工边界和顺序以 [`schemas/stage-registry.json`](../schemas/stage-registry.json) 为唯一来源。`TOPIC_SELECTION`、`LITERATURE_EVIDENCE` 和 `PROBLEM_FAMILIARIZATION` 不应被合并成一个“背景分析”阶段：它们分别解决全题目选取、来源学习和团队理解确认。用户明确要求局部工作时，只要 `execution_requires` 满足就可以开始；正式采用仍看 `adoption_requires`。
 
 状态不是简单的章节清单，而是帮助不同会话复原工作的可复核记录。核心决定、关键证据和最终交付必须可追踪；可选 review checkpoint 和过程 artifact 不应变成每轮工作的必填表。任何阶段发现上游证据不足时，应回退到相应范围或降低表述强度，而不是用语言润色掩盖缺口。
 
@@ -150,7 +150,7 @@ project_state/
 4. 关键建模假设及其适用范围；
 5. 候选模型、目标函数、约束和评价指标的取舍；
 5a. 团队是否通过本题对象复述理解候选模型的用途、关键假设、主要代价/风险和待验证点；
-6. 数据清洗、异常值处理、样本切分和外部资料采纳；
+6. 删除异常、改切分、采用外部资料或覆盖后续模型所用数据（查看缺失值本身不是门）；
 7. 实验是否足以支撑主张；
 8. 哪些结构、指标、图表或叙事方式真正体现本题特征；
 9. 论文中的主要结论、创新性表述和局限性；

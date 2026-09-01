@@ -58,9 +58,13 @@ def test_stage_registry_is_the_ordered_and_topological_source_of_truth():
     positions = {stage: index for index, stage in enumerate(order)}
     gate_types = set()
     for stage, record in registry["stages"].items():
-        assert all(positions[dependency] < positions[stage] for dependency in record["depends_on"])
+        execution = record.get("execution_requires") or record.get("depends_on") or []
+        assert all(positions[dependency] < positions[stage] for dependency in execution)
+        if "depends_on" in record:
+            assert list(record["depends_on"]) == list(execution)
         assert stage not in record.get("recommended_after", [])
         assert all(recommended in registry["stages"] for recommended in record.get("recommended_after", []))
+        assert all(dep in registry["stages"] for dep in record.get("adoption_requires", []))
         assert record["gate_type"] in {"core_decision", "review_checkpoint", "none"}
         gate_types.add(record["gate_type"])
         if record["gate_type"] == "core_decision":

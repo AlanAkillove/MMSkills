@@ -1,6 +1,6 @@
 {
-  "schema_version": "0.2",
-  "description": "Canonical stage IDs, hard dependencies, soft recommendations, gate types and review-lens map for the default MathModelingSkills workflow.",
+  "schema_version": "0.2.1",
+  "description": "Canonical stage IDs with execution_requires, adoption_requires and recommended_after. Skills are helpers; this graph is a recommended route, not a per-turn SOP.",
   "default_order": [
     "rules_profile",
     "topic_selection",
@@ -37,31 +37,277 @@
     "anti_homogenization": {"stage": "anti_homogenization", "timing": "post_draft"},
     "reader_experience": {"stage": "reader", "timing": "post_draft"}
   },
+  "action_levels": [
+    "explain",
+    "explore",
+    "propose",
+    "execute_reversible",
+    "adopt",
+    "freeze",
+    "submit"
+  ],
   "stages": {
-    "rules_profile": {"skill": "modeling-rules-profile", "depends_on": [], "human_gate": "optional", "gate_type": "review_checkpoint", "phase": "foundation", "notes": "规则是合规依据；在不作合规结论的探索阶段可以稍后核验。"},
-    "topic_selection": {"skill": "modeling-topic-selection", "depends_on": [], "recommended_after": ["rules_profile"], "human_gate": "required", "gate_type": "core_decision", "phase": "foundation", "notes": "规则影响赛事取舍时应优先核对；已有人类选题或早期比较不必被规则资料阻断。"},
-    "literature_evidence": {"skill": "modeling-literature-evidence", "depends_on": ["topic_selection"], "human_gate": "optional", "gate_type": "review_checkpoint", "phase": "familiarization", "notes": "Use orientation mode before formal problem intake; citation-audit may be rerun later."},
-    "problem_familiarization": {"skill": "modeling-problem-familiarization", "depends_on": ["literature_evidence", "topic_selection"], "human_gate": "required", "gate_type": "core_decision", "phase": "familiarization"},
-    "problem_intake": {"skill": "modeling-problem-intake", "depends_on": ["problem_familiarization", "topic_selection"], "human_gate": "required", "gate_type": "core_decision", "phase": "interpretation"},
-    "distinctiveness_coach": {"skill": "modeling-distinctiveness-coach", "depends_on": ["problem_intake", "problem_familiarization"], "human_gate": "optional", "gate_type": "review_checkpoint", "phase": "modeling", "notes": "写前保留题目锚点，不强行制造新颖性；未完成时可先写保守草稿。"},
-    "assumption_ledger": {"skill": "modeling-assumption-ledger", "depends_on": ["problem_intake", "problem_familiarization"], "human_gate": "required", "gate_type": "core_decision", "phase": "modeling"},
-    "data_audit": {"skill": "modeling-data-audit", "depends_on": ["problem_intake", "problem_familiarization"], "human_gate": "required", "gate_type": "core_decision", "phase": "modeling"},
-    "model_architect": {"skill": "modeling-model-architect", "depends_on": ["problem_intake", "problem_familiarization", "distinctiveness_coach", "assumption_ledger", "data_audit"], "human_gate": "required", "gate_type": "core_decision", "phase": "modeling"},
-    "experiment_validator": {"skill": "modeling-experiment-validator", "depends_on": ["model_architect"], "human_gate": "required", "gate_type": "core_decision", "phase": "validation"},
-    "paper_architect": {"skill": "modeling-paper-architect", "depends_on": ["problem_intake", "model_architect", "experiment_validator"], "human_gate": "optional", "gate_type": "review_checkpoint", "phase": "writing", "notes": "蓝图是写作辅助，不应把论文写作锁死在固定章节。"},
-    "figure_design": {"skill": "modeling-figure-designer", "depends_on": ["paper_architect", "experiment_validator"], "human_gate": "optional", "gate_type": "review_checkpoint", "phase": "writing"},
-    "figure_table": {"skill": "modeling-figure-table-auditor", "depends_on": ["experiment_validator", "figure_design"], "human_gate": "optional", "gate_type": "review_checkpoint", "phase": "audit"},
-    "claim_evidence": {"skill": "modeling-claim-evidence-audit", "depends_on": ["paper_architect", "experiment_validator"], "human_gate": "optional", "gate_type": "review_checkpoint", "phase": "audit"},
-    "terminology": {"skill": "modeling-terminology-auditor", "depends_on": ["paper_architect"], "human_gate": "optional", "gate_type": "review_checkpoint", "phase": "audit"},
-    "draft": {"skill": "modeling-paper-writer", "depends_on": [], "recommended_after": ["paper_architect", "experiment_validator", "figure_design", "figure_table", "claim_evidence", "terminology"], "human_gate": "optional", "gate_type": "review_checkpoint", "phase": "writing", "notes": "已有题面、分析或旧稿时可直接形成证据范围明确的暂定稿；结构、实验、图表和术语检查是推荐前置，不应阻断用户明确要求的续写。"},
-    "paper_review": {"skill": "modeling-paper-reviewer", "depends_on": ["draft"], "human_gate": "optional", "gate_type": "review_checkpoint", "phase": "audit"},
-    "ai_pattern": {"skill": "modeling-ai-pattern-reviewer", "depends_on": ["draft"], "human_gate": "optional", "gate_type": "review_checkpoint", "phase": "audit"},
-    "anti_homogenization": {"skill": "modeling-anti-homogenization-auditor", "depends_on": ["draft", "distinctiveness_coach"], "human_gate": "optional", "gate_type": "review_checkpoint", "phase": "audit"},
-    "reader": {"skill": "modeling-reader-experience-auditor", "depends_on": ["draft"], "human_gate": "optional", "gate_type": "review_checkpoint", "phase": "audit"},
-    "naturalizer": {"skill": "modeling-paper-naturalizer", "depends_on": ["draft"], "recommended_after": ["paper_review", "ai_pattern", "anti_homogenization", "reader"], "human_gate": "optional", "gate_type": "review_checkpoint", "phase": "revision", "notes": "没有专项报告时仍可做保守的成文清洁，但不得声称已完成全套审查。"},
-    "support": {"skill": "modeling-support-materials-auditor", "depends_on": ["draft"], "recommended_after": ["figure_table"], "human_gate": "optional", "gate_type": "review_checkpoint", "phase": "delivery"},
-    "ai_disclosure": {"skill": "modeling-ai-use-disclosure", "depends_on": ["rules_profile"], "human_gate": "required", "gate_type": "core_decision", "phase": "compliance"},
-    "final_preflight": {"skill": "modeling-final-preflight", "depends_on": ["naturalizer", "support", "ai_disclosure"], "recommended_after": ["paper_review", "ai_pattern", "anti_homogenization", "reader", "figure_table", "claim_evidence", "terminology"], "human_gate": "required", "gate_type": "core_decision", "phase": "delivery"},
-    "process_freezer": {"skill": "modeling-process-freezer", "depends_on": ["final_preflight"], "human_gate": "required", "gate_type": "core_decision", "phase": "delivery"}
+    "rules_profile": {
+      "skill": "modeling-rules-profile",
+      "execution_requires": [],
+      "adoption_requires": [],
+      "recommended_after": [],
+      "depends_on": [],
+      "human_gate": "optional",
+      "gate_type": "review_checkpoint",
+      "phase": "foundation",
+      "notes": "规则是合规依据；解释和探索不必先完成正式 profile。"
+    },
+    "topic_selection": {
+      "skill": "modeling-topic-selection",
+      "execution_requires": [],
+      "adoption_requires": [],
+      "recommended_after": ["rules_profile"],
+      "depends_on": [],
+      "human_gate": "required",
+      "gate_type": "core_decision",
+      "phase": "foundation",
+      "notes": "比较题目可以随时开始；正式选定主选/备选才是 adoption。"
+    },
+    "literature_evidence": {
+      "skill": "modeling-literature-evidence",
+      "execution_requires": [],
+      "adoption_requires": [],
+      "recommended_after": ["topic_selection"],
+      "depends_on": [],
+      "human_gate": "optional",
+      "gate_type": "review_checkpoint",
+      "phase": "familiarization",
+      "notes": "orientation 可随时开始；不得把未核验来源写成已采用证据。"
+    },
+    "problem_familiarization": {
+      "skill": "modeling-problem-familiarization",
+      "execution_requires": [],
+      "adoption_requires": ["topic_selection"],
+      "recommended_after": ["literature_evidence", "topic_selection"],
+      "depends_on": [],
+      "human_gate": "required",
+      "gate_type": "core_decision",
+      "phase": "familiarization",
+      "notes": "讲解和复述可以立即开始；把理解标记为已确认才需要选题范围。"
+    },
+    "problem_intake": {
+      "skill": "modeling-problem-intake",
+      "execution_requires": [],
+      "adoption_requires": ["topic_selection"],
+      "recommended_after": ["problem_familiarization", "literature_evidence"],
+      "depends_on": [],
+      "human_gate": "required",
+      "gate_type": "core_decision",
+      "phase": "interpretation",
+      "notes": "用户给出题面后即可整理问题地图；冻结题意解释才需要理解确认。"
+    },
+    "distinctiveness_coach": {
+      "skill": "modeling-distinctiveness-coach",
+      "execution_requires": [],
+      "adoption_requires": [],
+      "recommended_after": ["problem_intake", "problem_familiarization"],
+      "depends_on": [],
+      "human_gate": "optional",
+      "gate_type": "review_checkpoint",
+      "phase": "modeling",
+      "notes": "题目锚点是质量建议，不能阻断模型探索。"
+    },
+    "assumption_ledger": {
+      "skill": "modeling-assumption-ledger",
+      "execution_requires": [],
+      "adoption_requires": ["problem_intake"],
+      "recommended_after": ["problem_familiarization"],
+      "depends_on": [],
+      "human_gate": "required",
+      "gate_type": "core_decision",
+      "phase": "modeling",
+      "notes": "可以先列出候选假设；写入采用集才需要题意范围。"
+    },
+    "data_audit": {
+      "skill": "modeling-data-audit",
+      "execution_requires": [],
+      "adoption_requires": [],
+      "recommended_after": ["problem_intake"],
+      "depends_on": [],
+      "human_gate": "optional",
+      "gate_type": "review_checkpoint",
+      "phase": "modeling",
+      "notes": "查看缺失/口径是 explain/explore；删除异常、改切分或覆盖后续模型所用数据才是 adopt。"
+    },
+    "model_architect": {
+      "skill": "modeling-model-architect",
+      "execution_requires": [],
+      "adoption_requires": ["problem_intake"],
+      "recommended_after": ["problem_familiarization", "distinctiveness_coach", "assumption_ledger", "data_audit", "literature_evidence"],
+      "depends_on": [],
+      "human_gate": "required",
+      "gate_type": "core_decision",
+      "phase": "modeling",
+      "notes": "比较候选只需题面或用户描述；冻结核心模型才需要题意确认。"
+    },
+    "experiment_validator": {
+      "skill": "modeling-experiment-validator",
+      "execution_requires": [],
+      "adoption_requires": ["model_architect"],
+      "recommended_after": ["data_audit"],
+      "depends_on": [],
+      "human_gate": "required",
+      "gate_type": "core_decision",
+      "phase": "validation",
+      "notes": "可逆试算可以开始；把实验结果写进论文结论前需要已采用的模型范围。"
+    },
+    "paper_architect": {
+      "skill": "modeling-paper-architect",
+      "execution_requires": [],
+      "adoption_requires": [],
+      "recommended_after": ["problem_intake", "model_architect", "experiment_validator"],
+      "depends_on": [],
+      "human_gate": "optional",
+      "gate_type": "review_checkpoint",
+      "phase": "writing",
+      "notes": "蓝图是写作辅助，不是正文章节模板。"
+    },
+    "figure_design": {
+      "skill": "modeling-figure-designer",
+      "execution_requires": [],
+      "adoption_requires": [],
+      "recommended_after": ["paper_architect", "experiment_validator"],
+      "depends_on": [],
+      "human_gate": "optional",
+      "gate_type": "review_checkpoint",
+      "phase": "writing"
+    },
+    "figure_table": {
+      "skill": "modeling-figure-table-auditor",
+      "execution_requires": [],
+      "adoption_requires": [],
+      "recommended_after": ["experiment_validator", "figure_design"],
+      "depends_on": [],
+      "human_gate": "optional",
+      "gate_type": "review_checkpoint",
+      "phase": "audit"
+    },
+    "claim_evidence": {
+      "skill": "modeling-claim-evidence-audit",
+      "execution_requires": [],
+      "adoption_requires": [],
+      "recommended_after": ["paper_architect", "experiment_validator"],
+      "depends_on": [],
+      "human_gate": "optional",
+      "gate_type": "review_checkpoint",
+      "phase": "audit"
+    },
+    "terminology": {
+      "skill": "modeling-terminology-auditor",
+      "execution_requires": [],
+      "adoption_requires": [],
+      "recommended_after": ["paper_architect"],
+      "depends_on": [],
+      "human_gate": "optional",
+      "gate_type": "review_checkpoint",
+      "phase": "audit"
+    },
+    "draft": {
+      "skill": "modeling-paper-writer",
+      "execution_requires": [],
+      "adoption_requires": [],
+      "recommended_after": ["paper_architect", "experiment_validator", "figure_design", "figure_table", "claim_evidence", "terminology"],
+      "depends_on": [],
+      "human_gate": "optional",
+      "gate_type": "review_checkpoint",
+      "phase": "writing",
+      "notes": "有题面、分析或旧稿即可写暂定稿；提交前再做成文清洁。"
+    },
+    "paper_review": {
+      "skill": "modeling-paper-reviewer",
+      "execution_requires": ["draft"],
+      "adoption_requires": [],
+      "recommended_after": [],
+      "depends_on": ["draft"],
+      "human_gate": "optional",
+      "gate_type": "review_checkpoint",
+      "phase": "audit"
+    },
+    "ai_pattern": {
+      "skill": "modeling-ai-pattern-reviewer",
+      "execution_requires": ["draft"],
+      "adoption_requires": [],
+      "recommended_after": [],
+      "depends_on": ["draft"],
+      "human_gate": "optional",
+      "gate_type": "review_checkpoint",
+      "phase": "audit"
+    },
+    "anti_homogenization": {
+      "skill": "modeling-anti-homogenization-auditor",
+      "execution_requires": ["draft"],
+      "adoption_requires": [],
+      "recommended_after": ["distinctiveness_coach"],
+      "depends_on": ["draft"],
+      "human_gate": "optional",
+      "gate_type": "review_checkpoint",
+      "phase": "audit"
+    },
+    "reader": {
+      "skill": "modeling-reader-experience-auditor",
+      "execution_requires": ["draft"],
+      "adoption_requires": [],
+      "recommended_after": [],
+      "depends_on": ["draft"],
+      "human_gate": "optional",
+      "gate_type": "review_checkpoint",
+      "phase": "audit"
+    },
+    "naturalizer": {
+      "skill": "modeling-paper-naturalizer",
+      "execution_requires": ["draft"],
+      "adoption_requires": [],
+      "recommended_after": ["paper_review", "ai_pattern", "anti_homogenization", "reader"],
+      "depends_on": ["draft"],
+      "human_gate": "optional",
+      "gate_type": "review_checkpoint",
+      "phase": "revision"
+    },
+    "support": {
+      "skill": "modeling-support-materials-auditor",
+      "execution_requires": ["draft"],
+      "adoption_requires": [],
+      "recommended_after": ["figure_table"],
+      "depends_on": ["draft"],
+      "human_gate": "optional",
+      "gate_type": "review_checkpoint",
+      "phase": "delivery"
+    },
+    "ai_disclosure": {
+      "skill": "modeling-ai-use-disclosure",
+      "execution_requires": [],
+      "adoption_requires": ["rules_profile"],
+      "recommended_after": ["rules_profile"],
+      "depends_on": [],
+      "human_gate": "required",
+      "gate_type": "core_decision",
+      "phase": "compliance"
+    },
+    "final_preflight": {
+      "skill": "modeling-final-preflight",
+      "execution_requires": ["draft"],
+      "adoption_requires": ["ai_disclosure"],
+      "recommended_after": ["naturalizer", "support", "paper_review", "ai_pattern", "anti_homogenization", "reader", "figure_table", "claim_evidence", "terminology"],
+      "depends_on": ["draft"],
+      "human_gate": "required",
+      "gate_type": "core_decision",
+      "phase": "delivery"
+    },
+    "process_freezer": {
+      "skill": "modeling-process-freezer",
+      "execution_requires": ["final_preflight"],
+      "adoption_requires": ["final_preflight"],
+      "recommended_after": [],
+      "depends_on": ["final_preflight"],
+      "human_gate": "required",
+      "gate_type": "core_decision",
+      "phase": "delivery"
+    }
   }
 }

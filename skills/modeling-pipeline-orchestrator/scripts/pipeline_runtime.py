@@ -27,7 +27,19 @@ PROFILE_ALIASES = {
     "contest/fast": "contest-fast",
 }
 DEFAULT_PROFILE = "contest-standard"
+WORKING_DEPTHS = {"light", "standard", "full"}
 COLLABORATION_MODES = {"adaptive", "light", "standard", "full"}
+ACTION_LEVELS = {
+    "explain",
+    "explore",
+    "propose",
+    "execute_reversible",
+    "adopt",
+    "freeze",
+    "submit",
+}
+EXPLORATORY_ACTIONS = {"explain", "explore", "propose", "execute_reversible"}
+ADOPTION_ACTIONS = {"adopt", "freeze", "submit"}
 USER_INTENTS = {
     "understand",
     "explore",
@@ -42,6 +54,21 @@ USER_INTENTS = {
     "final_check",
     "release",
     "unknown",
+}
+INTENT_ACTION_MAP = {
+    "understand": "explore",
+    "explore": "explore",
+    "select_topic": "propose",
+    "literature": "explore",
+    "model": "explore",
+    "experiment": "execute_reversible",
+    "draft": "execute_reversible",
+    "revise": "execute_reversible",
+    "audit": "explore",
+    "disclose": "adopt",
+    "final_check": "freeze",
+    "release": "submit",
+    "unknown": "explore",
 }
 INTENT_STAGE_MAP = {
     "understand": "problem_familiarization",
@@ -98,16 +125,22 @@ def load_registry(path: Path = REGISTRY_PATH) -> Dict[str, Any]:
         record = stages[stage]
         if not isinstance(record, dict):
             raise ValueError(f"stage {stage} must be an object")
-        dependencies = record.get("depends_on")
-        if not isinstance(dependencies, list) or any(dep not in stages for dep in dependencies):
-            raise ValueError(f"stage {stage} has an unknown dependency")
-        if any(positions[dep] >= positions[stage] for dep in dependencies):
-            raise ValueError(f"stage {stage} is not topologically ordered")
-        recommended_after = record.get("recommended_after", [])
-        if not isinstance(recommended_after, list) or any(dep not in stages for dep in recommended_after):
-            raise ValueError(f"stage {stage} has an unknown soft recommendation")
-        if stage in recommended_after:
-            raise ValueError(f"stage {stage} cannot recommend itself")
+        execution = record.get("execution_requires")
+        if execution is None:
+            execution = record.get("depends_on") or []
+        if not isinstance(execution, list) or any(dep not in stages for dep in execution):
+            raise ValueError(f"stage {stage} has an unknown execution requirement")
+        if any(positions[dep] >= positions[stage] for dep in execution):
+            raise ValueError(f"stage {stage} execution_requires is not topologically ordered")
+        depends_on = record.get("depends_on")
+        if depends_on is not None and list(depends_on) != list(execution):
+            raise ValueError(f"stage {stage} depends_on must match execution_requires")
+        for field in ("adoption_requires", "recommended_after"):
+            values = record.get(field, [])
+            if not isinstance(values, list) or any(dep not in stages for dep in values):
+                raise ValueError(f"stage {stage} has an unknown {field} entry")
+            if stage in values:
+                raise ValueError(f"stage {stage} cannot list itself in {field}")
         gate_type = record.get("gate_type")
         if gate_type not in {"core_decision", "review_checkpoint", "none"}:
             raise ValueError(f"stage {stage} needs a gate_type")
@@ -135,7 +168,9 @@ def load_stage_graph(path: Path = REGISTRY_PATH) -> "OrderedDict[str, Dict[str, 
         record = registry["stages"][stage]
         graph[stage] = {
             "skill": record.get("skill"),
-            "depends_on": list(record.get("depends_on") or []),
+            "execution_requires": list(record.get("execution_requires") or record.get("depends_on") or []),
+            "adoption_requires": list(record.get("adoption_requires") or []),
+            "depends_on": list(record.get("execution_requires") or record.get("depends_on") or []),
             "recommended_after": list(record.get("recommended_after") or []),
             "human_gate": record.get("human_gate"),
             "gate_type": record.get("gate_type"),
@@ -175,16 +210,44 @@ def core_decision_stages(registry: Mapping[str, Any]) -> List[str]:
     ]
 
 
+def stage_requirement_list(spec: Mapping[str, Any], field: str) -> List[str]:
+    if field == "execution_requires":
+        return list(spec.get("execution_requires") or spec.get("depends_on") or [])
+    return [str(item) for item in (spec.get(field) or [])]
+
+
+def resolve_working_depth(state: Mapping[str, Any], profile: Mapping[str, Any]) -> str:
+    requested_depth = state.get("working_depth")
+    if requested_depth in WORKING_DEPTHS:
+        return str(requested_depth)
+    requested_mode = state.get("collaboration_mode")
+    if requested_mode in WORKING_DEPTHS:
+        return str(requested_mode)
+    configured = profile.get("collaboration_policy", {}).get("default_mode")
+    if configured in WORKING_DEPTHS:
+        return str(configured)
+    return "standard"
+
+
 def resolve_collaboration_mode(
     state: Mapping[str, Any], profile: Mapping[str, Any]
 ) -> str:
+    """Alias of working_depth for 0.2 compatibility; adaptive falls back to the profile default."""
+
     requested = state.get("collaboration_mode")
-    if requested in COLLABORATION_MODES:
+    if requested in WORKING_DEPTHS:
+        if state.get("working_depth") in WORKING_DEPTHS:
+            return str(state["working_depth"])
         return str(requested)
-    configured = profile.get("collaboration_policy", {}).get("default_mode")
-    if configured in COLLABORATION_MODES:
-        return str(configured)
-    return "standard"
+    return resolve_working_depth(state, profile)
+
+
+def persist_artifact_mode(working_depth: str) -> str:
+    if working_depth == "full":
+        return "required"
+    if working_depth == "light":
+        return "optional"
+    return "checkpoints"
 
 
 def resolve_user_intent(
@@ -193,19 +256,26 @@ def resolve_user_intent(
     raw = state.get("user_intent")
     raw = raw if isinstance(raw, dict) else {}
     goal = str(raw.get("goal") or "unknown")
+    if goal not in USER_INTENTS:
+        goal = "unknown"
     requested_stage = raw.get("requested_stage")
     requested_stage = str(requested_stage) if requested_stage else None
     target_stage = requested_stage if requested_stage in registry["stages"] else None
     if target_stage is None:
         target_stage = INTENT_STAGE_MAP.get(goal)
+    action = raw.get("action")
+    if action not in ACTION_LEVELS:
+        action = INTENT_ACTION_MAP.get(goal, "explore")
     return {
-        "goal": goal if goal in USER_INTENTS else "unknown",
+        "goal": goal,
+        "action": action,
         "requested_stage": requested_stage,
         "target_stage": target_stage,
         "scope": raw.get("scope", "unknown"),
         "urgency": raw.get("urgency", "unknown"),
         "allow_provisional_output": raw.get("allow_provisional_output", True),
         "note": raw.get("note", ""),
+        "explicit": bool(requested_stage) or goal != "unknown",
     }
 
 
@@ -344,9 +414,10 @@ def build_effective_stage_policy(
     registry = registry or load_registry()
     profile_id = normalize_profile_id(state.get("run_profile")) or DEFAULT_PROFILE
     profile = profile or load_run_profile(profile_id)
+    working_depth = resolve_working_depth(state, profile)
     collaboration_mode = resolve_collaboration_mode(state, profile)
     selected, skipped_conditional, not_in_profile = select_lenses(
-        profile, registry, state, collaboration_mode=collaboration_mode
+        profile, registry, state, collaboration_mode=working_depth
     )
     intent = resolve_user_intent(state, registry)
     selected_set = set(selected)
@@ -362,13 +433,13 @@ def build_effective_stage_policy(
             if stage in registry["stages"]
             and registry["stages"][stage].get("gate_type") == "review_checkpoint"
         }
-    if collaboration_mode == "full":
+    if working_depth == "full":
         review_gates = {
             stage
             for stage in registry["default_order"]
             if registry["stages"][stage].get("gate_type") == "review_checkpoint"
         }
-    elif collaboration_mode == "light":
+    elif working_depth == "light":
         review_gates &= {"paper_review", "reader", "naturalizer"}
     stages: "OrderedDict[str, Dict[str, Any]]" = OrderedDict()
     for stage in registry["default_order"]:
@@ -397,14 +468,17 @@ def build_effective_stage_policy(
             blocking = False
         artifact_mode = profile.get("artifact_policy", {}).get("state")
         compact = artifact_mode not in {None, "separate_stage_artifacts"}
-        if collaboration_mode == "light":
+        if working_depth == "light":
             compact = True
-        elif collaboration_mode == "full":
+        elif working_depth == "full":
             compact = False
+        execution_requires = stage_requirement_list(spec, "execution_requires")
         stages[stage] = {
             "skill": spec["skill"],
-            "depends_on": list(spec["depends_on"]),
-            "recommended_after": list(spec.get("recommended_after") or []),
+            "execution_requires": execution_requires,
+            "adoption_requires": stage_requirement_list(spec, "adoption_requires"),
+            "depends_on": execution_requires,
+            "recommended_after": stage_requirement_list(spec, "recommended_after"),
             "gate_type": gate_type,
             "human_gate": spec["human_gate"],
             "blocking": blocking,
@@ -420,7 +494,9 @@ def build_effective_stage_policy(
         "review_policy": profile.get("review_policy", {}),
         "human_gates": list(profile.get("human_gates") or []),
         "review_gates": sorted(review_gates),
+        "working_depth": working_depth,
         "collaboration_mode": collaboration_mode,
+        "persist_artifacts": persist_artifact_mode(working_depth),
         "intent": intent,
         "user_intent_priority": profile.get("collaboration_policy", {}).get(
             "user_intent_priority", True
@@ -485,11 +561,17 @@ def validate_state(
     collaboration_mode = state.get("collaboration_mode")
     if collaboration_mode is not None and collaboration_mode not in COLLABORATION_MODES:
         errors.append(f"unknown collaboration mode: {collaboration_mode}")
+    working_depth = state.get("working_depth")
+    if working_depth is not None and working_depth not in WORKING_DEPTHS:
+        errors.append(f"unknown working depth: {working_depth}")
     user_intent = state.get("user_intent")
     if isinstance(user_intent, dict):
         requested_stage = user_intent.get("requested_stage")
         if requested_stage and requested_stage not in stages:
             errors.append(f"user_intent.requested_stage is not in the registry: {requested_stage}")
+        action = user_intent.get("action")
+        if action is not None and action not in ACTION_LEVELS:
+            errors.append(f"unknown user_intent.action: {action}")
     if not isinstance(state.get("stages"), dict):
         return errors or ["stages must be an object"]
     for stage, record in state["stages"].items():
@@ -505,7 +587,7 @@ def validate_state(
             errors.append(f"skipped stage {stage} needs a reason")
         depends_on = record.get("depends_on")
         if depends_on is not None:
-            canonical = list(stages[stage].get("depends_on") or [])
+            canonical = stage_requirement_list(stages[stage], "execution_requires")
             if not isinstance(depends_on, list) or [str(item) for item in depends_on] != canonical:
                 errors.append(f"stage {stage} depends_on conflicts with the registry")
         if _has_confirmed_marker(record.get("human_status")) and not _decision_ids(record):
@@ -560,7 +642,7 @@ def hard_prerequisite_closure(registry: Mapping[str, Any], stage: str) -> List[s
         if current in closure:
             return
         closure.add(current)
-        for dependency in registry["stages"][current].get("depends_on") or []:
+        for dependency in stage_requirement_list(registry["stages"][current], "execution_requires"):
             visit(str(dependency))
 
     visit(stage)
@@ -588,6 +670,27 @@ def stage_input_available(
     )
 
 
+def recommended_frontier(
+    result: Sequence[str],
+    state: Mapping[str, Any],
+    policy: Mapping[str, Any],
+    registry: Mapping[str, Any],
+    target_stage: Optional[str],
+) -> List[str]:
+    """Without an explicit user goal, follow recommended_after rather than advertising every executable stage."""
+
+    filtered: List[str] = []
+    for stage in result:
+        spec = registry["stages"][stage]
+        if stage == "draft" and stage_input_available(state, stage, target_stage):
+            filtered.append(stage)
+            continue
+        recommended = stage_requirement_list(spec, "recommended_after")
+        if all(dependency_satisfied(state, policy, dep) for dep in recommended):
+            filtered.append(stage)
+    return filtered
+
+
 def ready_stages(
     state: Mapping[str, Any],
     *,
@@ -596,7 +699,10 @@ def ready_stages(
 ) -> List[str]:
     registry = registry or load_registry()
     policy = policy or build_effective_stage_policy(state, registry=registry)
-    target_stage = policy.get("intent", {}).get("target_stage")
+    intent = policy.get("intent") or {}
+    action = intent.get("action") or "explore"
+    target_stage = intent.get("target_stage")
+    explicit = bool(intent.get("explicit"))
     result = []
     for stage in registry["default_order"]:
         execution = policy["stages"][stage]["execution"]
@@ -607,9 +713,15 @@ def ready_stages(
             continue
         if not stage_input_available(state, stage, target_stage):
             continue
-        dependencies = registry["stages"][stage]["depends_on"]
-        if all(dependency_satisfied(state, policy, dep) for dep in dependencies):
-            result.append(stage)
+        spec = registry["stages"][stage]
+        execution_requires = stage_requirement_list(spec, "execution_requires")
+        if not all(dependency_satisfied(state, policy, dep) for dep in execution_requires):
+            continue
+        if action in ADOPTION_ACTIONS:
+            adoption_requires = stage_requirement_list(spec, "adoption_requires")
+            if not all(dependency_satisfied(state, policy, dep) for dep in adoption_requires):
+                continue
+        result.append(stage)
     if target_stage in result:
         return [target_stage] + [stage for stage in result if stage != target_stage]
     if target_stage and stage_record(state, target_stage).get("status", "not_started") in {
@@ -621,6 +733,8 @@ def ready_stages(
         focused = [stage for stage in result if stage in target_path]
         if focused:
             return focused
+    if not explicit:
+        return recommended_frontier(result, state, policy, registry, target_stage)
     return result
 
 
@@ -638,7 +752,9 @@ def plan_markdown(
         "",
         f"Mode: {state.get('mode', 'unknown')}",
         f"Run profile: {policy['profile_id']}",
+        f"Working depth: {policy.get('working_depth', policy['collaboration_mode'])}",
         f"Collaboration mode: {policy['collaboration_mode']}",
+        f"Persist artifacts: {policy.get('persist_artifacts', 'checkpoints')}",
         f"Profile policy: {policy['profile_path']}",
         f"Entry: {state.get('entry_status', 'unknown')}",
         f"Current stage: {state.get('current_stage', 'unknown')}",
@@ -647,26 +763,29 @@ def plan_markdown(
         f"Skipped lenses: {', '.join(policy['skipped_lenses']) or '-'}",
         f"Artifact projection: {artifact_policy.get('state', 'unknown')}",
         f"User intent: {policy['intent']['goal']}",
+        f"Intent action: {policy['intent'].get('action') or '-'}",
         f"Intent target: {policy['intent'].get('target_stage') or '-'}",
         "",
         "This is a routing proposal. It does not confirm mathematical correctness, human decisions, or submission readiness.",
         "User intent has priority over the recommended order; hard dependencies and human decision boundaries remain in force.",
-        "Canonical dependencies are unchanged; hard dependencies remain blocking, while recommended_after entries are advisory and do not block an explicitly requested task.",
+        "Canonical dependencies are unchanged; execution_requires remain blocking for the requested task, while adoption_requires only block adopt/freeze/submit and recommended_after entries are advisory and do not block an explicitly requested task.",
         "",
         "## Stage status",
         "",
-        "| stage | skill | status | execution | gate type | blocking | hard dependencies | recommended after |",
-        "|---|---|---|---|---|---|---|---|",
+        "| stage | skill | status | execution | gate type | blocking | execution requires | adoption requires | recommended after |",
+        "|---|---|---|---|---|---|---|---|---|",
     ]
     for stage in registry["default_order"]:
         spec = registry["stages"][stage]
         status = stage_record(state, stage).get("status", "not_started")
         effective = policy["stages"][stage]
-        dependencies = ", ".join(spec["depends_on"]) or "-"
-        recommended = ", ".join(spec.get("recommended_after") or []) or "-"
+        execution_requires = ", ".join(stage_requirement_list(spec, "execution_requires")) or "-"
+        adoption_requires = ", ".join(stage_requirement_list(spec, "adoption_requires")) or "-"
+        recommended = ", ".join(stage_requirement_list(spec, "recommended_after")) or "-"
         lines.append(
             f"| {stage} | {spec['skill']} | {status} | {effective['execution']} | "
-            f"{effective['gate_type']} | {'yes' if effective['blocking'] else 'deferred'} | {dependencies} | {recommended} |"
+            f"{effective['gate_type']} | {'yes' if effective['blocking'] else 'deferred'} | "
+            f"{execution_requires} | {adoption_requires} | {recommended} |"
         )
 
     ready = ready_stages(state, policy=policy, registry=registry)

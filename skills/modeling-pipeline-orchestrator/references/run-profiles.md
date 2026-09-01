@@ -18,7 +18,7 @@
 
 `canonical graph + run profile + user intent = effective_stage_policy`
 
-canonical `depends_on` 不变。档位只决定：
+canonical `execution_requires` / `adoption_requires` 不变。档位只决定：
 
 - 哪些审查透镜是 `selected`、`skipped-with-policy` 或 `not_selected`；
 - 产物写成完整阶段文件还是 compact projection；

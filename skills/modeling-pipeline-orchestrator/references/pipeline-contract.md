@@ -9,9 +9,11 @@ schema_version:
 project_id:
 mode: compose | revise | audit | disclose | final_check
 run_profile: research-full | contest-standard | contest-fast
+working_depth: light | standard | full
 collaboration_mode: adaptive | light | standard | full
 user_intent:
   goal: understand | explore | select_topic | literature | model | experiment | draft | revise | audit | disclose | final_check | release | unknown
+  action: explain | explore | propose | execute_reversible | adopt | freeze | submit
   requested_stage: null
   scope: question | subproblem | section | paper | project | unknown
   urgency: low | normal | high | unknown
@@ -45,6 +47,7 @@ outputs: []
 human_gate: required | optional | not_applicable
 gate_type: core_decision | review_checkpoint | none
 recommended_after: []       # 软建议；不构成 ready 的硬依赖
+# 注册表中的 execution_requires / adoption_requires 才分别约束执行与正式采用
 last_run_at:
 source_snapshot_id:
 evidence_status: confirmed | partial | unknown | conflict
