@@ -72,6 +72,23 @@
       "items": {"type": "string", "pattern": "^[a-z][a-z0-9_]*$"},
       "minItems": 1,
       "uniqueItems": true
+    },
+    "review_gates": {
+      "type": "array",
+      "items": {"type": "string", "pattern": "^[a-z][a-z0-9_]*$"},
+      "uniqueItems": true
+    },
+    "collaboration_policy": {
+      "type": "object",
+      "required": ["default_mode", "user_intent_priority", "allow_provisional_work", "artifact_visibility", "review_completion"],
+      "properties": {
+        "default_mode": {"enum": ["adaptive", "light", "standard", "full"]},
+        "user_intent_priority": {"type": "boolean"},
+        "allow_provisional_work": {"type": "boolean"},
+        "artifact_visibility": {"enum": ["internal", "mixed", "clean_manuscript"]},
+        "review_completion": {"enum": ["on_request", "before_final_adoption", "every_stage"]}
+      },
+      "additionalProperties": false
     }
   },
   "additionalProperties": false

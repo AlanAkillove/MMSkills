@@ -59,10 +59,14 @@ def test_stage_registry_is_the_ordered_and_topological_source_of_truth():
     gate_types = set()
     for stage, record in registry["stages"].items():
         assert all(positions[dependency] < positions[stage] for dependency in record["depends_on"])
+        assert stage not in record.get("recommended_after", [])
+        assert all(recommended in registry["stages"] for recommended in record.get("recommended_after", []))
         assert record["gate_type"] in {"core_decision", "review_checkpoint", "none"}
         gate_types.add(record["gate_type"])
         if record["gate_type"] == "core_decision":
             assert record["human_gate"] == "required"
+        elif record["gate_type"] == "review_checkpoint":
+            assert record["human_gate"] == "optional"
     assert {"core_decision", "review_checkpoint"} <= gate_types
     assert positions["distinctiveness_coach"] < positions["model_architect"]
     for lens_name, spec in registry["review_lenses"].items():
@@ -92,6 +96,12 @@ def test_run_profiles_cross_validate_against_registry_and_schema():
         assert unknown_gates == [], unknown_gates
         missing_core = sorted(core_decisions - set(payload["human_gates"]))
         assert missing_core == [], missing_core
+        review_gates = payload.get("review_gates", [])
+        assert all(gate in known_stages for gate in review_gates)
+        assert all(registry["stages"][gate]["gate_type"] == "review_checkpoint" for gate in review_gates)
+        collaboration = payload["collaboration_policy"]
+        assert collaboration["user_intent_priority"] is True
+        assert collaboration["allow_provisional_work"] is True
         review_policy = payload["review_policy"]
         for lens in review_policy["lenses"] + review_policy.get("conditional_lenses", []):
             assert lens in known_lenses, lens

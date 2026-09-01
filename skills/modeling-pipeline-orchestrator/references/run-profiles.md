@@ -1,6 +1,6 @@
 # 运行档位与编排边界
 
-运行档位用于在不同时间预算下安排产物和审查，不用于降低正确性标准。团队必须先确认 `run_profile`，Agent 只能根据剩余时间、材料完整度和交付目标提出候选。
+运行档位用于在不同时间预算下安排产物、审查和协作强度，不用于降低正确性标准。它是可选配置；用户没有指定时，编排器采用 `contest-standard` 的平衡默认，并优先响应用户当前目标。只有需要完整复盘或发布级审计时，才建议切换更重的档位。
 
 ## 档位选择
 
@@ -16,15 +16,15 @@
 
 编排器读取 YAML 后构造：
 
-`canonical graph + run profile = effective_stage_policy`
+`canonical graph + run profile + user intent = effective_stage_policy`
 
 canonical `depends_on` 不变。档位只决定：
 
 - 哪些审查透镜是 `selected`、`skipped-with-policy` 或 `not_selected`；
 - 产物写成完整阶段文件还是 compact projection；
-- 哪些 `review_checkpoint` 保持阻断，哪些延后到最终采用前再核对。
+- 哪些 `review_checkpoint` 需要在最终采用前显式核对，哪些只作为风险提示。
 
-`core_decision` 不能被档位取消。`contest-fast` 的 `max_post_draft_lenses: 2` 会保留一个实质性透镜和一个读者/合规透镜；未被选中的条件透镜按 `skipped-with-policy` 满足下游依赖，但不能声称这些风险已经审查通过。
+`core_decision` 不能被档位取消。`contest-fast` 的 `max_post_draft_lenses: 2` 会保留一个实质性透镜和一个读者/合规透镜；未被选中的条件透镜按 `skipped-with-policy` 记录，但不能声称这些风险已经审查通过。用户明确要求续写或局部修稿时，`recommended_after` 不得被当作硬依赖。
 
 标准档可以根据已开放的 P0/P1 和人工确认范围选择 post-draft lens，但要在 `run_profile.yaml` 记录未运行的透镜及理由。快速档至少运行一个实质性高风险透镜和一个读者/合规透镜；`ai-pattern` 与 `anti-homogenization` 可以条件触发，但不能仅因时间紧而声称没有模板化或同质化风险。
 

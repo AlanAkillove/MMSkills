@@ -1,6 +1,12 @@
 profile_id: contest-fast
 label: 比赛快速档
 purpose: 时间紧时快速形成可审查论文，同时保留核心证据和人工门
+collaboration_policy:
+  default_mode: light
+  user_intent_priority: true
+  allow_provisional_work: true
+  artifact_visibility: mixed
+  review_completion: before_final_adoption
 principles_preserved:
   - human_decision_gates
   - evidence_before_prose
@@ -33,13 +39,14 @@ human_gates:
   - topic_selection
   - problem_familiarization
   - problem_intake
-  - distinctiveness_coach
   - assumption_ledger
   - data_audit
   - model_architect
   - experiment_validator
-  - paper_architect
-  - draft
   - ai_disclosure
   - final_preflight
   - process_freezer
+review_gates:
+  - paper_review
+  - reader
+  - naturalizer

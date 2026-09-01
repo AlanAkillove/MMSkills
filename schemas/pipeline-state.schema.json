@@ -21,6 +21,20 @@
     "project_id": {"type": "string", "minLength": 1},
     "mode": {"enum": ["compose", "revise", "audit", "disclose", "final_check"]},
     "run_profile": {"enum": ["research-full", "contest-standard", "contest-fast"]},
+    "collaboration_mode": {"enum": ["adaptive", "light", "standard", "full"]},
+    "user_intent": {
+      "type": "object",
+      "required": ["goal"],
+      "properties": {
+        "goal": {"enum": ["understand", "explore", "select_topic", "literature", "model", "experiment", "draft", "revise", "audit", "disclose", "final_check", "release", "unknown"]},
+        "requested_stage": {"type": ["string", "null"]},
+        "scope": {"enum": ["question", "subproblem", "section", "paper", "project", "unknown"]},
+        "urgency": {"enum": ["low", "normal", "high", "unknown"]},
+        "allow_provisional_output": {"type": "boolean"},
+        "note": {"type": "string"}
+      },
+      "additionalProperties": false
+    },
     "selected_lenses": {
       "type": "array",
       "items": {

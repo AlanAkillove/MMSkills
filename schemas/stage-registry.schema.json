@@ -38,6 +38,11 @@
             "items": {"type": "string"},
             "uniqueItems": true
           },
+          "recommended_after": {
+            "type": "array",
+            "items": {"type": "string", "pattern": "^[a-z][a-z0-9_]*$"},
+            "uniqueItems": true
+          },
           "human_gate": {"enum": ["required", "optional", "not_applicable"]},
           "gate_type": {"enum": ["core_decision", "review_checkpoint", "none"]},
           "phase": {"type": "string", "minLength": 1},

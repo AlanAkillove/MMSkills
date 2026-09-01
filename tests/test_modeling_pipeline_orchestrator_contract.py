@@ -45,6 +45,10 @@ def test_skill_has_router_only_and_human_gate_boundary():
         "core_decision",
         "review_checkpoint",
         "effective_stage_policy",
+        "user intent",
+        "硬依赖",
+        "recommended_after",
+        "暂定",
     ):
         assert phrase in text
 
@@ -98,6 +102,13 @@ def test_pre_model_dependencies_keep_intake_after_familiarization():
     assert "distinctiveness_coach" in registry["default_order"]
     assert stages["topic_selection"]["gate_type"] == "core_decision"
     assert stages["terminology"]["gate_type"] == "review_checkpoint"
+    assert stages["paper_architect"]["human_gate"] == "optional"
+    assert stages["draft"]["skill"] == "modeling-paper-writer"
+    assert stages["draft"]["depends_on"] == []
+    assert "paper_architect" in stages["draft"]["recommended_after"]
+    assert "experiment_validator" in stages["draft"]["recommended_after"]
+    assert "claim_evidence" in stages["draft"]["recommended_after"]
+    assert stages["naturalizer"]["depends_on"] == ["draft"]
 
 
 def test_pre_model_graph_is_topologically_ordered():
@@ -185,12 +196,13 @@ def test_contest_fast_changes_effective_graph_without_rewriting_dependencies(tmp
     assert "anti_homogenization" not in fast.stdout.split("READY:", 1)[1]
     policy = json.loads(policy_json.read_text(encoding="utf-8"))
     assert policy["canonical_dependencies_unchanged"] is True
-    assert policy["stages"]["naturalizer"]["depends_on"] == [
+    assert policy["stages"]["naturalizer"]["depends_on"] == ["draft"]
+    assert set(policy["stages"]["naturalizer"]["recommended_after"]) == {
         "paper_review",
         "ai_pattern",
         "anti_homogenization",
         "reader",
-    ]
+    }
     assert policy["stages"]["ai_pattern"]["execution"] == "skipped-with-policy"
     assert policy["stages"]["anti_homogenization"]["execution"] == "skipped-with-policy"
     assert policy["stages"]["paper_review"]["execution"] == "selected"
@@ -211,12 +223,34 @@ def test_effective_policy_treats_unselected_lenses_as_satisfied_for_dependents()
     ready = ready_stages(state, policy=policy)
     assert "naturalizer" in ready
     assert "ai_pattern" not in ready
-    assert policy["stages"]["naturalizer"]["depends_on"] == [
-        "paper_review",
-        "ai_pattern",
-        "anti_homogenization",
-        "reader",
-    ]
+    assert policy["stages"]["naturalizer"]["depends_on"] == ["draft"]
+
+
+def test_explicit_user_intent_prioritizes_ready_stage_without_changing_hard_dependencies(tmp_path: Path):
+    output = tmp_path / "intent.md"
+    result = run_route(
+        FIXTURES / "post_draft_state.json",
+        output,
+        "--intent",
+        "revise",
+        "--collaboration-mode",
+        "light",
+    )
+    assert result.returncode == 0, result.stderr
+    assert "Collaboration mode: light" in output.read_text(encoding="utf-8")
+    assert "User intent: revise" in output.read_text(encoding="utf-8")
+    assert "Intent target: naturalizer" in output.read_text(encoding="utf-8")
+    assert "recommended_after entries are advisory" in output.read_text(encoding="utf-8")
+
+
+def test_draft_is_ready_without_optional_review_reports():
+    state = json.loads((FIXTURES / "post_draft_state.json").read_text(encoding="utf-8"))
+    state["stages"]["draft"] = {"status": "not_started"}
+    for stage in ("figure_design", "figure_table", "claim_evidence", "terminology"):
+        state["stages"][stage] = {"status": "not_started"}
+    state["run_profile"] = "contest-standard"
+    policy = build_effective_stage_policy(state)
+    assert "draft" in ready_stages(state, policy=policy)
 
 
 def test_validate_state_rejects_registry_dependency_conflict():
@@ -239,3 +273,39 @@ def test_negative_fixtures_are_explicit():
         ("contest-fast", "README.md"),
     ):
         assert phrase in (FIXTURES / name).read_text(encoding="utf-8")
+
+
+def test_unready_intent_focuses_ready_hard_prerequisites():
+    state = json.loads((FIXTURES / "post_draft_state.json").read_text(encoding="utf-8"))
+    state["user_intent"] = {"goal": "revise"}
+    state["stages"]["draft"] = {"status": "not_started"}
+    state["stages"]["naturalizer"] = {"status": "not_started"}
+    policy = build_effective_stage_policy(state)
+    assert ready_stages(state, policy=policy) == ["draft"]
+
+
+def test_collaboration_mode_overrides_optional_depth_but_not_core_gates():
+    state = json.loads((FIXTURES / "post_draft_state.json").read_text(encoding="utf-8"))
+    state["collaboration_mode"] = "light"
+    light = build_effective_stage_policy(state)
+    assert light["collaboration_mode"] == "light"
+    assert light["stages"]["model_architect"]["blocking"] is True
+    assert set(light["review_gates"]) <= {"paper_review", "reader", "naturalizer"}
+    assert "reader_experience" in light["selected_lenses"]
+    assert light["stages"]["paper_architect"]["artifact_projection"] == "compact"
+
+    state["collaboration_mode"] = "full"
+    full = build_effective_stage_policy(state)
+    assert full["collaboration_mode"] == "full"
+    assert set(full["selected_lenses"]) == set(full["review_policy"]["lenses"])
+    assert full["stages"]["paper_architect"]["artifact_projection"] == "full"
+    assert full["stages"]["ai_pattern"]["blocking"] is True
+
+
+def test_explicit_draft_intent_can_bootstrap_without_state_artifact(tmp_path: Path):
+    output = tmp_path / "draft.md"
+    result = run_route(FIXTURES / "initial_state.json", output, "--intent", "draft")
+    assert result.returncode == 0, result.stderr
+    assert result.stdout.startswith("WROTE:")
+    assert "READY: draft" in result.stdout
+    assert "Intent target: draft" in output.read_text(encoding="utf-8")

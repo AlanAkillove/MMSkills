@@ -1,6 +1,12 @@
 profile_id: contest-standard
 label: 比赛标准档
 purpose: 在比赛周期内保留可复核主链并合并低风险过程材料
+collaboration_policy:
+  default_mode: standard
+  user_intent_priority: true
+  allow_provisional_work: true
+  artifact_visibility: mixed
+  review_completion: before_final_adoption
 principles_preserved:
   - human_decision_gates
   - evidence_before_prose
@@ -27,13 +33,18 @@ human_gates:
   - topic_selection
   - problem_familiarization
   - problem_intake
-  - distinctiveness_coach
   - assumption_ledger
   - data_audit
   - model_architect
   - experiment_validator
-  - paper_architect
-  - draft
   - ai_disclosure
   - final_preflight
   - process_freezer
+review_gates:
+  - paper_review
+  - figure_table
+  - claim_evidence
+  - terminology
+  - reader
+  - naturalizer
+  - support

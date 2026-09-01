@@ -15,6 +15,12 @@ modeling-ai-use-disclosure
 
 每个 skill 的 `SKILL.md` 是入口；详细词表、规则矩阵、长样例和脚本按需放在同目录下。
 
+## 应用原则
+
+专项 skill 是协作辅助，不是逐轮审批脚本。除原始数据保护、来源真实性、隐私安全、陌生代码不自动执行和核心决定由人确认等硬边界外，读取顺序、检查深度、输出形式和步骤顺序都应根据用户目标、材料完整度、时间与风险取舍；用户明确要求局部解释、探索、续写或修稿时，优先完成该范围，并把未覆盖内容写成范围说明，而不是无故阻断。
+
+完整模式适合交接、发布和高风险复盘；轻量模式适合局部任务。Agent 应先说明本轮采用的范围和暂定状态，避免把内部账本、finding/decision ID、流程话语或占位符带入最终论文。
+
 ## 已实现
 
 - [`modeling-topic-selection`](modeling-topic-selection/)：在多题比赛开始时逐题盘点并比较题意、背景、资源、时间、验证和差异化风险，保留主选/备选的人类决策门。
@@ -35,6 +41,7 @@ modeling-ai-use-disclosure
 - [`modeling-experiment-validator`](modeling-experiment-validator/)：登记基线、对照、敏感性、边界、不确定性和复现实验，防止只报最好结果。
 - [`modeling-literature-evidence`](modeling-literature-evidence/)：以 orientation 或 citation-audit 模式围绕题意、背景、方法、数据和主张建立来源清单与可核查证据链，阻断搜索摘要和虚构引用。
 - [`modeling-paper-architect`](modeling-paper-architect/)：将题目、证据和主张组织为章节/段落契约，避免固定目录与清单式拼接。
+- [`modeling-paper-writer`](modeling-paper-writer/)：把真实建模工作写成自然、可读、题目特异的论文正文、摘要或分节草稿，不把流程记录带进成文。
 - [`modeling-figure-designer`](modeling-figure-designer/)：从读者任务、证据角色和题目特征出发设计并制作可读、可复现、适合正文排版的图表与模型结构图。
 - [`modeling-figure-table-auditor`](modeling-figure-table-auditor/)：逐图/表核对证据角色、数据/单位/来源、正文主张、版本和渲染可读性。
 - [`modeling-support-materials-auditor`](modeling-support-materials-auditor/)：安全核对附录/压缩包、代码/数据、匿名信息和论文一致性，默认不执行陌生代码。

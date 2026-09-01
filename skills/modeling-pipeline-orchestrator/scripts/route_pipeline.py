@@ -10,6 +10,8 @@ from pathlib import Path
 from typing import Any, Dict
 
 from pipeline_runtime import (
+    COLLABORATION_MODES,
+    USER_INTENTS,
     PROFILE_ALIASES,
     build_effective_stage_policy,
     normalize_profile_id,
@@ -39,6 +41,20 @@ def parse_args() -> argparse.Namespace:
         type=Path,
         help="optional JSON file for the computed effective_stage_policy",
     )
+    parser.add_argument(
+        "--intent",
+        choices=sorted(USER_INTENTS),
+        help="optional user goal override; it only changes routing priority",
+    )
+    parser.add_argument(
+        "--requested-stage",
+        help="optional explicit stage requested by the user",
+    )
+    parser.add_argument(
+        "--collaboration-mode",
+        choices=sorted(COLLABORATION_MODES),
+        help="optional collaboration intensity override",
+    )
     return parser.parse_args()
 
 
@@ -56,6 +72,18 @@ def main() -> int:
             print("FAIL", file=sys.stderr)
             print(f"- unknown run profile: {state['run_profile']}", file=sys.stderr)
             return 1
+    if args.intent or args.requested_stage:
+        state = dict(state)
+        intent = dict(state.get("user_intent") or {})
+        if args.intent:
+            intent["goal"] = args.intent
+        if args.requested_stage:
+            intent["requested_stage"] = args.requested_stage
+        intent.setdefault("goal", "unknown")
+        state["user_intent"] = intent
+    if args.collaboration_mode:
+        state = dict(state)
+        state["collaboration_mode"] = args.collaboration_mode
     errors = validate_state(state)
     if errors:
         print("FAIL", file=sys.stderr)

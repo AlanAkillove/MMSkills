@@ -1,6 +1,12 @@
 profile_id: research-full
 label: 完整研究档
 purpose: 需要完整留痕、复盘和跨会话交接的数模项目
+collaboration_policy:
+  default_mode: full
+  user_intent_priority: true
+  allow_provisional_work: true
+  artifact_visibility: mixed
+  review_completion: every_stage
 principles_preserved:
   - human_decision_gates
   - evidence_before_prose
@@ -26,14 +32,26 @@ human_gates:
   - topic_selection
   - problem_familiarization
   - problem_intake
-  - distinctiveness_coach
   - assumption_ledger
   - data_audit
   - model_architect
   - experiment_validator
-  - paper_architect
-  - claim_evidence
-  - draft
   - ai_disclosure
   - final_preflight
   - process_freezer
+review_gates:
+  - rules_profile
+  - literature_evidence
+  - distinctiveness_coach
+  - paper_architect
+  - figure_design
+  - figure_table
+  - claim_evidence
+  - terminology
+  - draft
+  - paper_review
+  - ai_pattern
+  - anti_homogenization
+  - reader
+  - naturalizer
+  - support

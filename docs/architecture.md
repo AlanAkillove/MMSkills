@@ -36,9 +36,9 @@ RULES_PROFILE
   -> PROCESS_FREEZER
 ```
 
-上图是编排器默认图的阅读索引；阶段 ID、依赖、人工门和顺序以 [`schemas/stage-registry.json`](../schemas/stage-registry.json) 为唯一来源。`TOPIC_SELECTION`、`LITERATURE_EVIDENCE` 和 `PROBLEM_FAMILIARIZATION` 不应被合并成一个“背景分析”阶段：它们分别解决全题目选取、来源学习和团队理解确认。
+上图是编排器推荐图的阅读索引；阶段 ID、硬依赖、软建议、人工边界和顺序以 [`schemas/stage-registry.json`](../schemas/stage-registry.json) 为唯一来源。`TOPIC_SELECTION`、`LITERATURE_EVIDENCE` 和 `PROBLEM_FAMILIARIZATION` 不应被合并成一个“背景分析”阶段：它们分别解决全题目选取、来源学习和团队理解确认。用户明确要求局部工作时，可以从目标阶段或最近硬前置开始。
 
-状态不是简单的章节清单，而是每个阶段必须产出的可复核中间材料。任何阶段发现上游证据不足时，应回退到相应阶段，而不是用语言润色掩盖缺口。
+状态不是简单的章节清单，而是帮助不同会话复原工作的可复核记录。核心决定、关键证据和最终交付必须可追踪；可选 review checkpoint 和过程 artifact 不应变成每轮工作的必填表。任何阶段发现上游证据不足时，应回退到相应范围或降低表述强度，而不是用语言润色掩盖缺口。
 
 ## 3. 技能分层
 
@@ -71,6 +71,7 @@ RULES_PROFILE
 - `modeling-anti-homogenization-auditor`
 - `modeling-paper-naturalizer`
 - `modeling-reader-experience-auditor`
+- `modeling-paper-writer`
 - `modeling-tex-paper-production`
 - `modeling-final-preflight`
 
@@ -141,7 +142,7 @@ project_state/
 
 ## 5. 人类决策门
 
-注册表把人工门分成 `core_decision` 和 `review_checkpoint`。以下节点是 `core_decision`，Agent 只能提出候选和风险，没有人工确认不能继续：
+注册表把人工边界分成 `core_decision` 和 `review_checkpoint`。以下节点是 `core_decision`，Agent 不能替人最终采用，但在确认前仍可以提出候选、解释和暂定产物：
 
 1. 全部题目的比较范围、主选/备选和选题依据；
 2. 题意和子问题的最终解释；
@@ -156,7 +157,7 @@ project_state/
 10. AI 使用详情、采纳/修改描述和最终提交文件；
 11. 官方 TeX/Word 模板、格式开关、PDF 页面和最终可提交版本。
 
-审稿意见是否采纳、术语/图表/阅读体验等 `review_checkpoint` 可以由运行档位延后，但最终采用前仍须人核对。确认应写入 `decision_log.md`，不能只留在一次不可追溯的口头对话中。
+审稿意见是否采纳、术语/图表/阅读体验等 `review_checkpoint` 默认不阻断用户明确要求的工作，但最终采用前仍须人核对。确认应写入 `decision_log.md`，不能只留在一次不可追溯的口头对话中。
 
 ## 6. 上下文与长文处理
 
@@ -186,13 +187,15 @@ project_state/
 
 共享机器可读契约位于 [`schemas/`](../schemas/)，其中 `stage-registry.json` 是阶段图的唯一来源，`finding.schema.json` 是跨审查共同问题的 envelope。Markdown 模板服务于讨论，不能替代结构化状态；修改共享字段时必须同步更新 skill、fixtures 和迁移说明。
 
-项目可按 [`profiles/`](../profiles/) 选择 `research-full`、`contest-standard` 或 `contest-fast`。档位只压缩中间产物和审查组合，不移除 `core_decision`、失败证据、未决事项、AI 使用事实或最终冻结。`review_checkpoint` 可以被档位延后，但不能被当成已经通过。编排器将 canonical 阶段图与档位合成为 `effective_stage_policy`。
+项目可按 [`profiles/`](../profiles/) 选择 `research-full`、`contest-standard` 或 `contest-fast`。未指定时使用 `contest-standard` 的平衡默认。档位只调整中间产物、审查组合和协作强度，不移除 `core_decision`、失败证据、未决事项、AI 使用事实或最终冻结。`review_checkpoint` 可以被档位延后，但不能被当成已经通过。编排器将 canonical 阶段图、档位和 `user_intent` 合成为 `effective_stage_policy`。
+
+阶段执行采用“硬依赖 + 软建议”两层：`depends_on` 决定是否能开始，`recommended_after` 只提示更合适的先后。默认允许先形成可回退草稿，再按风险运行审稿、AI 模板化、反同质化、阅读体验和自然化审查；内部状态与最终论文正文分离。
 
 ## 9. 研究与实现顺序
 
 1. 先冻结阶段注册表、共享 schema、finding 去重协议、质量模型、反同质化检查项和规则适配接口；
 2. 再实现前置闭环：全题目盘点 → 选题人工门 → 题意地图 → 文献学习 → 多轮理解确认；
-3. 再实现最小论文闭环：题意 → 证据 → 论文 → 审查 → 自然化 → 预检；
+3. 再实现最小论文闭环：题意 → 证据 → 写作 → 成文清洁/审查 → 自然化 → 预检；
 4. 在写作前接入差异化设计、模型选择和作者决策记录；
 5. 然后接入实验/支撑材料和 AI 使用披露；
 6. 最后根据真实论文运行结果拆分或合并 skills。

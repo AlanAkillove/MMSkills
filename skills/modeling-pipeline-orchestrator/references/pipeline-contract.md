@@ -9,6 +9,13 @@ schema_version:
 project_id:
 mode: compose | revise | audit | disclose | final_check
 run_profile: research-full | contest-standard | contest-fast
+collaboration_mode: adaptive | light | standard | full
+user_intent:
+  goal: understand | explore | select_topic | literature | model | experiment | draft | revise | audit | disclose | final_check | release | unknown
+  requested_stage: null
+  scope: question | subproblem | section | paper | project | unknown
+  urgency: low | normal | high | unknown
+  allow_provisional_output: true
 entry_status: confirmed | ambiguous | unknown
 current_stage:
 stages: {}
@@ -37,6 +44,7 @@ inputs: []
 outputs: []
 human_gate: required | optional | not_applicable
 gate_type: core_decision | review_checkpoint | none
+recommended_after: []       # 软建议；不构成 ready 的硬依赖
 last_run_at:
 source_snapshot_id:
 evidence_status: confirmed | partial | unknown | conflict
@@ -45,7 +53,7 @@ issue_ids: []
 reason:
 ~~~
 
-passed 只表示该阶段契约已通过，不表示所有上游事实正确；skipped 必须有不适用理由和人工决定；stale/superseded 不能作为下游依赖的通过条件。
+passed 只表示该阶段契约已通过，不表示所有上游事实正确；skipped 必须有不适用理由和人工决定；stale/superseded 不能作为硬依赖的通过条件。`review_checkpoint` 默认是可延后的建议；`core_decision` 只在最终采用、定稿或冻结前构成人工阻断。
 
 ## 事件日志
 

@@ -1,3 +1,3 @@
 interface:
   display_name: "数模论文最终预检"
-  short_description: "汇总规则与证据状态，阻断高风险提交项"
+  short_description: "检查提交风险与论文成文清洁，阻断高风险交付项"

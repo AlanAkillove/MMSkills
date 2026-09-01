@@ -2,7 +2,23 @@
 
 本文件记录可复用技能和共享契约的变化。
 
-## [Unreleased]
+## [0.2.0] - 2026-09-01
+
+### Changed
+
+- 编排器改为 user intent priority：用户明确要求解释、探索、续写或局部修稿时，优先推进目标范围，不因可选 artifact 或 review checkpoint 缺失而改写任务顺序；未指定档位时默认使用 `contest-standard`。
+- 阶段注册表新增 `recommended_after` 软建议，并将 `human_gate` 语义对齐为 core decision=`required`、review checkpoint=`optional`；论文写作不再硬依赖结构蓝图、实验、图表/术语审查报告，缺口由写作 skill 标记并由终检拦截最终采用。
+- 运行时与状态 schema 增加 `user_intent`、`collaboration_mode`、`review_gates` 和协作策略；计划同时展示硬依赖、软建议、目标阶段和协作强度。
+- 将写作入口从占位的 `author/agent writing` 替换为 `modeling-paper-writer`，明确段落优先、摘要后置提炼、术语克制和内部追踪层/论文成文层分离。
+- `modeling-paper-architect`、`modeling-paper-naturalizer`、TeX 生产和人工门文档改为推荐流程，允许在不越过核心决策边界的前提下交付暂定分析和局部草稿。
+- 通用 TeX 模板移除容易被直接复制进论文的可见示例正文、泛化公式和占位清单，保留注释式骨架。
+
+### Added
+
+- `skills/modeling-final-preflight/scripts/check_manuscript_quality.py`：检查草稿/待填残留、内部 ID、过程性话语、重复防御性元话语、摘要密度、失效交叉引用和列表密度；不计算 AI 率、原创度或相似度。
+- 成文质量回归测试、论文写作 skill 契约测试和 ADR 0006。
+
+## [0.1.0] - 2026-08-31
 
 ### Added
 
