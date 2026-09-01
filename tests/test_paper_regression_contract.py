@@ -35,6 +35,16 @@ def test_rubric_names_reading_dimensions_without_prescribing_a_template():
         assert phrase in rubric
     readme = (FIXTURES / "README.md").read_text(encoding="utf-8")
     assert "26A" not in readme or "不是" in readme
+    protocol = (FIXTURES / "replay-protocol.md").read_text(encoding="utf-8")
+    for phrase in (
+        "不是",
+        "端到端写作测试",
+        "继续问题三",
+        "比较几个模型",
+        "第一次真实 Agent",
+        "不要计算与任何成熟论文的相似度",
+    ):
+        assert phrase in protocol, phrase
 
 
 def test_desensitized_failure_excerpt_still_surfaces_process_residue(tmp_path: Path):

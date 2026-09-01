@@ -40,6 +40,28 @@ ACTION_LEVELS = {
 }
 EXPLORATORY_ACTIONS = {"explain", "explore", "propose", "execute_reversible"}
 ADOPTION_ACTIONS = {"adopt", "freeze", "submit"}
+ACTION_GATE_VALUES = {"none", "optional", "required"}
+FALLBACK_ACTION_GATES = {
+    "core_decision": {
+        "explain": "none",
+        "explore": "none",
+        "propose": "none",
+        "execute_reversible": "none",
+        "adopt": "required",
+        "freeze": "required",
+        "submit": "required",
+    },
+    "review_checkpoint": {
+        "explain": "none",
+        "explore": "none",
+        "propose": "none",
+        "execute_reversible": "none",
+        "adopt": "optional",
+        "freeze": "required",
+        "submit": "required",
+    },
+    "none": {action: "none" for action in ACTION_LEVELS},
+}
 USER_INTENTS = {
     "understand",
     "explore",
@@ -153,6 +175,21 @@ def load_registry(path: Path = REGISTRY_PATH) -> Dict[str, Any]:
             raise ValueError(
                 f"stage {stage} must use human_gate={expected_gate} for gate_type={gate_type}"
             )
+        overlay = record.get("action_gates") or {}
+        if not isinstance(overlay, dict) or any(
+            key not in ACTION_LEVELS or value not in ACTION_GATE_VALUES
+            for key, value in overlay.items()
+        ):
+            raise ValueError(f"stage {stage} has an invalid action_gates overlay")
+    defaults = payload.get("default_action_gates")
+    if not isinstance(defaults, dict):
+        raise ValueError("stage registry needs default_action_gates")
+    for gate_type in ("core_decision", "review_checkpoint", "none"):
+        mapping = defaults.get(gate_type)
+        if not isinstance(mapping, dict) or set(mapping) != ACTION_LEVELS:
+            raise ValueError(f"default_action_gates.{gate_type} must cover every action")
+        if any(value not in ACTION_GATE_VALUES for value in mapping.values()):
+            raise ValueError(f"default_action_gates.{gate_type} has an invalid gate value")
     for lens_name, spec in lenses.items():
         if not isinstance(spec, dict) or spec.get("stage") not in stages:
             raise ValueError(f"review lens {lens_name} must map to a registry stage")
@@ -174,6 +211,7 @@ def load_stage_graph(path: Path = REGISTRY_PATH) -> "OrderedDict[str, Dict[str, 
             "recommended_after": list(record.get("recommended_after") or []),
             "human_gate": record.get("human_gate"),
             "gate_type": record.get("gate_type"),
+            "action_gates": resolve_action_gates(record, registry),
             "phase": record.get("phase"),
             "notes": record.get("notes", ""),
         }
@@ -214,6 +252,24 @@ def stage_requirement_list(spec: Mapping[str, Any], field: str) -> List[str]:
     if field == "execution_requires":
         return list(spec.get("execution_requires") or spec.get("depends_on") or [])
     return [str(item) for item in (spec.get(field) or [])]
+
+
+def resolve_action_gates(
+    spec: Mapping[str, Any], registry: Mapping[str, Any]
+) -> Dict[str, str]:
+    gate_type = str(spec.get("gate_type") or "none")
+    defaults = registry.get("default_action_gates") or FALLBACK_ACTION_GATES
+    merged = dict(defaults.get(gate_type) or FALLBACK_ACTION_GATES.get(gate_type) or {})
+    overlay = spec.get("action_gates") or {}
+    if isinstance(overlay, Mapping):
+        merged.update({str(key): str(value) for key, value in overlay.items()})
+    return {action: merged.get(action, "none") for action in ACTION_LEVELS}
+
+
+def action_gate_for(
+    spec: Mapping[str, Any], registry: Mapping[str, Any], action: str
+) -> str:
+    return resolve_action_gates(spec, registry).get(action, "none")
 
 
 def resolve_working_depth(state: Mapping[str, Any], profile: Mapping[str, Any]) -> str:
@@ -460,12 +516,10 @@ def build_effective_stage_policy(
             reason = f"{profile_id} does not include lens {lens}"
         else:
             execution = "selected"
-        if gate_type == "core_decision":
-            blocking = True
-        elif gate_type == "review_checkpoint":
-            blocking = stage in review_gates
-        else:
-            blocking = False
+        current_action = intent.get("action") or "explore"
+        action_gates = resolve_action_gates(spec, registry)
+        action_gate = action_gates.get(current_action, "none")
+        blocking = action_gate == "required"
         artifact_mode = profile.get("artifact_policy", {}).get("state")
         compact = artifact_mode not in {None, "separate_stage_artifacts"}
         if working_depth == "light":
@@ -481,6 +535,8 @@ def build_effective_stage_policy(
             "recommended_after": stage_requirement_list(spec, "recommended_after"),
             "gate_type": gate_type,
             "human_gate": spec["human_gate"],
+            "action_gates": action_gates,
+            "action_gate": action_gate,
             "blocking": blocking,
             "execution": execution,
             "lens": lens,
@@ -624,11 +680,44 @@ def validate_state(
 
 
 def dependency_satisfied(state: Mapping[str, Any], policy: Mapping[str, Any], dependency: str) -> bool:
+    """Execution-level satisfaction: passed/skipped, or a policy-skipped review lens."""
+
     status = stage_record(state, dependency).get("status", "not_started")
     if status in SATISFIED:
         return True
     execution = policy["stages"][dependency]["execution"]
     return execution in POLICY_SATISFIED and status in {"not_started", "ready", "skipped"}
+
+
+def execution_satisfied(state: Mapping[str, Any], policy: Mapping[str, Any], dependency: str) -> bool:
+    return dependency_satisfied(state, policy, dependency)
+
+
+def adoption_satisfied(
+    state: Mapping[str, Any],
+    policy: Mapping[str, Any],
+    dependency: str,
+    *,
+    registry: Optional[Mapping[str, Any]] = None,
+) -> bool:
+    """Adoption-level satisfaction: execution plus a human-confirmed decision for required gates."""
+
+    if not execution_satisfied(state, policy, dependency):
+        return False
+    registry = registry or load_registry()
+    spec = registry["stages"][dependency]
+    gates = resolve_action_gates(spec, registry)
+    if gates.get("adopt") != "required" and spec.get("gate_type") != "core_decision":
+        return True
+    record = stage_record(state, dependency)
+    execution = policy["stages"][dependency]["execution"]
+    if execution in POLICY_SATISFIED and record.get("status", "not_started") in {
+        "not_started",
+        "ready",
+        "skipped",
+    }:
+        return True
+    return _has_confirmed_marker(record.get("human_status")) and bool(_decision_ids(record))
 
 
 def hard_prerequisite_closure(registry: Mapping[str, Any], stage: str) -> List[str]:
@@ -719,7 +808,10 @@ def ready_stages(
             continue
         if action in ADOPTION_ACTIONS:
             adoption_requires = stage_requirement_list(spec, "adoption_requires")
-            if not all(dependency_satisfied(state, policy, dep) for dep in adoption_requires):
+            if not all(
+                adoption_satisfied(state, policy, dep, registry=registry)
+                for dep in adoption_requires
+            ):
                 continue
         result.append(stage)
     if target_stage in result:
@@ -772,8 +864,8 @@ def plan_markdown(
         "",
         "## Stage status",
         "",
-        "| stage | skill | status | execution | gate type | blocking | execution requires | adoption requires | recommended after |",
-        "|---|---|---|---|---|---|---|---|---|",
+        "| stage | skill | status | execution | gate type | action gate | blocking | execution requires | adoption requires | recommended after |",
+        "|---|---|---|---|---|---|---|---|---|---|",
     ]
     for stage in registry["default_order"]:
         spec = registry["stages"][stage]
@@ -784,7 +876,8 @@ def plan_markdown(
         recommended = ", ".join(stage_requirement_list(spec, "recommended_after")) or "-"
         lines.append(
             f"| {stage} | {spec['skill']} | {status} | {effective['execution']} | "
-            f"{effective['gate_type']} | {'yes' if effective['blocking'] else 'deferred'} | "
+            f"{effective['gate_type']} | {effective.get('action_gate', '-')} | "
+            f"{'yes' if effective['blocking'] else 'deferred'} | "
             f"{execution_requires} | {adoption_requires} | {recommended} |"
         )
 
@@ -794,7 +887,11 @@ def plan_markdown(
         for stage in ready:
             skill = registry["stages"][stage]["skill"]
             projection = policy["stages"][stage]["artifact_projection"]
-            gate = "blocking core/review gate" if policy["stages"][stage]["blocking"] else "optional or deferred checkpoint"
+            gate = (
+                "required action gate for the current intent; propose and wait for a decision_id"
+                if policy["stages"][stage]["blocking"]
+                else "no required action gate for the current intent"
+            )
             lines.append(
                 f"- Run {stage} through {skill}; verify its inputs and write a {projection} artifact if useful; {gate}."
             )
@@ -862,25 +959,15 @@ def plan_markdown(
     else:
         lines.append("- None recorded.")
     target_stage = policy.get("intent", {}).get("target_stage")
-    if ready:
-        priority_note = (
-            f" Prioritize the requested target {target_stage}."
-            if target_stage in ready
-            else " The requested target is not ready, so continue with its nearest hard prerequisite."
-        )
-        safe_action = (
-            "Open the ready stage's input artifacts, check the latest process-freezer manifest, "
-            "then choose the stage that best matches the user's intent rather than treating the list as a mandatory sequence."
-            + priority_note
-        )
-    elif core_needs_human:
-        safe_action = "Resolve the listed human gates and record decision IDs before rerunning downstream stages."
-    elif review_needs_human:
-        safe_action = "Review checkpoints are not a global stop; continue the user's requested work and carry these checks to final adoption."
-    elif blocked:
-        safe_action = "Inspect the listed blocked or stale stages and their upstream evidence before rerunning anything."
-    else:
-        safe_action = "Inspect the incomplete state and latest process-freezer manifest before selecting the next stage."
+    safe_action = compose_safe_next_action(
+        state,
+        policy,
+        ready=ready,
+        core_needs_human=core_needs_human,
+        review_needs_human=review_needs_human,
+        blocked=blocked,
+        target_stage=target_stage,
+    )
     lines.extend(
         [
             "",
@@ -890,3 +977,63 @@ def plan_markdown(
         ]
     )
     return "\n".join(lines) + "\n"
+
+
+def compose_safe_next_action(
+    state: Mapping[str, Any],
+    policy: Mapping[str, Any],
+    *,
+    ready: Sequence[str],
+    core_needs_human: Sequence[str],
+    review_needs_human: Sequence[str],
+    blocked: Sequence[str],
+    target_stage: Optional[str],
+) -> str:
+    working_depth = str(policy.get("working_depth") or "standard")
+    persist = str(policy.get("persist_artifacts") or "checkpoints")
+    intent = policy.get("intent") or {}
+    action = str(intent.get("action") or "explore")
+    explicit = bool(intent.get("explicit"))
+    local_turn = working_depth == "light" or (
+        explicit and action in EXPLORATORY_ACTIONS and persist != "required"
+    )
+    finalish = working_depth == "full" or persist == "required" or state.get("mode") in {
+        "final_check",
+        "disclose",
+    }
+    if ready:
+        if target_stage in ready:
+            priority = f" Prioritize the requested target {target_stage}."
+        elif target_stage:
+            priority = " The requested target is not ready, so continue with its nearest hard prerequisite."
+        else:
+            priority = ""
+        blocking_ready = [stage for stage in ready if policy["stages"][stage]["blocking"]]
+        if local_turn:
+            body = (
+                "Continue the requested task directly. "
+                "Do not open a process-freezer manifest or generate ledgers unless the user asked to persist state, this is a final delivery, or working_depth is full."
+            )
+        elif finalish:
+            body = (
+                "Continue the requested task. Read only the artifacts needed this turn. "
+                "Update the process-freezer manifest because this is a full-depth or final-delivery pass."
+            )
+        else:
+            body = (
+                "Continue the requested task. Read input artifacts only if they are needed for this turn. "
+                "Check the process-freezer manifest only for cross-session resume, full depth, or final delivery."
+            )
+        if blocking_ready and action in ADOPTION_ACTIONS:
+            body += (
+                f" Action `{action}` is a required human gate for {', '.join(blocking_ready)}; "
+                "present the proposal and wait for a decision_id before marking adopted, frozen, or submitted."
+            )
+        return body + priority
+    if core_needs_human:
+        return "Resolve the listed human gates and record decision IDs before rerunning downstream stages."
+    if review_needs_human:
+        return "Review checkpoints are not a global stop; continue the user's requested work and carry these checks to final adoption."
+    if blocked:
+        return "Inspect the listed blocked or stale stages and their upstream evidence before rerunning anything."
+    return "Inspect the incomplete state and continue the smallest user-requested task. Check a process-freezer manifest only for cross-session resume, full depth, or final delivery."

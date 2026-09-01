@@ -26,6 +26,7 @@ REQUIRED_PATTERNS = {
     r"\\mmIncludeCodeAppendix": "code appendix switch",
     r"\\mmShowHeader": "header switch",
     r"\\mmIncludeBibliography": "bibliography switch",
+    r"\\mmIncludeAppendix": "appendix switch",
 }
 
 
@@ -45,7 +46,7 @@ def check_template(path: Path) -> tuple[list[str], list[str]]:
         errors.append("absolute local path found")
     if re.search(r"(?:\.\.[\\/]){2,}", content):
         errors.append("deep project-relative path found")
-    if re.search(r"问题重述|总体分析与建模路线|子问题一：模型建立与求解", content):
+    if re.search(r"问题重述|总体分析与建模路线|子问题一：模型建立与求解|复现与支撑材料|支撑材料清单", content):
         errors.append("default template must not ship a fixed paper outline; keep layout only")
     if "TODO" in content or "FIXME" in content:
         warnings.append("unfinished marker found; replace before using as a paper")

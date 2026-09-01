@@ -138,7 +138,9 @@ def test_route_reports_blocked_stage_and_rejects_unknown_stage(tmp_path: Path):
     assert "题面图示关系未确认" in text
     assert "Blocked or recheck" in text
     assert "Run ai_disclosure through modeling-ai-use-disclosure" in text
-    assert "Open the ready stage's input artifacts" in text
+    assert "Continue the requested task" in text
+    assert "Open the ready stage's input artifacts" not in text
+    assert "check the latest process-freezer manifest" not in text
 
     invalid_output = tmp_path / "invalid.md"
     invalid = run_route(FIXTURES / "invalid_state.json", invalid_output)
@@ -215,7 +217,9 @@ def test_contest_fast_changes_effective_graph_without_rewriting_dependencies(tmp
     assert policy["stages"]["anti_homogenization"]["execution"] == "skipped-with-policy"
     assert policy["stages"]["paper_review"]["execution"] == "selected"
     assert policy["stages"]["reader"]["execution"] == "selected"
-    assert policy["stages"]["model_architect"]["blocking"] is True
+    assert policy["stages"]["model_architect"]["blocking"] is False
+    assert policy["stages"]["model_architect"]["action_gate"] == "none"
+    assert policy["stages"]["model_architect"]["human_gate"] == "required"
     assert policy["stages"]["terminology"]["blocking"] is False
     fast_text = fast_output.read_text(encoding="utf-8")
     assert "compact" in fast_text
@@ -297,7 +301,8 @@ def test_collaboration_mode_overrides_optional_depth_but_not_core_gates():
     state["collaboration_mode"] = "light"
     light = build_effective_stage_policy(state)
     assert light["collaboration_mode"] == "light"
-    assert light["stages"]["model_architect"]["blocking"] is True
+    assert light["stages"]["model_architect"]["blocking"] is False
+    assert light["stages"]["model_architect"]["human_gate"] == "required"
     assert set(light["review_gates"]) <= {"paper_review", "reader", "naturalizer"}
     assert "reader_experience" in light["selected_lenses"]
     assert light["stages"]["paper_architect"]["artifact_projection"] == "compact"
@@ -307,7 +312,8 @@ def test_collaboration_mode_overrides_optional_depth_but_not_core_gates():
     assert full["collaboration_mode"] == "full"
     assert set(full["selected_lenses"]) == set(full["review_policy"]["lenses"])
     assert full["stages"]["paper_architect"]["artifact_projection"] == "full"
-    assert full["stages"]["ai_pattern"]["blocking"] is True
+    assert full["stages"]["ai_pattern"]["blocking"] is False
+    assert full["stages"]["ai_pattern"]["action_gates"]["freeze"] == "required"
 
 
 def test_explicit_draft_intent_can_bootstrap_without_state_artifact(tmp_path: Path):
@@ -327,9 +333,11 @@ def test_explore_model_intent_is_ready_without_pre_model_ledgers():
     assert ready[0] == "model_architect"
     assert policy["intent"]["action"] == "explore"
     assert policy["stages"]["model_architect"]["execution_requires"] == []
+    assert policy["stages"]["model_architect"]["blocking"] is False
+    assert policy["stages"]["model_architect"]["action_gate"] == "none"
 
 
-def test_adoption_action_waits_for_intake_before_freezing_a_model():
+def test_adoption_action_waits_for_human_confirmed_intake_before_freezing_a_model():
     state = json.loads((FIXTURES / "initial_state.json").read_text(encoding="utf-8"))
     state["user_intent"] = {"goal": "model", "action": "adopt"}
     policy = build_effective_stage_policy(state)
@@ -337,7 +345,33 @@ def test_adoption_action_waits_for_intake_before_freezing_a_model():
     assert "model_architect" not in ready
     state["stages"]["problem_intake"] = {"status": "passed", "reason": "fixture intake adopted"}
     policy = build_effective_stage_policy(state)
+    assert "model_architect" not in ready_stages(state, policy=policy)
+    state["stages"]["problem_intake"] = {
+        "status": "passed",
+        "human_status": "human-confirmed",
+        "decision_id": "dec-intake-fixture",
+        "reason": "fixture intake adopted",
+    }
+    policy = build_effective_stage_policy(state)
     assert "model_architect" in ready_stages(state, policy=policy)
+    assert policy["stages"]["model_architect"]["blocking"] is True
+
+
+def test_data_audit_adopt_is_a_required_action_gate_even_as_review_checkpoint():
+    state = json.loads((FIXTURES / "initial_state.json").read_text(encoding="utf-8"))
+    state["user_intent"] = {
+        "goal": "explore",
+        "action": "explore",
+        "requested_stage": "data_audit",
+    }
+    explore = build_effective_stage_policy(state)
+    assert explore["stages"]["data_audit"]["blocking"] is False
+    assert explore["stages"]["data_audit"]["action_gate"] == "none"
+    state["user_intent"]["action"] = "adopt"
+    adopt = build_effective_stage_policy(state)
+    assert adopt["stages"]["data_audit"]["gate_type"] == "review_checkpoint"
+    assert adopt["stages"]["data_audit"]["action_gate"] == "required"
+    assert adopt["stages"]["data_audit"]["blocking"] is True
 
 
 def test_working_depth_is_the_user_facing_alias_of_collaboration_mode():

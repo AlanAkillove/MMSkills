@@ -10,7 +10,19 @@
 - 反同质化与 AI 披露设计草案。
 - 中性 TeX 论文模板、赛事格式映射和 TeX/PDF 版式预检 skill（本轮新增）。
 
-## 阶段 0.8：去流程中心化与 2026 AI 规则对齐（本轮完成）
+## 阶段 0.9：动作门运行时补全（本轮完成）
+
+0.2.2 不做 0.3.0，也不新增 skill，只清 0.2.1 残留的旧语义：
+
+1. registry 增加 `action_gates`；`blocking` 按当前动作计算；`adoption_satisfied()` 要求 human-confirmed；
+2. Safe next action 不再无条件读取 freezer manifest；
+3. 继续瘦身 naturalizer、审稿、结构、实验和图表 skill；
+4. 默认附录移出通用 TeX；CUMCM AI 义务字段改为四态；
+5. 增加 live 回放协议，但**尚未**用真实宿主重跑 test1。
+
+对应决策见 [`docs/adr/0008-action-gates-at-runtime.md`](adr/0008-action-gates-at-runtime.md)。
+
+## 阶段 0.8：去流程中心化与 2026 AI 规则对齐（已完成）
 
 0.2.1 针对“意图优先仍只是排序、SKILL 仍像 SOP、2025 AI 细则被带入 2026”做瘦身迭代，不新增 skill：
 

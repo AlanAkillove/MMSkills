@@ -23,11 +23,11 @@ description: "按用户当前目标和风险，灵活安排数学建模项目中
 - `adoption_requires`：可以先探索和建议，但 adopt / freeze / submit 前必须满足。
 - `recommended_after`：只提高质量，不得阻断明确要求的解释、探索、续写或局部修稿。
 
-人工确认挂在动作上，而不是整段 stage：
+人工确认挂在动作上，而不是整段 stage。registry 的 `action_gates`（加 `default_action_gates`）才决定当前动作要不要等人：
 
 `explain < explore < propose < execute_reversible < adopt < freeze / submit`
 
-探索和建议不必等人逐项点头；把模型、假设、数据口径或结论写成已采用，以及覆盖、删除、提交，才需要人类确认。`core_decision` 仍标记哪些内容最终必须由人签核；`review_checkpoint` 默认不阻断用户当前工作。编排器不能把用户未回复当作确认。
+探索和建议不必等人逐项点头；计划里的 `blocking` 只对当前 `user_intent.action` 为 `required` 的动作亮灯。把模型、假设、数据口径或结论写成已采用，以及覆盖、删除、提交，才需要人类确认。`core_decision` 标识最终必须由人签核的内容；`adoption_requires` 对其前置还要检查 `human-confirmed` 和 `decision_id`，不能只看 `status: passed`。`data_audit` 虽是 `review_checkpoint`，删除异常或改切分并让后续模型采用时 `adopt` 仍为 required。编排器不能把用户未回复当作确认。
 
 用户可感知的工作强度是 `working_depth = light | standard | full`（`collaboration_mode` 是兼容别名）。默认先直接回答用户；只有跨会话、用户要求留痕、`full` 或最终交付时才落盘账本。路由器输出 `effective_stage_policy`。
 
@@ -64,7 +64,7 @@ RULES_PROFILE
 2. 计算状态：not_started、ready、in_progress、needs_human、passed、blocked、stale、skipped、superseded。只有 `execution_requires` 满足时阶段才因探索而 ready；`adoption_requires` 只约束 adopt/freeze/submit。
 3. 选择专项 skill，写成“读取什么、运行哪项检查、哪些内容仍待人确认”。不要写成“请 AI 自主完成建模”。
 4. 返工时只回归受影响范围；并行报告按 finding-protocol 合并。
-5. 需要交接时再输出最小续接包。不要把生成 `question_map.md` 或假设账本当成本轮目标。
+5. 需要交接时再输出最小续接包。不要把生成 `question_map.md` 或假设账本当成本轮目标。Safe next action 按 `working_depth`、入口类型和用户意图生成：light/local turn 直接继续当前任务，不强制读取 process-freezer manifest。
 
 ## 风险与停止条件
 

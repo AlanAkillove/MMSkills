@@ -1,6 +1,6 @@
 {
-  "schema_version": "0.2.1",
-  "description": "Canonical stage IDs with execution_requires, adoption_requires and recommended_after. Skills are helpers; this graph is a recommended route, not a per-turn SOP.",
+  "schema_version": "0.2.2",
+  "description": "Canonical stage IDs with execution_requires, adoption_requires, recommended_after and action_gates. Skills are helpers; this graph is a recommended route, not a per-turn SOP.",
   "default_order": [
     "rules_profile",
     "topic_selection",
@@ -46,6 +46,35 @@
     "freeze",
     "submit"
   ],
+  "default_action_gates": {
+    "core_decision": {
+      "explain": "none",
+      "explore": "none",
+      "propose": "none",
+      "execute_reversible": "none",
+      "adopt": "required",
+      "freeze": "required",
+      "submit": "required"
+    },
+    "review_checkpoint": {
+      "explain": "none",
+      "explore": "none",
+      "propose": "none",
+      "execute_reversible": "none",
+      "adopt": "optional",
+      "freeze": "required",
+      "submit": "required"
+    },
+    "none": {
+      "explain": "none",
+      "explore": "none",
+      "propose": "none",
+      "execute_reversible": "none",
+      "adopt": "none",
+      "freeze": "none",
+      "submit": "none"
+    }
+  },
   "stages": {
     "rules_profile": {
       "skill": "modeling-rules-profile",
@@ -132,8 +161,13 @@
       "depends_on": [],
       "human_gate": "optional",
       "gate_type": "review_checkpoint",
+      "action_gates": {
+        "adopt": "required",
+        "freeze": "required",
+        "submit": "required"
+      },
       "phase": "modeling",
-      "notes": "查看缺失/口径是 explain/explore；删除异常、改切分或覆盖后续模型所用数据才是 adopt。"
+      "notes": "查看缺失/口径是 explain/explore；删除异常、改切分或覆盖后续模型所用数据才是 adopt，必须人工确认。"
     },
     "model_architect": {
       "skill": "modeling-model-architect",

@@ -39,6 +39,7 @@ def test_template_contains_profile_switches_and_no_project_content():
         "mmIncludeCodeAppendix",
         "mmShowHeader",
         "mmIncludeBibliography",
+        "mmIncludeAppendix",
     ):
         assert f"\\{name}" in tex
     for phrase in (
@@ -47,11 +48,13 @@ def test_template_contains_profile_switches_and_no_project_content():
         "\\bibliographystyle",
         "\\bibliography{references}",
         "\\graphicspath",
-        "\\label{",
     ):
         assert phrase in tex
     assert "\\mmIncludeBibliographyfalse" in tex
     assert "\\ifmmIncludeBibliography" in tex
+    assert "\\mmIncludeAppendixfalse" in tex
+    assert "\\ifmmIncludeAppendix" in tex
+    assert "复现与支撑材料" not in tex
     assert "\\nocite{*}" not in tex
     for marker in ("D:/DesktopDocs/", "C:/Users/"):
         assert marker not in tex
@@ -59,7 +62,7 @@ def test_template_contains_profile_switches_and_no_project_content():
 
 
 def test_template_support_files_are_neutral_and_present():
-    assert (TEMPLATE_DIR / "references.bib").exists()
+    assert (TEMPLATE_DIR / "appendix.tex").exists()
     assert (TEMPLATE_DIR / "latexmkrc").exists()
     assert (TEMPLATE_DIR / "tex-format-profile.example.yaml").exists()
     assert (TEMPLATE_DIR / "tex_build_manifest.example.yaml").exists()

@@ -3,7 +3,7 @@
   "$id": "https://github.com/AlanAkillove/MMSkills/schemas/stage-registry.schema.json",
   "title": "MathModelingSkills canonical pipeline stage registry",
   "type": "object",
-  "required": ["schema_version", "default_order", "stages", "review_lenses"],
+  "required": ["schema_version", "default_order", "stages", "review_lenses", "default_action_gates"],
   "properties": {
     "schema_version": {"type": "string"},
     "description": {"type": "string"},
@@ -13,6 +13,16 @@
         "enum": ["explain", "explore", "propose", "execute_reversible", "adopt", "freeze", "submit"]
       },
       "uniqueItems": true
+    },
+    "default_action_gates": {
+      "type": "object",
+      "required": ["core_decision", "review_checkpoint", "none"],
+      "properties": {
+        "core_decision": {"$ref": "#/$defs/actionGateMap"},
+        "review_checkpoint": {"$ref": "#/$defs/actionGateMap"},
+        "none": {"$ref": "#/$defs/actionGateMap"}
+      },
+      "additionalProperties": false
     },
     "default_order": {
       "type": "array",
@@ -61,6 +71,7 @@
             "items": {"type": "string"},
             "uniqueItems": true
           },
+          "action_gates": {"$ref": "#/$defs/actionGateOverlay"},
           "human_gate": {"enum": ["required", "optional", "not_applicable"]},
           "gate_type": {"enum": ["core_decision", "review_checkpoint", "none"]},
           "phase": {"type": "string", "minLength": 1},
@@ -68,6 +79,36 @@
         },
         "additionalProperties": false
       }
+    }
+  },
+  "$defs": {
+    "actionGateValue": {"enum": ["none", "optional", "required"]},
+    "actionGateMap": {
+      "type": "object",
+      "required": ["explain", "explore", "propose", "execute_reversible", "adopt", "freeze", "submit"],
+      "properties": {
+        "explain": {"$ref": "#/$defs/actionGateValue"},
+        "explore": {"$ref": "#/$defs/actionGateValue"},
+        "propose": {"$ref": "#/$defs/actionGateValue"},
+        "execute_reversible": {"$ref": "#/$defs/actionGateValue"},
+        "adopt": {"$ref": "#/$defs/actionGateValue"},
+        "freeze": {"$ref": "#/$defs/actionGateValue"},
+        "submit": {"$ref": "#/$defs/actionGateValue"}
+      },
+      "additionalProperties": false
+    },
+    "actionGateOverlay": {
+      "type": "object",
+      "properties": {
+        "explain": {"$ref": "#/$defs/actionGateValue"},
+        "explore": {"$ref": "#/$defs/actionGateValue"},
+        "propose": {"$ref": "#/$defs/actionGateValue"},
+        "execute_reversible": {"$ref": "#/$defs/actionGateValue"},
+        "adopt": {"$ref": "#/$defs/actionGateValue"},
+        "freeze": {"$ref": "#/$defs/actionGateValue"},
+        "submit": {"$ref": "#/$defs/actionGateValue"}
+      },
+      "additionalProperties": false
     }
   },
   "additionalProperties": false

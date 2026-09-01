@@ -56,7 +56,7 @@ issue_ids: []
 reason:
 ~~~
 
-passed 只表示该阶段契约已通过，不表示所有上游事实正确；skipped 必须有不适用理由和人工决定；stale/superseded 不能作为硬依赖的通过条件。`review_checkpoint` 默认是可延后的建议；`core_decision` 只在最终采用、定稿或冻结前构成人工阻断。
+passed 只表示该阶段契约已执行过，不表示所有上游事实正确，也不等于人工已经采用。skipped 必须有不适用理由；stale/superseded 不能作为硬依赖的通过条件。`core_decision` 标识最终必须由人签核的内容；`action_gates` 决定当前动作要不要等人。`blocking` 只在当前 `user_intent.action` 的 gate 为 `required` 时为真。`review_checkpoint` 默认不阻断解释/探索；`data_audit` 的 `adopt` 仍为 required。`adoption_requires` 对 core decision 前置必须有 `human-confirmed` 和 `decision_id`，不能只看 `status: passed`。
 
 ## 事件日志
 

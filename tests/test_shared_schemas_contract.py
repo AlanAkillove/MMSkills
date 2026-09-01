@@ -71,6 +71,9 @@ def test_stage_registry_is_the_ordered_and_topological_source_of_truth():
             assert record["human_gate"] == "required"
         elif record["gate_type"] == "review_checkpoint":
             assert record["human_gate"] == "optional"
+    assert registry["stages"]["data_audit"]["action_gates"]["adopt"] == "required"
+    assert registry["default_action_gates"]["core_decision"]["explore"] == "none"
+    assert registry["default_action_gates"]["core_decision"]["adopt"] == "required"
     assert {"core_decision", "review_checkpoint"} <= gate_types
     assert positions["distinctiveness_coach"] < positions["model_architect"]
     for lens_name, spec in registry["review_lenses"].items():

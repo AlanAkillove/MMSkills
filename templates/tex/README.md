@@ -6,7 +6,7 @@
 
 ## 文件
 
-- `main.tex`：单文件编译入口，含可切换的目录、页眉、参考文献、代码附录和 AI 声明开关；
+- `main.tex`：排版入口，含目录、页眉、参考文献、附录、代码附录和 AI 声明开关；正文通过 `body.tex` 引入，默认不预装正文章节或附录内容；
 - `references.bib`：空的引用数据库，只能填入已核验来源；
 - `latexmkrc`：使用 XeLaTeX 的可选 latexmk 配置；
 - `tex-format-profile.example.yaml`：将赛事要求翻译为源稿开关前的记录模板；
@@ -29,10 +29,10 @@
 XeLaTeX + ctexart
 A4、四边 2.5 cm（仅为中性起点，不等于所有赛事要求）
 摘要/summary 后从第 1 页开始用页脚居中阿拉伯数字
-不显示目录、页眉、身份信息、AI 声明、参考文献和代码附录
+不显示目录、页眉、身份信息、AI 声明、参考文献、附录和代码附录
 ```
 
-五个开关的含义：
+六个开关的含义：
 
 ```tex
 \mmIncludeContentsfalse       % 要求目录的赛事才开启
@@ -40,6 +40,7 @@ A4、四边 2.5 cm（仅为中性起点，不等于所有赛事要求）
 \mmIncludeCodeAppendixfalse  % 规则要求且篇幅允许时才开启
 \mmShowHeaderfalse           % 规则要求控制号/页眉时才开启
 \mmIncludeBibliographyfalse  % 有已核验且实际引用的来源后才开启
+\mmIncludeAppendixfalse      % 需要附录内容时才开启；CUMCM 清单示例见 examples/cumcm-appendix.tex
 ```
 
 例如，COMAP 风格的草稿可能需要目录和控制号页眉，但还必须根据当届 instructions 处理英文 Summary Sheet、总页数和 AI Use Report；不能只打开两个开关就宣称合规。CUMCM 电子版通常需要摘要页作为第一页、不放承诺书/编号页和目录；其余字段仍要以目标年份及赛区通知为准。

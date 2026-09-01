@@ -2,6 +2,21 @@
 
 本文件记录可复用技能和共享契约的变化。
 
+## [0.2.2] - 2026-09-01
+
+### Changed
+
+- `blocking` 改为当前动作的 `action_gates`：探索模型不再显示 blocking core gate；`data_audit` 的 adopt/freeze/submit 仍为 required。
+- `adoption_requires` 对 core decision 前置检查 `human-confirmed` 和 `decision_id`，不再把单独的 `status: passed` 当成已经采用。
+- Safe next action 按 `working_depth` 和用户意图生成；light/local turn 直接继续当前任务，不强制读取 process-freezer manifest。
+- 瘦身 naturalizer、paper-reviewer、paper-architect、experiment-validator 和图表类 `SKILL.md`；SOP 移入 `references/recommended-workflow.md`。
+- 默认 TeX 附录改为 `\mmIncludeAppendix` 开关，复现/支撑材料章节移到 `examples/cumcm-appendix.tex`。
+- CUMCM 2026 对参考文献列 AI、正文标注、参考文献后未使用声明和全文交互日志改为 `not_required`，不再用布尔 `false` 表达“禁止”。
+
+### Added
+
+- ADR 0008，以及明确“contract tests ≠ live 回放”的 `replay-protocol.md`。第一次真实 Agent 的 test1 重放仍待进行。
+
 ## [0.2.1] - 2026-09-01
 
 ### Changed

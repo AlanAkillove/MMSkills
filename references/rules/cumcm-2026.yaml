@@ -136,7 +136,7 @@ rules:
   - rule_id: CUMCM-AI-NO-2025-BIBLIOGRAPHY-OR-BODY-MARK
     category: ai
     title: "2026 不再要求参考文献列 AI 工具或正文标注生成内容"
-    requirement: "不得把 2025 年“正文相应位置标注 AI 生成内容、参考文献列出所用 AI 工具、未使用声明放在参考文献之后、必须附关键交互记录全文”自动带入 2026 提交材料。2026 只要求参考文献前的二选一声明，以及使用 AI 时的支撑材料详情 PDF。"
+    requirement: "2026 不再要求正文标注 AI 生成内容、参考文献列出所用 AI 工具、未使用声明放在参考文献之后，或详情 PDF 必须附关键交互记录全文。这些字段记为 not_required，不是 prohibited。不得把 2025 细则自动当作 2026 的 mandatory 要求。"
     condition: "目标年份为 2026 的 CUMCM 提交适用。"
     exceptions: []
     applies_to: [paper, support_materials, ai_tools]
@@ -146,7 +146,7 @@ rules:
     evidence_anchors:
       - locator: "CUMCM-AI-2026-CN/第3、4、6条"
         excerpt_or_summary: "2026 正文未要求 bibliography 引用 AI 或文内标注；第 6 条规定此前不一致规定以 2026 为准。"
-    verification_action: "检查 .bib 和正文是否误加 AI 工具文献条目或“此处由 AI 生成”标注；声明是否在参考文献之前且句式与原文一致。"
+    verification_action: "检查声明位置和详情 PDF 是否按 2026 原文；若出现参考文献 AI 条目或正文“此处由 AI 生成”，标记为队伍额外选择而非 2026 强制项，并确认未使用声明仍在参考文献之前。"
     human_question: "论文声明和详情 PDF 是否已按 2026 原文，而不是按 2025 细则补了参考文献或正文标注？"
     decision_id: unknown
   - rule_id: CUMCM-AI-RESPONSIBILITY
@@ -248,11 +248,11 @@ disclosure:
       - "Specific purpose and stage"
       - "Principal prompting approach and usage process; typical interaction examples allowed"
       - "Principal adoption, manual modification, and verification of AI outputs, except language polishing"
-  full_raw_log_required: false
+  full_raw_log_required: not_required
   typical_interaction_examples_allowed: true
-  citation_of_ai_in_references: false
-  in_text_annotation_of_ai_content: false
-  unused_declaration_after_references: false
+  citation_of_ai_in_references: not_required
+  in_text_annotation_of_ai_content: not_required
+  unused_declaration_after_references: not_required
   superseded_prior_year_requirements:
     year: 2025
     source_id: CUMCM-AI-2025-CN
@@ -290,10 +290,11 @@ implementation_notes:
   - "当前状态为 draft：赛区/学校附加通知、实际提交系统和最终作者确认尚未纳入。"
   - "2026 年 AI 规定自 2026-09-01 起试行；比赛前必须重新核验官方网页、赛区通知和提交系统。"
   - "2025 年试行规定中的参考文献列工具、正文标注、参考文献后未使用声明、强制关键交互记录，不得写入 2026 执行字段。"
+  - "规范义务字段使用 required / prohibited / not_required / unspecified，不用布尔值把“不再要求”写成“禁止”。"
   - "unknown、conflict、stale 和未签核的关键字段不得被编排器解释为合规通过。"
 change_log:
   - date: "2026-09-01"
-    change: "对照官网正文与用户提供的 2026 PDF，将 citation_of_ai_in_references 和正文标注明确为 false，并登记被替代的 2025 条款。"
+    change: "将 citation_of_ai_in_references、正文标注、参考文献后未使用声明和全文交互日志从布尔 false 改为 not_required，避免把 2026 未要求编码成禁止。"
     source_ids: [CUMCM-AI-2026-CN, CUMCM-AI-2026-LOCAL, CUMCM-AI-2025-CN]
 human_confirmation:
   required: true

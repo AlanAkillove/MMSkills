@@ -85,6 +85,7 @@ page_limit = historical "about 30" guidance; confirm current edition
 \mmIncludeCodeAppendixfalse  % 只有赛事明确要求且篇幅允许时开启
 \mmShowHeaderfalse           % 只有 profile 要求控制号/页眉时开启
 \mmIncludeBibliographyfalse  % 有已核验且实际引用的来源后才开启
+\mmIncludeAppendixfalse      % 需要附录内容时才开启；CUMCM 清单见 examples/cumcm-appendix.tex
 ```
 
 变更开关前要在 profile 和 `decision_log.md` 中写明依据。不要通过 `\fontsize`、负间距、透明文字、不可见身份字段或压缩图片元数据绕过规则。

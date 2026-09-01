@@ -16,6 +16,8 @@
 \mmShowHeaderfalse
 \newif\ifmmIncludeBibliography
 \mmIncludeBibliographyfalse
+\newif\ifmmIncludeAppendix
+\mmIncludeAppendixfalse
 
 % ---------- 论文元数据：不要填入不允许公开的身份信息 ----------
 \newcommand{\mmPaperTitle}{[填写论文题目]}
@@ -141,34 +143,12 @@
   \bibliography{references}
 \fi
 
-% ---------- 附录 ----------
-\clearpage
-\appendix
-\section{复现与支撑材料}
-% 附录是否需要、是否计入页数以及代码位置由目标赛事 profile 决定。
-
-\subsection{复现入口}
-% 用一个自然段或必要的表格记录环境、数据版本、运行命令和输出入口。
-
-\subsection{支撑材料清单}
-\begin{table}[H]
-  \centering
-  \caption{支撑材料及用途}
-  \label{tab:supporting-materials}
-  \begin{tabularx}{0.96\textwidth}{l X l}
-    \toprule
-    文件/目录 & 用途与对应正文证据 & 版本或校验信息 \\
-    \midrule
-    % 按实际可交付材料添加行；没有支撑材料时删除本表。
-    \bottomrule
-  \end{tabularx}
-\end{table}
-
-\ifmmIncludeCodeAppendix
-  \section{核心源代码}
-  只有在 profile 明确要求、文件已核验且篇幅允许时才开启。代码应来自可追溯的源文件，不在 TeX 中手工改写数据或结果。
-  % 将上一行的 \mmCodeFile 替换为安全的相对路径后再取消注释：
-  % \lstinputlisting[style=paper-code]{\mmCodeFile}
+% 附录不是通用内容模板。需要附录时由 profile 打开开关，再 \input 项目自己的 appendix.tex；
+% CUMCM 示例见 examples/cumcm-appendix.tex。
+\ifmmIncludeAppendix
+  \clearpage
+  \appendix
+  \input{appendix.tex}
 \fi
 
 \end{document}

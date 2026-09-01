@@ -36,7 +36,7 @@ RULES_PROFILE
   -> PROCESS_FREEZER
 ```
 
-上图是编排器推荐图的阅读索引；阶段 ID、执行依赖、采用依赖、软建议、人工边界和顺序以 [`schemas/stage-registry.json`](../schemas/stage-registry.json) 为唯一来源。`TOPIC_SELECTION`、`LITERATURE_EVIDENCE` 和 `PROBLEM_FAMILIARIZATION` 不应被合并成一个“背景分析”阶段：它们分别解决全题目选取、来源学习和团队理解确认。用户明确要求局部工作时，只要 `execution_requires` 满足就可以开始；正式采用仍看 `adoption_requires`。
+上图是编排器推荐图的阅读索引；阶段 ID、执行依赖、采用依赖、软建议、人工边界和顺序以 [`schemas/stage-registry.json`](../schemas/stage-registry.json) 为唯一来源。`TOPIC_SELECTION`、`LITERATURE_EVIDENCE` 和 `PROBLEM_FAMILIARIZATION` 不应被合并成一个“背景分析”阶段：它们分别解决全题目选取、来源学习和团队理解确认。用户明确要求局部工作时，只要 `execution_requires` 满足就可以开始；正式采用仍看 `adoption_requires`，且 core decision 前置需要 `human-confirmed`。计划中的 `blocking` 跟随当前动作的 `action_gates`，不是整个 stage 永远阻断。
 
 状态不是简单的章节清单，而是帮助不同会话复原工作的可复核记录。核心决定、关键证据和最终交付必须可追踪；可选 review checkpoint 和过程 artifact 不应变成每轮工作的必填表。任何阶段发现上游证据不足时，应回退到相应范围或降低表述强度，而不是用语言润色掩盖缺口。
 
