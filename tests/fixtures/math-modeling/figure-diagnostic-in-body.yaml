@@ -1,0 +1,6 @@
+figure_design:
+  figure_id: FIG-residual
+  placement: diagnostic
+  used_in_manuscript: true
+  paper_location: 正文
+  figure_question: residual debugging

@@ -1,0 +1,91 @@
+# Machine-readable default ownership. Not a hard dependency graph.
+schema_version: "0.3.0-dev"
+never_preload:
+  - modeling-pipeline-orchestrator
+  - modeling-process-freezer
+  - schemas/stage-registry.json
+orchestrator_intents:
+  - resume
+  - full_audit
+  - submission_plan
+  - diagnose_state
+roles:
+  modeler:
+    specialists:
+      select_topic: [modeling-topic-selection]
+      understand: [modeling-problem-familiarization]
+      intake: [modeling-problem-intake]
+      literature: [modeling-literature-evidence]
+      model: [modeling-model-architect]
+      assumption: [modeling-assumption-ledger]
+      terminology_establish: [modeling-terminology-auditor]
+      data_explore: [modeling-data-audit]
+      distinctiveness: [modeling-distinctiveness-coach]
+  computationalist:
+    specialists:
+      data_change: [modeling-data-audit]
+      experiment: [modeling-experiment-validator]
+      figure: [modeling-figure-designer]
+      figure_audit: [modeling-figure-table-auditor]
+  writer:
+    specialists:
+      structure: [modeling-paper-architect]
+      draft: [modeling-paper-writer]
+      terminology_audit: [modeling-terminology-auditor]
+      claim: [modeling-claim-evidence-audit]
+      naturalize: [modeling-paper-naturalizer]
+      review: [modeling-paper-reviewer]
+      reader: [modeling-reader-experience-auditor]
+      tex: [modeling-tex-paper-production]
+      preflight: [modeling-final-preflight]
+      disclose: [modeling-ai-use-disclosure]
+intents:
+  continue_local:
+    role: inherit
+    specialists: []
+    persist_artifacts: false
+  understand:
+    role: modeler
+    specialists: [modeling-problem-familiarization]
+  literature:
+    role: modeler
+    specialists: [modeling-literature-evidence]
+  model:
+    role: modeler
+    specialists: [modeling-model-architect]
+  terminology_establish:
+    role: modeler
+    specialists: [modeling-terminology-auditor]
+  experiment:
+    role: computationalist
+    specialists: [modeling-experiment-validator]
+  figure:
+    role: computationalist
+    specialists: [modeling-figure-designer]
+  draft:
+    role: writer
+    specialists: [modeling-paper-writer]
+  revise:
+    role: writer
+    specialists: [modeling-paper-writer]
+  terminology_audit:
+    role: writer
+    specialists: [modeling-terminology-auditor]
+  preflight:
+    role: writer
+    specialists: [modeling-final-preflight]
+  disclose:
+    role: writer
+    specialists: [modeling-ai-use-disclosure]
+  resume:
+    role: cross_cutting
+    specialists: [modeling-pipeline-orchestrator]
+  full_audit:
+    role: cross_cutting
+    specialists: [modeling-pipeline-orchestrator]
+  submission_plan:
+    role: cross_cutting
+    specialists: [modeling-pipeline-orchestrator, modeling-final-preflight]
+  diagnose_state:
+    role: cross_cutting
+    specialists: [modeling-pipeline-orchestrator]

@@ -5,6 +5,8 @@ figure_design:
   figure_question: null
   reader_task: null
   evidence_role: null
+  placement: paper
+  used_in_manuscript: false
   question_ids: []
   claim_ids: []
   evidence_ids: []

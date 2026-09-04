@@ -21,7 +21,7 @@ description: "在提交前汇总规则、论文、题意、假设、主张证据
 
 1. 固定目标赛事/年份/组别/赛区、提交时间窗和有效 `rules_profile`；profile 过期/冲突时只做非合规部分并标阻断；
 2. 固定电子论文、源文/渲染件、附录、支撑包、代码、数据、AI trace、规则和各 artifact 的版本/hash；
-3. 读取 `question_map`、`assumption_ledger`、`claim_evidence_matrix`、`terminology_ledger`、`distinctiveness_ledger`、model/experiment/figure/reader/support 审计；
+3. 读取 `question_map`、`assumption_ledger`、`claim_evidence_matrix`、`terminology_table.md`（若只有旧 `terminology_ledger` 则沿用）、`distinctiveness_ledger`、model/experiment/figure/reader/support 审计；
 4. 读取规则 profile 的论文/支撑/匿名/AI/文件大小/声明位置/提交字段；
 5. 记录未读材料、未执行代码、未知字段、冲突、人工尚未确认和冻结后改动。
 
@@ -49,7 +49,7 @@ description: "在提交前汇总规则、论文、题意、假设、主张证据
 
 ### 2. 先跑机械检查
 
-检查文件存在/大小/格式、页数/首页/声明位置、匿名字符串/元数据、引用/图表/章节编号、清单与压缩包、hash 和缺失文件。机械检查结果也要带证据路径和工具版本。
+检查文件存在/大小/格式、页数/首页/声明位置、匿名字符串/元数据、引用/图表/章节编号、清单与压缩包、hash 和缺失文件。若存在 `results_snapshot`、术语表或图表 manifest，再运行 `scripts/check_workbench_artifacts.py`：过期数字、术语 drift、diagnostic 图混入正文、本地 citation 字段冲突。若已有 PDF，同一脚本加 `--pdf` 做页数/纸张/空白页和元数据检查。机械检查结果也要带证据路径和工具版本。
 
 ### 3. 检查成文质量
 
@@ -111,4 +111,4 @@ P0/P1 未关闭时不能标 ready/frozen，不继续靠润色或重命名隐藏�
 - 不替作者决定模型、假设、数据、实验、结论、AI 事实和风险接受；
 - 不生成虚假声明、AI 使用详情、匿名材料或提交记录。
 
-详细字段和阻断规则按需读取 [preflight-contract.md](references/preflight-contract.md)、[check-catalog.md](references/check-catalog.md)、[blocking-and-signoff.md](references/blocking-and-signoff.md) 和 [research-basis.md](references/research-basis.md)。机械成文检查使用 `scripts/check_manuscript_quality.py`。
+详细字段和阻断规则按需读取 [preflight-contract.md](references/preflight-contract.md)、[check-catalog.md](references/check-catalog.md)、[blocking-and-signoff.md](references/blocking-and-signoff.md) 和 [research-basis.md](references/research-basis.md)。机械成文检查使用 `scripts/check_manuscript_quality.py`；工作台产物检查使用 `scripts/check_workbench_artifacts.py`。

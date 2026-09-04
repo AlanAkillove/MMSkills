@@ -56,6 +56,14 @@ latexmk -xelatex -interaction=nonstopmode -file-line-error main.tex
 
 默认渲染到项目 `tmp/pdfs/`，不把辅助文件和临时图片提交到仓库。实际目标宽度下检查中文、数学符号、上下标、图例、图注、表格、链接、页码、页眉、孤行、空白页和裁切。源文件的 `width=0.9\textwidth` 不能替代 PDF 页面检查。
 
+机械检查先跑：
+
+```text
+python skills/modeling-tex-paper-production/scripts/check_pdf_visual.py paper.pdf --paper a4
+```
+
+空白页、非预期纸张、本地路径和身份元数据由脚本报告。中文被抽成乱码时不要把抽取文本当成原文；光栅未做时 `raster.status=unassessed`。
+
 ## 交付前清理
 
 - `.aux/.log/.fls/.fdb_latexmk/.synctex.gz` 等构建产物不进入论文支撑包，除非另有记录要求；

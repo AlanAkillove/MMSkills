@@ -2,7 +2,7 @@
 
 ## 1. 项目定位与职责边界
 
-MathModelingSkills 是一个面向数学建模论文生产过程的 Agent skill 集合。它服务于“人类负责问题判断与最终决策，Agent 负责检索、整理、候选生成、机械执行和多轮审查”的协作方式。
+MathModelingSkills 是面向人机协作的数学建模工作台。用户和 Agent 默认通过 `math-modeling` 看到三个角色（建模手、编程手、论文手）；现有 specialist 按需加载。人类拥有建模判断，Agent 负责理解、检索、推导、实现、核验和起草。
 
 职责边界如下：
 
@@ -11,7 +11,9 @@ MathModelingSkills 是一个面向数学建模论文生产过程的 Agent skill 
 - 赛事页数、AI 规则和交付要求通过目标赛事 profile 适配；
 - 语言层修改与题意、证据、模型和结论审查保持分工。
 
-## 2. 生命周期状态机
+## 2. 默认认知入口与编排图
+
+普通对话走三角色入口，不读取下面这张图。这张图只供完整赛程、恢复或提交诊断使用，来源仍是 [`schemas/stage-registry.json`](../schemas/stage-registry.json)。
 
 ```text
 RULES_PROFILE
@@ -42,9 +44,9 @@ RULES_PROFILE
 
 ## 3. 技能分层
 
-### 3.1 编排层
+### 3.1 入口与编排层
 
-`modeling-pipeline-orchestrator` 只负责识别入口、检查前置条件、调用专项技能、保存状态、提示人工确认和处理回退，不负责自行写出未经验证的实质内容。
+`math-modeling` 是默认认知入口：按当前意图加载建模手、编程手或论文手，再按需打开 specialist。`modeling-pipeline-orchestrator` 只负责完整赛程、跨会话恢复、full audit 和提交诊断，不负责自行写出未经验证的实质内容，也不处理“继续问题三”这类局部请求。
 
 ### 3.2 研究与建模层
 

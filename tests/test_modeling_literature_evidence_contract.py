@@ -17,6 +17,7 @@ def test_skill_has_source_boundary_and_no_fabrication_gate():
         "虚构作者/标题/DOI/页码",
         "source_safety_issue",
         "orientation",
+        "modeling-synthesis",
         "citation-audit",
         "literature_insight_id",
         "source_does_not_support",

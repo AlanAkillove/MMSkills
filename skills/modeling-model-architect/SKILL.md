@@ -13,8 +13,12 @@ description: "组织数模问题的可解释基线、候选模型、适配条件
 
 ## 硬约束
 
+- 不从算法名称开始选型，不打开用于发现模型的算法目录。候选来自题目结构、机理和文献综合。
+- 不要问用户“选有限元、神经网络还是响应面”；先问输出形式、可解释性与代价、不可接受的失败、实验预算。
+- 没有有意义的对照时，不要为了合同而编造 baseline。
+- 正式大编码前可用便宜的可行性探测证伪坏方案，不打总分。探测字段见 [feasibility-probe.md](references/feasibility-probe.md)；可用 `math-modeling/scripts/model/check_feasibility_probe.py` 拒绝打分记录。
 - 最终目标函数、关键假设、核心模型和采用/放弃决定由团队确认；不替人选择最终模型。
-- 先给可解释基线，再谈更复杂候选。不把算法名称当创新，不为避免同质化强行引入深度学习或复杂优化。
+- 不把算法名称当创新，不为避免同质化强行引入深度学习或复杂优化。
 - 不编造训练结果、最优性、鲁棒性、因果或文献依据。代码跑通不等于模型正确。
 - 不使用总分、信心百分比、默认排序、单一“推荐”或把用户未回复当作确认。
 - 理解校验请用户用本题对象复述输入/输出、一个关键假设和一个主要代价/风险；不能用“看懂了吗”或 Agent 自己的判断代替。
@@ -40,4 +44,4 @@ description: "组织数模问题的可解释基线、候选模型、适配条件
 - `P0`：模型会改题意，或未确认却准备提交为最终模型。
 - `P1`：任务不适配、关键假设/数据不可得、用户只看到黑箱总分，或核心主张没有验证路径。
 
-未知就写未知。完整协议见 [model-contract.md](references/model-contract.md)、[baseline-and-fit.md](references/baseline-and-fit.md)、[user-decision-support.md](references/user-decision-support.md)、[validation-readiness.md](references/validation-readiness.md)、[recommended-workflow.md](references/recommended-workflow.md) 和 [research-basis.md](references/research-basis.md)。
+未知就写未知。完整协议见 [model-contract.md](references/model-contract.md)、[baseline-and-fit.md](references/baseline-and-fit.md)、[user-decision-support.md](references/user-decision-support.md)、[validation-readiness.md](references/validation-readiness.md)、[feasibility-probe.md](references/feasibility-probe.md)、[recommended-workflow.md](references/recommended-workflow.md) 和 [research-basis.md](references/research-basis.md)。

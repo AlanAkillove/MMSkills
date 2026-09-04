@@ -10,7 +10,17 @@
 - 反同质化与 AI 披露设计草案。
 - 中性 TeX 论文模板、赛事格式映射和 TeX/PDF 版式预检 skill（本轮新增）。
 
-## 阶段 0.9：动作门运行时补全（本轮完成）
+## 阶段 1.0：三角色工作台（进行中，0.3.0-dev）
+
+按 ADR 0009 开始 0.3.0，不把算法知识库做成选型入口：
+
+1. 已完成：`math-modeling` 入口、三角色指南、`route_role.py`、编排器降级、术语 establish/audit 与 drift 扫描、results snapshot、run_summary、可行性探测记录、图表 placement、本地 DOI/citation 对照、终检工作台胶水、PDF 机械视觉 QA、可选 DSH 薄适配；
+2. 待做：联网文献发现（仍须与核验分开）；有 pymupdf 时再补光栅页抽查的宿主验证；
+3. 发布门：真实 Agent 回放（局部任务直达、物理工程题文献驱动、数据题不过度检索、术语 drift、旧数字、test1）。不能把本阶段 pytest 写成 0.3.0 实践成功。DSH 不是发布门。
+
+对应决策见 [`docs/adr/0009-role-oriented-workbench.md`](adr/0009-role-oriented-workbench.md)。
+
+## 阶段 0.9：动作门运行时补全（已完成）
 
 0.2.2 不做 0.3.0，也不新增 skill，只清 0.2.1 残留的旧语义：
 

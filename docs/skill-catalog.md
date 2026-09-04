@@ -2,13 +2,14 @@
 
 这是当前技能目录和优先级记录。优先级依据“对后续返工的影响 × 可跨论文复用性 × 可测试性”确定。反同质化不是最后的装饰检查，而是从题意拆解和模型选择阶段开始的横切能力。
 
-当前进度：现有技能已完成首轮设计和实现；共享阶段注册表、finding/schema、运行档位和行为场景已接入运行时（effective stage policy、schema 校验、finding 合并语义、Codex runner）。前置链和完整串联的脱敏真实项目回归仍需补做。当前规则实现以 CUMCM 为首个具体适配对象。
+当前进度：0.3.0-dev 增加三角色统一入口；specialist 仍为内部能力。共享阶段注册表只服务于编排器的完整赛程/恢复/提交路径。前置链和脱敏真实项目回放仍是发布门。
 
 ## P0：先做最小闭环
 
 | 候选 skill | 作用 | 关键产物 |
 |---|---|---|
-| `modeling-pipeline-orchestrator` | 识别阶段、管理状态、触发人工确认 | `pipeline_state.yaml` |
+| `math-modeling` | 按当前意图路由到建模手/编程手/论文手 | 本轮 loaded specialists（通常不落盘） |
+| `modeling-pipeline-orchestrator` | 完整赛程、恢复、full audit、提交诊断 | `pipeline_state.yaml` |
 | `modeling-topic-selection` | 比较全场题目并形成主选/备选人工决策 | `topic_cards.md` + `topic_selection_brief.md` |
 | `modeling-problem-familiarization` | 分轮学习题目背景、对象关系与文献边界 | `problem_background_map.md` + `understanding_checkpoint.md` |
 | `modeling-problem-intake` | 把题面拆成任务、变量、目标、约束和歧义 | `question_map.md` |
@@ -28,12 +29,12 @@
 | `modeling-experiment-validator` | 记录实验、比较、敏感性、不确定性和稳健性 | `experiment_registry.jsonl` + reproduction manifest |
 | `modeling-figure-designer` | 从题目、证据和读者任务设计并制作论文图表、模型图和多面板图 | `figure_design_brief.md` + source/render + manifest |
 | `modeling-distinctiveness-coach` | 写前保留题目特征和真实取舍，阻断强行创新 | `distinctiveness_ledger.md` |
-| `modeling-terminology-auditor` | 发现术语漂移、生造术语和不必要高级感 | `terminology_ledger.md` |
+| `modeling-terminology-auditor` | 建模阶段建立术语表，成稿后只做 drift audit | `terminology_table.md` |
 | `modeling-anti-homogenization-auditor` | 审核题目特征、建模路径、证据组织和表达是否被模板抹平 | `distinctiveness_audit.md` |
 | `modeling-ai-pattern-reviewer` | 识别模板化痕迹并给出证据化重写建议 | `ai_pattern_report.md` |
 | `modeling-reader-experience-auditor` | 以不同读者路径检查逻辑、导航、视觉和信息负担 | `reader_audit.md` |
 | `modeling-ai-use-disclosure` | 从会话/日志整理赛事适配的 AI 使用详情 PDF | `AI工具使用详情.pdf` |
-| `modeling-literature-evidence` | 以 orientation/citation-audit 两种模式围绕背景、题意、方法、数据和主张建立可核查来源链 | `source_register.csv` + `literature_orientation_ledger.md` / `citation_evidence_matrix.csv` |
+| `modeling-literature-evidence` | orientation / modeling-synthesis / citation-audit：发现与核验分开，文献服务模型综合而不是模板 | `source_register.csv` + orientation/synthesis notes |
 | `modeling-process-freezer` | 冻结阶段快照、hash、谱系和人工签核 | `freeze_manifest.json` + `handoff.md` |
 | `modeling-tex-paper-production` | 按赛事 profile 生成、迁移、编译、渲染和审计 TeX 论文 | `main.tex` + `tex_build_manifest.yaml` + `tex_layout_audit.md` |
 

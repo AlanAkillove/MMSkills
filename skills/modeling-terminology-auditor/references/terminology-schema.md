@@ -1,6 +1,22 @@
 # 术语账本字段契约
 
-## 推荐结构
+0.3.0 默认产物是 `terminology_table.md`（概念表 + 符号表）。`terminology_ledger.md` 仍可作为详细账本兼容旧项目。
+
+## terminology_table.md
+
+```markdown
+# Terminology Table
+
+## Concepts
+| zh_canonical | en_canonical | definition | source | scope | allowed_aliases | ambiguous_or_deprecated | status | first_definition |
+
+## Symbols
+| symbol | concept | type | definition | unit | domain_range | scope | source |
+```
+
+`ambiguous_or_deprecated` 只记录会造成概念漂移、层级错误或含义混乱的别名，不是禁止一切近义表达。`status` 使用 `standard`、`project-defined`、`candidate`、`alias`、`deprecated`、`unknown`、`conflict`。
+
+## 详细账本（兼容）
 
 ```markdown
 # Terminology Ledger

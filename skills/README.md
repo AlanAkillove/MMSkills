@@ -25,6 +25,7 @@ modeling-ai-use-disclosure
 
 ## 已实现
 
+- [`math-modeling`](math-modeling/)：极薄统一入口，把当前任务路由到建模手 / 编程手 / 论文手；普通对话不预加载编排器。
 - [`modeling-topic-selection`](modeling-topic-selection/)：在多题比赛开始时逐题盘点并比较题意、背景、资源、时间、验证和差异化风险，保留主选/备选的人类决策门。
 - [`modeling-problem-familiarization`](modeling-problem-familiarization/)：在选题后分轮学习题目背景、对象关系、测量过程、术语和文献迁移边界，通过复述纠错形成理解快照。
 - [`modeling-problem-intake`](modeling-problem-intake/)：在共同理解确认后将题面整理为带证据锚点的问题地图，专门处理图示/几何关系、边界条件、歧义和长题面续接。
@@ -50,7 +51,7 @@ modeling-ai-use-disclosure
 - [`modeling-final-preflight`](modeling-final-preflight/)：汇总规则与各专项证据状态，按 P0/P1 阻断高风险提交项并保留人工签核。
 - [`modeling-ai-use-disclosure`](modeling-ai-use-disclosure/)：从明确授权的会话/日志抽取 AI 使用事件，核对规则与人工控制，并生成可验证的 AI 使用详情 PDF。
 - [`modeling-process-freezer`](modeling-process-freezer/)：用 append-only 快照、SHA-256、状态谱系和人工签核保存长会话与改稿过程。
-- [`modeling-pipeline-orchestrator`](modeling-pipeline-orchestrator/)：按阶段依赖、证据状态和人工门生成全流程运行计划，不替人作核心决定。
+- [`modeling-pipeline-orchestrator`](modeling-pipeline-orchestrator/)：仅用于完整赛程、跨会话恢复、full audit 或提交诊断；普通交互不经过它。
 - [`modeling-tex-paper-production`](modeling-tex-paper-production/)：按赛事 profile 建立、迁移、编译、渲染和预检数学建模论文 TeX 交付稿。
 
 ## 最低契约

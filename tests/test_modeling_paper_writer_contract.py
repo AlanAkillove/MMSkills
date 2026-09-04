@@ -18,6 +18,8 @@ def test_writer_is_intent_first_and_not_a_template_filler():
         "成文清洁",
         "不编造证据",
         "writing_notes",
+        "terminology_table.md",
+        "results_snapshot",
     ):
         assert phrase in content
 

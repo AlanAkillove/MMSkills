@@ -1,0 +1,6 @@
+figure_design:
+  figure_id: FIG-resistance
+  placement: paper
+  used_in_manuscript: true
+  paper_location: 正文
+  figure_question: How does thermal resistance change with Re?

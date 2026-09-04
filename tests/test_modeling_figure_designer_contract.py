@@ -23,6 +23,8 @@ def test_entrypoint_defines_design_scope_and_human_boundary():
         "unassessed",
         "modeling-figure-table-auditor",
         "P0/P1",
+        "diagnostic",
+        "placement",
     ):
         assert phrase in content
 

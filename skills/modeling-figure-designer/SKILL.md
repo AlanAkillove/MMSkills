@@ -24,4 +24,6 @@ description: "从数模论文的题目、主张、数据和读者任务出发，
 
 读者应在约五秒内知道图在回答什么。需要制作或交接时，再保留绘图脚本、可编辑源和目标尺寸渲染。
 
+每张图还要有放置角色：`diagnostic`（调试，默认不进正文）、`comparison`、`paper`、`appendix`。宁可少而承重，不要装饰清单。机械检查用 `math-modeling/scripts/figures/check_figure_placement.py`。
+
 完整协议见 [design-contract.md](references/design-contract.md)、[chart-selection.md](references/chart-selection.md)、[visual-system.md](references/visual-system.md)、[production-and-handoff.md](references/production-and-handoff.md)、[recommended-workflow.md](references/recommended-workflow.md) 和 [research-basis.md](references/research-basis.md)。

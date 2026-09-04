@@ -1,0 +1,12 @@
+{
+  "candidate_id": "",
+  "family": "other",
+  "checks": [
+    {
+      "name": "example_only",
+      "result": "unknown",
+      "note": "Replace with the actual cheap falsification for this candidate."
+    }
+  ],
+  "verdict": "unknown"
+}

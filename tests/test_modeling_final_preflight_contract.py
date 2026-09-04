@@ -24,6 +24,7 @@ def test_entrypoint_is_status_aggregator_not_compliance_guarantee():
         "ready_for_human_submission",
         "成文清洁",
         "check_manuscript_quality.py",
+        "check_workbench_artifacts.py",
     ):
         assert phrase in content
 
@@ -61,6 +62,7 @@ def test_references_define_check_layers_and_signoff():
     for phrase in ("P0/P1", "accepted-risk", "frozen", "decision ID"):
         assert phrase in blocking
     assert (SKILL_DIR / "scripts" / "check_manuscript_quality.py").is_file()
+    assert (SKILL_DIR / "scripts" / "check_workbench_artifacts.py").is_file()
 
 
 def test_fixture_set_covers_blocking_unknown_and_freeze():

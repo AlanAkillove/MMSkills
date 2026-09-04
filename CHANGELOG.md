@@ -2,6 +2,26 @@
 
 本文件记录可复用技能和共享契约的变化。
 
+## [Unreleased] 0.3.0-dev
+
+### Added
+
+- 极薄的 `math-modeling` 统一入口与 Modeler / Computationalist / Writer 角色指南；`route_role.py` 按当前话语分流，普通任务不预加载编排器和 stage registry。
+- ADR 0009：problem-first、literature-guided 工作台；不建设用于模型发现的算法知识库。
+- `terminology_table.md` 与术语 `establish` / `audit` 模式；机械 drift 扫描脚本。
+- 轻量 `results_snapshot` 冻结与 source-hash 过期检查。
+- `run_summary.json`、模型可行性探测记录（禁止打分）、图表 `placement`（diagnostic/comparison/paper/appendix）与 PNG 几何检查。
+- 本地 DOI 规范化 / citation 字段对照 / DOI 去重；终检 `check_workbench_artifacts.py` 串联过期数字、术语 drift、diagnostic 图和 citation 对照。
+- 可选 DeepSeek Harness `native-adapter` 镜像（`hosts/deepseek-harness/`），不改写源 skill，不是发布门。
+- PDF 机械视觉 QA：纸张尺寸、空白页、文本抽取、元数据/路径泄露；光栅未安装时记 `unassessed`。
+
+### Changed
+
+- `modeling-pipeline-orchestrator` 降为完整赛程、恢复、full audit 和提交诊断入口。
+- `modeling-model-architect` 明确禁止算法名菜单和为合同编造 baseline。
+- `modeling-literature-evidence` 增加 `modeling-synthesis` 模式：搜索≠核验，文献不是模型模板。
+- Writer / 终检默认消费 `terminology_table` 与 `results_snapshot`；`pytest.ini` 把测试范围限制在 `tests/`，避免本地嵌套副本干扰收集。
+
 ## [0.2.2] - 2026-09-01
 
 ### Changed

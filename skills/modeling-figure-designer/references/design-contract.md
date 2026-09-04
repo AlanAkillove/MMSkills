@@ -13,6 +13,8 @@ figure_design:
   figure_question: null
   reader_task: compare | locate_trend | inspect_distribution | inspect_relationship | inspect_boundary | follow_process | verify_result | other
   evidence_role: descriptive | comparative | trend | relationship | distribution | sensitivity | feasibility | process | schematic | result_table
+  placement: diagnostic | comparison | paper | appendix
+  used_in_manuscript: false
   question_ids: []
   claim_ids: []
   evidence_ids: []

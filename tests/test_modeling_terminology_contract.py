@@ -1,6 +1,9 @@
 """Deterministic package checks for modeling-terminology-auditor."""
 
 from pathlib import Path
+import json
+import subprocess
+import sys
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -22,6 +25,9 @@ def test_entrypoint_has_term_boundaries():
         "高级感",
         "不机械全局替换",
         "Research Chair/用户",
+        "establish",
+        "audit",
+        "terminology_table.md",
     ):
         assert phrase in content
 
@@ -51,6 +57,9 @@ def test_shared_terminology_template_is_present():
     content = TEMPLATE.read_text(encoding="utf-8")
     for phrase in ("Concept register", "canonical_term", "Human decisions", "K-001"):
         assert phrase in content
+    table = (ROOT / "templates" / "terminology_table.md").read_text(encoding="utf-8")
+    for phrase in ("zh_canonical", "en_canonical", "ambiguous_or_deprecated", "domain_range"):
+        assert phrase in table
 
 
 def test_fixture_set_covers_term_drift_and_conflicts():
@@ -68,6 +77,47 @@ def test_fixture_set_covers_term_drift_and_conflicts():
     expected = (FIXTURE_DIR / "expected-behavior.md").read_text(encoding="utf-8")
     for phrase in ("标准术语", "高级感", "P0/P1", "不能全局替换"):
         assert phrase in expected
+
+
+def test_drift_scanner_flags_unregistered_wrapper_terms(tmp_path: Path):
+    script = SKILL_DIR / "scripts" / "check_terminology_drift.py"
+    report = tmp_path / "drift.json"
+    bad = subprocess.run(
+        [
+            sys.executable,
+            str(script),
+            "--table",
+            str(FIXTURE_DIR / "table-flow-maldistribution.md"),
+            "--manuscript",
+            str(FIXTURE_DIR / "manuscript-wrapper-term.tex"),
+            "--json-out",
+            str(report),
+        ],
+        cwd=ROOT,
+        check=False,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+    )
+    assert bad.returncode == 1, bad.stdout + bad.stderr
+    kinds = {item["kind"] for item in json.loads(report.read_text(encoding="utf-8"))}
+    assert "deprecated-or-ambiguous-alias" in kinds or "unregistered-wrapper" in kinds
+    good = subprocess.run(
+        [
+            sys.executable,
+            str(script),
+            "--table",
+            str(FIXTURE_DIR / "table-flow-maldistribution.md"),
+            "--manuscript",
+            str(FIXTURE_DIR / "manuscript-canonical.tex"),
+        ],
+        cwd=ROOT,
+        check=False,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+    )
+    assert good.returncode == 0, good.stdout + good.stderr
 
 
 if __name__ == "__main__":

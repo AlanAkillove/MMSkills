@@ -142,7 +142,11 @@ skills/<skill-name>/SKILL.md
 
 如果当前版本确认支持 Agent Skills，可以检查其 user/workspace discovery tier、trust/consent 状态以及当前版本的 `skills install`、`skills link`、`skills list` 或刷新命令。命令和路径必须以当前 `gemini --help`/官方文档为准；这些命令不能作为跨平台安装命令。如果只是把目录链接到 `.agents/skills` 或 `.gemini/skills`，仍要单独验证宿主是否发现并能激活。
 
-### 5.4 其他 Agent 应用
+### 5.4 DeepSeek Harness
+
+DSH 是可选宿主，不是发布门。源技能仍在仓库 `skills/`；需要时用 `hosts/deepseek-harness/sync_adapter.py` 生成 `native-adapter` 镜像（默认 `.agents/`），不要改写源 `SKILL.md` 或把 DSH 工具 API 写进主架构。脚本始终从上游仓库根目录运行。安装后仍要分开报告 copied / discovered / activated / verified。缺宿主时记 `not_run`。
+
+### 5.5 其他 Agent 应用
 
 不得因为应用名称包含“Agent”“Copilot”“Assistant”或“Skill”就推断它支持本标准。按下列顺序判断：
 
@@ -156,18 +160,19 @@ skills/<skill-name>/SKILL.md
 
 ## 六、技能范围与作用域
 
-本仓库包含多个互相交接的专项技能。Agent 不应默认把 23 个技能全文注入每次会话；应根据用户目标选择最小可用集合，并说明缺少哪些上游材料会限制结果。
+本仓库包含一个极薄入口和多个互相交接的专项技能。Agent 不应把全部 specialist 全文注入每次会话；默认只加载 `math-modeling`，再按当前意图打开一个角色和最少 specialist。
 
 推荐按以下功能族起步，实际名称以安装时的 `skills/` 目录清单为准：
 
 | 用户目标 | 优先候选技能 |
 |---|---|
+| 默认入口 | `math-modeling`（建模手 / 编程手 / 论文手） |
 | 题意、数据和模型准备 | `modeling-problem-intake`、`modeling-rules-profile`、`modeling-data-audit`、`modeling-assumption-ledger`、`modeling-model-architect`、`modeling-experiment-validator` |
 | 论文结构、审稿和自然化 | `modeling-paper-architect`、`modeling-paper-reviewer`、`modeling-ai-pattern-reviewer`、`modeling-terminology-auditor`、`modeling-paper-naturalizer`、`modeling-reader-experience-auditor` |
 | 反同质化与作者判断 | `modeling-distinctiveness-coach`、`modeling-anti-homogenization-auditor`、`modeling-claim-evidence-audit` |
 | 图表制作与审计 | `modeling-figure-designer`、`modeling-figure-table-auditor` |
 | 规则、披露与提交 | `modeling-rules-profile`、`modeling-ai-use-disclosure`、`modeling-support-materials-auditor`、`modeling-final-preflight`、`modeling-process-freezer` |
-| 全流程编排 | `modeling-pipeline-orchestrator`，并按其依赖图装载专项技能 |
+| 完整赛程 / 恢复 / 提交诊断 | `modeling-pipeline-orchestrator`，普通对话不要先加载它 |
 
 作用域建议：
 

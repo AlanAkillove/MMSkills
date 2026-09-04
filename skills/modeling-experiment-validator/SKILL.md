@@ -23,7 +23,7 @@ description: "把数模论文中的计算、仿真、对照、敏感性和稳健
 
 先直接回答当前问题：这个结果支持哪条主张、缺什么设置、失败有没有留下。默认不先写五份实验材料。
 
-解释已有结果时，先做结果—主张核对。新增实验或把结果当最终证据时，再补齐输入、随机设置和 `output_hashes`。常用类型包括 `baseline_comparison`、`sensitivity`、`uncertainty_or_repetition`；不是每个模型都需要全部类型。
+解释已有结果时，先做结果—主张核对。新增实验或把结果当最终证据时，再补齐输入、随机设置和 `output_hashes`。常用类型包括 `baseline_comparison`、`sensitivity`、`uncertainty_or_repetition`；不是每个模型都需要全部类型。没有有意义对照时不要编造 baseline。普通试算只写轻量 `run_summary.json`，不要每轮实验报告；正式写稿前才 freeze `results_snapshot`。
 
 只有跨会话、留痕、`full` 或最终交付时，才落盘 registry、验证矩阵和复现清单。
 

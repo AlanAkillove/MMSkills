@@ -15,9 +15,14 @@ def test_compatibility_matrix_is_capability_based_and_conservative():
     required_states = set(payload["source_contract"]["required_states"])
     assert {"partial", "blocked", "verified"}.issubset(required_states)
     hosts = payload["hosts"]
-    assert {host["host_id"] for host in hosts} == {"codex", "claude-code", "gemini-cli", "generic-agent"}
+    ids = {host["host_id"] for host in hosts}
+    assert {"codex", "claude-code", "gemini-cli", "generic-agent"} <= ids
+    by_id = {host["host_id"]: host for host in hosts}
+    assert by_id["codex"]["status"] == "fixture_only"
+    assert by_id["codex"].get("behavior_runner") == "tests/behavioral/run_host_case.py"
+    dsh = by_id["deepseek-harness"]
+    assert dsh["adapter_mode"] == "native-adapter"
+    assert dsh["status"] == "optional"
+    assert dsh.get("required_for_release") is False
     for host in hosts:
-        assert host["status"] == "fixture_only"
-        if host["host_id"] == "codex":
-            assert host.get("behavior_runner") == "tests/behavioral/run_host_case.py"
         assert "report_missing_capabilities" in host["smoke_actions"] or "verify_artifact" in host["smoke_actions"]

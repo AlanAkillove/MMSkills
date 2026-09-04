@@ -1,0 +1,7 @@
+{
+  "candidate_id": "black-box",
+  "family": "other",
+  "checks": [{"name": "anything", "result": "pass", "note": ""}],
+  "verdict": "feasible_to_try",
+  "overall_score": 96
+}

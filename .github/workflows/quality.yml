@@ -44,9 +44,10 @@ jobs:
           import yaml
 
           for path in Path(".").rglob("*.yaml"):
-              if "tmp" not in path.parts:
-                  with path.open(encoding="utf-8") as handle:
-                      yaml.safe_load(handle)
+              if {"tmp", ".agents", ".git", "real-projects-tests"} & set(path.parts):
+                  continue
+              with path.open(encoding="utf-8") as handle:
+                  yaml.safe_load(handle)
           print("YAML parse passed")
           PY
 

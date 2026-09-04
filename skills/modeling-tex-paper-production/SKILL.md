@@ -83,6 +83,14 @@ AI 声明不是 TeX 模板的默认装饰。只有目标赛事要求、且事件
 
 先用 XeLaTeX 或明确的 `latexmk -xelatex` 编译，再处理 warning。至少渲染摘要页、含公式页、最密集的图表页、参考文献页和附录页；检查中文字体、数学符号、图注/表头、浮动体位置、孤行孤标题、页码连续性、超出边界、空白页、目录链接和实际字号。构建日志中的 `Overfull`、`Undefined`、`Missing` 和字体替换都要逐项处理或记录为 `unknown`。
 
+对生成的 PDF 运行机械页面检查：
+
+```text
+python skills/modeling-tex-paper-production/scripts/check_pdf_visual.py paper.pdf --paper a4
+```
+
+它检查页数、纸张尺寸、空白页、文本能否抽出、元数据/路径泄露。没有 pymupdf 时光栅抽查记为 `unassessed`，不能写成页面已通过。视觉美感仍由人看渲染页。
+
 不要为满足页数上限统一压缩全文。优先删重复叙述、移走不承担主张的中间输出、合并重复图表、将长推导/代码放入赛事允许的附录或支撑材料；若规则把附录计入总页数，必须在 profile 中明确并让人决定取舍。
 
 在交付前另行运行 `modeling-final-preflight/scripts/check_manuscript_quality.py`，检查草稿状态、待填内容、内部编号、过程性话语、摘要密度和失效交叉引用。它是成文清洁检查，不是 AI 检测或论文评分器。

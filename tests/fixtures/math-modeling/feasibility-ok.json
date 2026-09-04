@@ -1,0 +1,9 @@
+{
+  "candidate_id": "1d-manifold",
+  "family": "physics",
+  "checks": [
+    {"name": "units_consistent", "result": "pass", "note": "K/W throughout"},
+    {"name": "compute_budget", "result": "unknown", "note": "mesh size not yet estimated"}
+  ],
+  "verdict": "feasible_to_try"
+}

@@ -19,18 +19,29 @@ hosts:
     smoke_actions: [discover, activate, run_behavior_case, verify_artifact]
     behavior_runner: tests/behavioral/run_host_case.py
     status: fixture_only
+    required_for_release: true
   - host_id: claude-code
     adapter_mode: native-standard-or-native-adapter
     evidence_source: host-specific-current-documentation
     smoke_actions: [discover, activate, run_behavior_case, verify_artifact]
     status: fixture_only
+    required_for_release: false
   - host_id: gemini-cli
     adapter_mode: native-standard-or-native-adapter
     evidence_source: host-specific-current-documentation
     smoke_actions: [discover, activate, run_behavior_case, verify_artifact]
     status: fixture_only
+    required_for_release: false
+  - host_id: deepseek-harness
+    adapter_mode: native-adapter
+    evidence_source: hosts/deepseek-harness/README.md
+    smoke_actions: [sync_adapter, discover, verify_artifact]
+    adapter_script: hosts/deepseek-harness/sync_adapter.py
+    status: optional
+    required_for_release: false
   - host_id: generic-agent
     adapter_mode: project-instructions-or-prompt-only
     evidence_source: host-capability-probe
     smoke_actions: [map_source_contract, report_missing_capabilities, verify_artifact]
     status: fixture_only
+    required_for_release: false

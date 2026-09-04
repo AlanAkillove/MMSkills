@@ -15,7 +15,10 @@
 - `familiarization_open_questions.md`：题目熟悉阶段的未决问题和解锁条件；
 - `decision_log.md`：人类做出的关键选择；
 - `claim_evidence_matrix.csv`：主张—证据—边界映射；
-- `terminology_ledger.md`：术语、定义、首次出现、替换和禁用候选；
+- `terminology_ledger.md`：旧版术语账本；新项目优先用 `terminology_table.md`；
+- `terminology_table.md`：建模阶段建立的概念/符号表，写作阶段只做 drift；
+- `run_summary.json`：单次实验的轻量运行摘要，不是实验报告；
+- `feasibility_probe.json`：编码前的便宜证伪记录，禁止打分；
 - `experiment_registry.jsonl`：实验、参数、数据版本、结果和复现入口；
 - `model_candidate_cards.md`：逐候选模型的通俗用途、分项评估、代价、风险、未知和理解校验；
 - `model_decision_brief.md`：候选并列比较、验证优先级和人类确认问题；

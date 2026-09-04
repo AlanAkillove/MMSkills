@@ -27,6 +27,7 @@ def test_entrypoint_defines_tex_scope_and_human_boundary():
         "needs-human-confirmation",
         "modeling-final-preflight",
         "modeling-process-freezer",
+        "check_pdf_visual.py",
     ):
         assert phrase in content
 
