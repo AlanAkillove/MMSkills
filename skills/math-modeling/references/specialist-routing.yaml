@@ -1,5 +1,5 @@
 # Machine-readable default ownership. Not a hard dependency graph.
-schema_version: "0.3.0-dev"
+schema_version: "0.3.0-rc"
 never_preload:
   - modeling-pipeline-orchestrator
   - modeling-process-freezer
@@ -44,6 +44,17 @@ intents:
     role: inherit
     specialists: []
     persist_artifacts: false
+    requires_context: true
+  figure_inspect:
+    role: inherit
+    specialists: []
+    persist_artifacts: false
+    requires_context: true
+  numeric_ambiguous:
+    role: inherit
+    specialists: []
+    persist_artifacts: false
+    requires_context: true
   understand:
     role: modeler
     specialists: [modeling-problem-familiarization]

@@ -10,13 +10,14 @@
 - 反同质化与 AI 披露设计草案。
 - 中性 TeX 论文模板、赛事格式映射和 TeX/PDF 版式预检 skill（本轮新增）。
 
-## 阶段 1.0：三角色工作台（进行中，0.3.0-dev）
+## 阶段 1.0：三角色工作台（进行中，0.3.0-rc）
 
-按 ADR 0009 开始 0.3.0，不把算法知识库做成选型入口：
+按 ADR 0009 冻结 0.3 方向，不把算法知识库做成选型入口，也不再增加 skill：
 
-1. 已完成：`math-modeling` 入口、三角色指南、`route_role.py`、编排器降级、术语 establish/audit 与 drift 扫描、results snapshot、run_summary、可行性探测记录、图表 placement、本地 DOI/citation 对照、终检工作台胶水、PDF 机械视觉 QA、可选 DSH 薄适配；
-2. 待做：联网文献发现（仍须与核验分开）；有 pymupdf 时再补光栅页抽查的宿主验证；
-3. 发布门：真实 Agent 回放（局部任务直达、物理工程题文献驱动、数据题不过度检索、术语 drift、旧数字、test1）。不能把本阶段 pytest 写成 0.3.0 实践成功。DSH 不是发布门。
+1. 已完成：`math-modeling` 入口、三角色指南、编排器降级、术语 establish/audit、results snapshot、run_summary、可行性探测、图表 placement、本地 citation 对照、终检胶水、PDF 机械视觉 QA、可选 DSH 薄适配；
+2. 收口中：router 在无上下文时返回 `unknown` 而不是猜 modeler；旧架构文档降为 legacy 附录；文献默认对话综合、事件驱动落盘；model-architect 改为语义证据门；snapshot 与 preflight 零检查/纸张/身份边界；
+3. 待做：联网文献发现（仍须与核验分开）；有 pymupdf 时再补光栅页抽查的宿主验证；
+4. 发布门：真实 Agent 回放（局部任务直达、物理工程题文献驱动、数据题不过度检索、术语 drift、旧数字、test1 / 26A）。不能把本阶段 pytest 写成 0.3.0 实践成功。DSH 不是发布门。适配器复制整个 `skills/` 树，不能假装宿主只发现 `math-modeling`。
 
 对应决策见 [`docs/adr/0009-role-oriented-workbench.md`](adr/0009-role-oriented-workbench.md)。
 

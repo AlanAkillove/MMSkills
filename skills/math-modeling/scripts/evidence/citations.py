@@ -34,25 +34,48 @@ def normalize_doi(value: str) -> str:
 
 
 def _norm_title(value: Any) -> str:
-    return re.sub(r"\s+", " ", str(value or "").strip().lower())
+    text = re.sub(r"\s+", " ", str(value or "").strip().lower())
+    text = re.sub(r"[\"'`“”‘’]", "", text)
+    text = re.sub(r"[:：;；,.。!！?？()\[\]{}]", " ", text)
+    text = text.replace("—", " ").replace("–", " ").replace("-", " ")
+    return re.sub(r"\s+", " ", text).strip()
 
 
-def compare_records(claimed: dict[str, Any], fetched: dict[str, Any]) -> list[str]:
+def _titles_compatible(claimed: str, fetched: str) -> bool:
+    if not claimed or not fetched:
+        return True
+    if claimed == fetched:
+        return True
+    return claimed in fetched or fetched in claimed
+
+
+def analyze_records(claimed: dict[str, Any], fetched: dict[str, Any]) -> tuple[list[str], list[str]]:
     errors: list[str] = []
+    warnings: list[str] = []
     claimed_doi = normalize_doi(str(claimed.get("doi") or ""))
     fetched_doi = normalize_doi(str(fetched.get("doi") or ""))
-    if not claimed_doi or not fetched_doi:
-        errors.append("DOI missing; keep as unverified candidate")
-    elif claimed_doi != fetched_doi:
-        errors.append(f"DOI mismatch: {claimed_doi} != {fetched_doi}")
+    if claimed_doi and fetched_doi:
+        if claimed_doi != fetched_doi:
+            errors.append(f"DOI mismatch: {claimed_doi} != {fetched_doi}")
+    elif claimed_doi or fetched_doi:
+        warnings.append("DOI present on only one record")
+    else:
+        warnings.append(
+            "DOI absent; official reports, standards, and government pages may have no DOI"
+        )
     claimed_title = _norm_title(claimed.get("title"))
     fetched_title = _norm_title(fetched.get("title"))
-    if claimed_title and fetched_title and claimed_title != fetched_title:
+    if claimed_title and fetched_title and not _titles_compatible(claimed_title, fetched_title):
         errors.append("title mismatch")
     claimed_year = str(claimed.get("year") or "").strip()
     fetched_year = str(fetched.get("year") or "").strip()
     if claimed_year and fetched_year and claimed_year != fetched_year:
         errors.append("year mismatch")
+    return errors, warnings
+
+
+def compare_records(claimed: dict[str, Any], fetched: dict[str, Any]) -> list[str]:
+    errors, _warnings = analyze_records(claimed, fetched)
     return errors
 
 
@@ -82,7 +105,9 @@ def main() -> int:
     if args.command == "compare":
         claimed = json.loads(args.claimed.read_text(encoding="utf-8"))
         fetched = json.loads(args.fetched.read_text(encoding="utf-8"))
-        errors = compare_records(claimed, fetched)
+        errors, warnings = analyze_records(claimed, fetched)
+        for item in warnings:
+            print(f"WARNING: {item}")
         if errors:
             for item in errors:
                 print(f"ERROR: {item}")

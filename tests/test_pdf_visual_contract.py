@@ -112,3 +112,26 @@ def test_blank_page_wrong_size_and_path_metadata(tmp_path: Path):
     assert any(item.startswith("pdf-blank-") for item in ids), ids
     assert any(item.startswith("pdf-page-size-") for item in ids), ids
     assert "pdf-meta-path" in ids, ids
+
+
+def test_letter_paper_is_ok_when_profile_asks_for_letter(tmp_path: Path):
+    pdf = tmp_path / "letter.pdf"
+    write_simple_pdf(pdf, width=612.0, height=792.0, texts=["MCM page"])
+    report = inspect_pdf(pdf, paper="letter", scan_identity=True)
+    assert not [item for item in report["findings"] if item["severity"] in {"P0", "P1"}], report["findings"]
+    unassessed = inspect_pdf(pdf, paper=None, scan_identity=False)
+    assert any(item["id"] == "pdf-paper-unassessed" for item in unassessed["findings"])
+    assert not [item for item in unassessed["findings"] if item["severity"] in {"P0", "P1"}]
+
+
+def test_edu_cn_bibliography_url_is_not_identity_leak(tmp_path: Path):
+    pdf = tmp_path / "refs.pdf"
+    write_simple_pdf(
+        pdf,
+        width=595.27,
+        height=841.89,
+        texts=["https://www.tsinghua.edu.cn/paper.pdf"],
+    )
+    report = inspect_pdf(pdf, paper="a4", scan_identity=True)
+    ids = {item["id"] for item in report["findings"]}
+    assert not any(item.startswith("pdf-identity-") for item in ids), report["findings"]

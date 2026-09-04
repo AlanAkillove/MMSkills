@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-"""Route a user turn to one role and a small specialist set. This is not a workflow engine."""
+"""High-confidence role hint for the current turn. This is not a workflow engine
+and not a keyword classifier that guesses a role when context is missing.
+"""
 
 from __future__ import annotations
 
@@ -8,7 +10,7 @@ import json
 import re
 import sys
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Tuple
 
 import yaml
 
@@ -16,24 +18,30 @@ import yaml
 ROOT = Path(__file__).resolve().parents[3]
 ROUTING_PATH = Path(__file__).resolve().parents[1] / "references" / "specialist-routing.yaml"
 
-INTENT_PATTERNS: List[tuple[str, re.Pattern[str]]] = [
-    ("resume", re.compile(r"恢复会话|跨会话|handoff|process-freezer|续接上次", re.I)),
-    ("full_audit", re.compile(r"全流程审计|完整审查|full audit", re.I)),
-    ("submission_plan", re.compile(r"提交计划|安排提交|submission plan", re.I)),
-    ("diagnose_state", re.compile(r"项目状态诊断|stage registry|pipeline plan", re.I)),
-    ("disclose", re.compile(r"AI\s*披露|使用详情\.pdf|disclosure", re.I)),
-    ("preflight", re.compile(r"提交前|终检|preflight", re.I)),
-    ("terminology_audit", re.compile(r"术语漂移|术语审查|terminology drift", re.I)),
-    ("terminology_establish", re.compile(r"术语表|统一叫|canonical term|terminology_table", re.I)),
-    ("literature", re.compile(r"文献|相关工作|论文检索|DOI|orientation", re.I)),
-    ("figure", re.compile(r"画图|绘图|检查图|figure|plot", re.I)),
-    ("experiment", re.compile(r"实验|跑代码|数值|求解|python|matlab", re.I)),
-    ("model", re.compile(r"比较.*模型|候选模型|模型设计|采用这个模型", re.I)),
-    ("understand", re.compile(r"理解|弄懂|歧管|机理|题意|familiar", re.I)),
-    ("revise", re.compile(r"重写摘要|改摘要|续写|自然化|5\.3|章节", re.I)),
-    ("draft", re.compile(r"写论文|正文|摘要|draft", re.I)),
-    ("continue_local", re.compile(r"继续问题|接着(写|做|算)|continue (question|q)\s*\d+", re.I)),
+# (intent, pattern, default_confidence)
+INTENT_PATTERNS: List[Tuple[str, re.Pattern[str], str]] = [
+    ("resume", re.compile(r"恢复会话|跨会话|handoff|process-freezer|续接上次", re.I), "high"),
+    ("full_audit", re.compile(r"全流程审计|完整审查|full audit", re.I), "high"),
+    ("submission_plan", re.compile(r"提交计划|安排提交|submission plan", re.I), "high"),
+    ("diagnose_state", re.compile(r"项目状态诊断|stage registry|pipeline plan", re.I), "high"),
+    ("disclose", re.compile(r"AI\s*披露|使用详情\.pdf|disclosure", re.I), "high"),
+    ("preflight", re.compile(r"提交前|终检|preflight", re.I), "high"),
+    ("terminology_audit", re.compile(r"术语漂移|术语审查|terminology drift", re.I), "high"),
+    ("terminology_establish", re.compile(r"术语表|统一叫|canonical term|terminology_table", re.I), "high"),
+    ("literature", re.compile(r"文献|相关工作|论文检索|DOI|orientation", re.I), "medium"),
+    ("figure", re.compile(r"画图|绘图|figure|plot", re.I), "medium"),
+    ("figure_inspect", re.compile(r"检查图|修改图", re.I), "low"),
+    ("experiment", re.compile(r"实验|跑代码|求解|python|matlab", re.I), "medium"),
+    ("numeric_ambiguous", re.compile(r"数值", re.I), "low"),
+    ("model", re.compile(r"比较.*模型|候选模型|模型设计|采用这个模型|继续.*模型|推模型", re.I), "high"),
+    ("understand", re.compile(r"理解|弄懂|歧管|机理|题意|familiar", re.I), "medium"),
+    ("revise", re.compile(r"重写摘要|改摘要|续写|自然化|精修\s*\d|5\.3|章节", re.I), "high"),
+    ("draft", re.compile(r"写论文|正文|摘要|draft", re.I), "medium"),
+    ("continue_local", re.compile(r"继续问题|接着(写|做|算)|continue (question|q)\s*\d+", re.I), "low"),
 ]
+
+# Intents that cross roles. Do not guess modeler/computationalist/writer.
+CONTEXT_REQUIRED_INTENTS = {"continue_local", "figure_inspect", "numeric_ambiguous"}
 
 
 def load_routing(path: Path = ROUTING_PATH) -> Dict[str, Any]:
@@ -43,14 +51,15 @@ def load_routing(path: Path = ROUTING_PATH) -> Dict[str, Any]:
     return payload
 
 
-def classify_intent(query: str) -> str:
+def classify_intent(query: str) -> Tuple[str, str, str]:
+    """Return (intent, matched_rule, confidence). Empty/unmatched is continue_local."""
     text = query.strip()
     if not text:
-        return "continue_local"
-    for intent, pattern in INTENT_PATTERNS:
+        return "continue_local", "empty_query", "low"
+    for intent, pattern, confidence in INTENT_PATTERNS:
         if pattern.search(text):
-            return intent
-    return "continue_local"
+            return intent, intent, confidence
+    return "continue_local", "unmatched", "low"
 
 
 def _as_list(value: Any) -> List[str]:
@@ -66,16 +75,33 @@ def route_query(
     routing: Optional[Dict[str, Any]] = None,
 ) -> Dict[str, Any]:
     routing = routing or load_routing()
-    intent = classify_intent(query)
+    intent, matched_rule, confidence = classify_intent(query)
     spec = (routing.get("intents") or {}).get(intent) or {}
-    role = spec.get("role") or "inherit"
-    if role == "inherit":
-        role = current_role or "modeler"
+    requires_context = bool(spec.get("requires_context")) or intent in CONTEXT_REQUIRED_INTENTS
+    declared_role = spec.get("role") or "inherit"
+    if declared_role == "inherit" or (requires_context and not current_role):
+        if current_role:
+            role = current_role
+            if requires_context:
+                confidence = "medium"
+            requires_context = False
+        else:
+            role = "unknown"
+            confidence = "low"
+            requires_context = True
+            declared_role = "inherit"
+    else:
+        role = declared_role
     specialists = _as_list(spec.get("specialists"))
+    if role == "unknown":
+        specialists = []
     orchestrator_intents = set(_as_list(routing.get("orchestrator_intents")))
     never_preload = _as_list(routing.get("never_preload"))
     load_orchestrator = intent in orchestrator_intents
-    loaded = ["math-modeling", f"role:{role}", *specialists]
+    loaded = ["math-modeling"]
+    if role != "unknown":
+        loaded.append(f"role:{role}")
+    loaded.extend(specialists)
     if load_orchestrator and "modeling-pipeline-orchestrator" not in specialists:
         loaded.append("modeling-pipeline-orchestrator")
     return {
@@ -88,7 +114,14 @@ def route_query(
         "load_stage_registry": load_orchestrator,
         "persist_artifacts": bool(spec.get("persist_artifacts", False)),
         "never_preload": never_preload,
-        "note": "Load only these capabilities this turn. Do not open the stage registry unless load_stage_registry is true.",
+        "confidence": confidence,
+        "matched_rule": matched_rule,
+        "requires_context": requires_context,
+        "note": (
+            "High-confidence hint only. If role is unknown or requires_context is true, "
+            "ask which role is in progress; do not default to modeler. "
+            "Do not open the stage registry unless load_stage_registry is true."
+        ),
     }
 
 
@@ -106,6 +139,9 @@ def main() -> int:
         return 0
     print(f"INTENT: {plan['intent']}")
     print(f"ROLE: {plan['role']}")
+    print(f"CONFIDENCE: {plan['confidence']}")
+    print(f"MATCHED_RULE: {plan['matched_rule']}")
+    print(f"REQUIRES_CONTEXT: {plan['requires_context']}")
     print(f"SPECIALISTS: {', '.join(plan['specialists']) or '-'}")
     print(f"LOAD_ORCHESTRATOR: {plan['load_orchestrator']}")
     print(f"LOAD_STAGE_REGISTRY: {plan['load_stage_registry']}")

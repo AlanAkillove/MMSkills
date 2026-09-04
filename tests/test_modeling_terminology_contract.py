@@ -25,6 +25,7 @@ def test_entrypoint_has_term_boundaries():
         "高级感",
         "不机械全局替换",
         "Research Chair/用户",
+        "mechanical drift scan",
         "establish",
         "audit",
         "terminology_table.md",

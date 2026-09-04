@@ -2,25 +2,30 @@
 
 本文件记录可复用技能和共享契约的变化。
 
-## [Unreleased] 0.3.0-dev
-
-### Added
-
-- 极薄的 `math-modeling` 统一入口与 Modeler / Computationalist / Writer 角色指南；`route_role.py` 按当前话语分流，普通任务不预加载编排器和 stage registry。
-- ADR 0009：problem-first、literature-guided 工作台；不建设用于模型发现的算法知识库。
-- `terminology_table.md` 与术语 `establish` / `audit` 模式；机械 drift 扫描脚本。
-- 轻量 `results_snapshot` 冻结与 source-hash 过期检查。
-- `run_summary.json`、模型可行性探测记录（禁止打分）、图表 `placement`（diagnostic/comparison/paper/appendix）与 PNG 几何检查。
-- 本地 DOI 规范化 / citation 字段对照 / DOI 去重；终检 `check_workbench_artifacts.py` 串联过期数字、术语 drift、diagnostic 图和 citation 对照。
-- 可选 DeepSeek Harness `native-adapter` 镜像（`hosts/deepseek-harness/`），不改写源 skill，不是发布门。
-- PDF 机械视觉 QA：纸张尺寸、空白页、文本抽取、元数据/路径泄露；光栅未安装时记 `unassessed`。
+## [Unreleased] 0.3.0-rc
 
 ### Changed
 
 - `modeling-pipeline-orchestrator` 降为完整赛程、恢复、full audit 和提交诊断入口。
-- `modeling-model-architect` 明确禁止算法名菜单和为合同编造 baseline。
-- `modeling-literature-evidence` 增加 `modeling-synthesis` 模式：搜索≠核验，文献不是模型模板。
+- Router 不再把无上下文的 `continue_local` 猜成 modeler；输出 `confidence` / `matched_rule` / `requires_context`，缺少角色时为 `unknown`。
+- `architecture.md` 把 stage 图、`project_state` 清单、三套 profile 和旧实施顺序降为 legacy/full-orchestration 附录。
+- `modeling-literature-evidence` 默认对话综合；ledger/matrix 仅在跨会话、进入模型依据、citation-audit 或提交时落盘。
+- `modeling-model-architect` 的正式采用改为语义证据（题意口径尚未人类确认），不再要求先跑名为 `problem_familiarization` 的 skill。
+- `results_snapshot.json` 改为多 claim、仓库相对路径；机械产物是 `snapshot`，有 `decision_id` 后才是 `frozen`。
+- 终检胶水零检查输出 `UNASSESSED`；PDF 纸张从赛事 profile 传入；身份扫描不再把 `.edu.cn` 当 P1。
+- 术语 drift 脚本明确为 mechanical scan；`run_summary` 记录 Python/OS/git revision；citation 对照允许无 DOI，标题允许副标题差异。
+- DSH 适配器文档改为：复制整个 `skills/` 树，不能强制宿主只发现 `math-modeling`。
 - Writer / 终检默认消费 `terminology_table` 与 `results_snapshot`；`pytest.ini` 把测试范围限制在 `tests/`，避免本地嵌套副本干扰收集。
+
+### Added
+
+- 极薄的 `math-modeling` 统一入口与 Modeler / Computationalist / Writer 角色指南；普通任务不预加载编排器和 stage registry。
+- ADR 0009：problem-first、literature-guided 工作台；不建设用于模型发现的算法知识库。
+- `terminology_table.md` 与术语 `establish` / `audit` 模式；机械 drift 扫描脚本。
+- 轻量 results snapshot、`run_summary.json`、可行性探测记录（禁止打分）、图表 `placement` 与 PNG 几何检查。
+- 本地 DOI 规范化 / citation 字段对照 / DOI 去重；终检 `check_workbench_artifacts.py`。
+- 可选 DeepSeek Harness `native-adapter` 镜像（`hosts/deepseek-harness/`），不改写源 skill，不是发布门。
+- PDF 机械视觉 QA：纸张尺寸、空白页、文本抽取、元数据/路径泄露；光栅未安装时记 `unassessed`。
 
 ## [0.2.2] - 2026-09-01
 

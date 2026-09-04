@@ -22,8 +22,9 @@ python hosts/deepseek-harness/sync_adapter.py --target .agents
 
 ## 运行约定
 
-- 默认只让 DSH 发现 `math-modeling`；普通对话不要预加载全部 specialist。
-- 脚本按上游仓库根目录执行，例如：
+适配器会镜像整个 `skills/` 树，以便 specialist 的相对链接仍然有效。`source-manifest.yaml` 的 `default_entry` 是 `math-modeling`，但这**不是** Harness 级强制：适配器本身不能阻止宿主把全部 specialist 列给模型。若 DSH 会把 28 个 Skill 都暴露给模型，顶层认知复杂度仍需在会话里遵守“只加载 math-modeling + 一个角色”。copied ≠ discovered/activated/verified。
+
+脚本按上游仓库根目录执行，例如：
 
 ```text
 python skills/modeling-tex-paper-production/scripts/check_pdf_visual.py paper.pdf
@@ -31,6 +32,6 @@ python skills/modeling-tex-paper-production/scripts/check_pdf_visual.py paper.pd
 
 不要把这些命令改写成适配器内部路径后再写回源 skill。
 
-- 缺 DSH 宿主时，兼容性状态是 `optional` / `not_run`，不阻挡 Codex 发布。
+缺 DSH 宿主时，兼容性状态是 `optional` / `not_run`，不阻挡 Codex 发布。
 
 安装时仍按 [跨 Agent 安装教程](../../docs/agent-skill-installation.md) 报告 copied / discovered / activated / verified；镜像存在不等于已经激活。

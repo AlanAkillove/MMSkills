@@ -21,6 +21,7 @@ def test_skill_has_source_boundary_and_no_fabrication_gate():
         "citation-audit",
         "literature_insight_id",
         "source_does_not_support",
+        "默认不落盘",
     ):
         assert phrase in text
 

@@ -7,6 +7,9 @@ import argparse
 import json
 from datetime import datetime, timezone
 from pathlib import Path
+import platform
+import subprocess
+import sys
 from typing import Any
 
 ALLOWED_STATUS = {"ok", "failed", "unknown"}
@@ -28,6 +31,29 @@ def validate_summary(payload: dict[str, Any]) -> list[str]:
     return errors
 
 
+def capture_environment(repo_root: Path | None = None) -> dict[str, Any]:
+    env: dict[str, Any] = {
+        "recorded_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "python": sys.version.split()[0],
+        "implementation": sys.implementation.name,
+        "os": platform.platform(),
+        "executable": sys.executable,
+    }
+    try:
+        result = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            cwd=repo_root or Path.cwd(),
+            check=False,
+            capture_output=True,
+            text=True,
+            timeout=3,
+        )
+        env["git_revision"] = result.stdout.strip() if result.returncode == 0 else "unknown"
+    except (OSError, subprocess.SubprocessError):
+        env["git_revision"] = "unknown"
+    return env
+
+
 def build_summary(args: argparse.Namespace) -> dict[str, Any]:
     outputs: dict[str, Any] = {}
     if args.output_json:
@@ -42,7 +68,7 @@ def build_summary(args: argparse.Namespace) -> dict[str, Any]:
         "input_hash": args.input_hash or "",
         "parameters": json.loads(args.parameters) if args.parameters else {},
         "seed": args.seed,
-        "environment": {"recorded_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")},
+        "environment": capture_environment(),
         "outputs": outputs,
         "artifacts": artifacts,
         "warnings": [item.strip() for item in (args.warning or []) if item.strip()],

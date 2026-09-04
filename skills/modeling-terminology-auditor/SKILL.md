@@ -28,4 +28,4 @@ description: "在建模阶段建立共享术语与符号表，并在成稿后检
 
 先直接回答当前用词问题。`establish` 只改用户触及的几行；`audit` 默认对照 `terminology_table.md`（若只有旧的 `terminology_ledger.md` 则沿用）。需要留痕或最终交付时再写 audit 报告。
 
-机械别名/过期名扫描可用 `scripts/check_terminology_drift.py`。字段见 [terminology-schema.md](references/terminology-schema.md)；新词判据见 [term-decision-rubric.md](references/term-decision-rubric.md)；跨产物核对见 [cross-artifact-consistency.md](references/cross-artifact-consistency.md)；模式细节见 [recommended-workflow.md](references/recommended-workflow.md) 和 [research-basis.md](references/research-basis.md)。
+机械别名/过期名扫描可用 `scripts/check_terminology_drift.py`。它只检查表中列出的 deprecated/ambiguous aliases 和少量写死的包装词模式，是 **mechanical drift scan**。脚本输出 `OK` 不表示全文没有 AI 生造术语、高承诺词或概念层级漂移；那些仍须由 LLM 对照术语表做语义审查。字段见 [terminology-schema.md](references/terminology-schema.md)；新词判据见 [term-decision-rubric.md](references/term-decision-rubric.md)；跨产物核对见 [cross-artifact-consistency.md](references/cross-artifact-consistency.md)；模式细节见 [recommended-workflow.md](references/recommended-workflow.md) 和 [research-basis.md](references/research-basis.md)。

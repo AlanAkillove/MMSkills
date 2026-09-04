@@ -29,6 +29,7 @@ def test_entrypoint_is_baseline_first_and_human_led():
         "model_candidate_cards.md",
         "model_decision_brief.md",
         "problem_familiarization",
+        "语义证据要求",
         "literature_orientation_ledger",
         "P0",
         "P1",

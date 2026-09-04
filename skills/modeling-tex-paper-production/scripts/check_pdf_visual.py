@@ -19,7 +19,8 @@ A4 = (595.27, 841.89)
 LETTER = (612.0, 792.0)
 PAPERS = {"a4": A4, "letter": LETTER}
 PATH_RE = re.compile(r"(?:[A-Za-z]:[\\/](?:Users|home)|/Users/|/home/)")
-IDENTITY_RE = re.compile(r"(?:队号|指导老师|指导教师|\.edu\.cn)")
+# Contest cover tokens only. Do not treat .edu.cn / bibliography URLs as identity leaks.
+CONTEST_IDENTITY_RE = re.compile(r"(?:队号|指导老师|指导教师)")
 
 
 def _page_size(page: Any) -> tuple[float, float]:
@@ -37,14 +38,23 @@ def _size_ok(width: float, height: float, expected: tuple[float, float], tol: fl
 def inspect_pdf(
     path: Path,
     *,
-    paper: str = "a4",
+    paper: str | None = "a4",
     min_pages: int | None = None,
     max_pages: int | None = None,
     scan_identity: bool = True,
 ) -> dict[str, Any]:
     reader = PdfReader(str(path))
     findings: list[dict[str, Any]] = []
-    expected = PAPERS[paper]
+    expected = PAPERS.get(paper) if paper else None
+    if paper is None:
+        findings.append(
+            {
+                "id": "pdf-paper-unassessed",
+                "severity": "P2",
+                "status": "unassessed",
+                "message": "paper size not checked; pass --paper a4|letter from the contest profile",
+            }
+        )
     pages: list[dict[str, Any]] = []
     metadata = reader.metadata
     meta_text = " ".join(
@@ -53,8 +63,8 @@ def inspect_pdf(
     ) if metadata else ""
     if PATH_RE.search(meta_text):
         findings.append({"id": "pdf-meta-path", "severity": "P1", "message": "PDF metadata contains a local filesystem path"})
-    if scan_identity and IDENTITY_RE.search(meta_text):
-        findings.append({"id": "pdf-meta-identity", "severity": "P1", "message": "PDF metadata may contain identity or affiliation text"})
+    if scan_identity and CONTEST_IDENTITY_RE.search(meta_text):
+        findings.append({"id": "pdf-meta-identity", "severity": "P1", "message": "PDF metadata may contain contest identity text"})
 
     if not reader.pages:
         findings.append({"id": "pdf-empty", "severity": "P0", "message": "PDF has no pages"})
@@ -77,7 +87,7 @@ def inspect_pdf(
             "extraction": "ok" if text.strip() else ("unreliable" if images else "empty"),
         }
         pages.append(record)
-        if not _size_ok(width, height, expected):
+        if expected is not None and not _size_ok(width, height, expected):
             findings.append(
                 {
                     "id": f"pdf-page-size-{index}",
@@ -110,7 +120,7 @@ def inspect_pdf(
                     "message": f"page {index} text contains a local filesystem path",
                 }
             )
-        if scan_identity and IDENTITY_RE.search(text):
+        if scan_identity and CONTEST_IDENTITY_RE.search(text):
             findings.append(
                 {
                     "id": f"pdf-identity-{index}",

@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Flag manuscript tokens that contradict an established terminology table.
 
-This is a drift scanner, not a decision to invent or replace canonical terms.
+This is a mechanical drift scanner, not a decision to invent or replace canonical terms.
+OK does not mean the manuscript has no invented terminology, high-commitment words, or concept-level drift.
 """
 
 from __future__ import annotations
@@ -88,6 +89,7 @@ def main() -> int:
             print(f"DRIFT: {item['kind']}: {item['term']}")
         return 1
     print("OK: no mechanical terminology drift")
+    print("NOTE: this is an alias/wrapper scan only; it is not a semantic invented-term audit")
     return 0
 
 

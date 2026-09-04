@@ -20,6 +20,7 @@ def test_dsh_docs_are_optional_native_adapter():
         "math-modeling",
         "native-adapter",
         "仓库根目录",
+        "镜像整个",
     ):
         assert phrase in readme
     install = (ROOT / "docs" / "agent-skill-installation.md").read_text(encoding="utf-8")

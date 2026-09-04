@@ -42,6 +42,10 @@ def test_run_summary_rejects_scores_and_accepts_outputs(tmp_path: Path):
         str(good),
     )
     assert wrote.returncode == 0, wrote.stderr
+    env = json.loads(good.read_text(encoding="utf-8"))["environment"]
+    assert env["python"]
+    assert env["os"]
+    assert "git_revision" in env
     assert json.loads(good.read_text(encoding="utf-8"))["outputs"]["rmse"] == 2.18
     bad = tmp_path / "scored.json"
     bad.write_text(
@@ -103,6 +107,16 @@ def test_doi_normalize_and_local_citation_compare():
     )
     assert mismatched.returncode == 1
     assert "title mismatch" in mismatched.stdout
+    official = run(
+        script,
+        "compare",
+        "--claimed",
+        str(FIXTURES / "citation-no-doi-claimed.json"),
+        "--fetched",
+        str(FIXTURES / "citation-no-doi-fetched.json"),
+    )
+    assert official.returncode == 0, official.stdout + official.stderr
+    assert "DOI absent" in official.stdout
 
 
 def test_feasibility_probe_rejects_scoring():
@@ -158,3 +172,11 @@ def test_preflight_workbench_glue_flags_stale_numbers_and_wrapper_terms(
     assert "stale snapshot" in blob
     assert "diagnostic" in blob
     assert "terminology" in blob
+
+
+def test_preflight_glue_zero_checks_is_unassessed_not_ok():
+    result = run(PREFLIGHT / "check_workbench_artifacts.py")
+    assert result.returncode == 2
+    assert "UNASSESSED" in result.stdout
+    assert "OK: workbench artifacts" not in result.stdout
+    assert "checks_run" in result.stdout

@@ -7,7 +7,7 @@ Never preload the workflow. Load capability from the user's current intent outwa
 只知道：用户现在想做什么、手头有哪些材料、属于哪个角色。
 禁止：完整阶段图、stage registry、process-freezer、全部 specialist 清单当作本轮 SOP。
 
-入口：`skills/math-modeling/SKILL.md`。确定性分流：`scripts/route_role.py`。
+入口：`skills/math-modeling/SKILL.md`。确定性分流：`scripts/route_role.py`（高置信度提示；无 `current_role` 时 `continue_local` / `检查图` / `数值` 返回 `unknown`，不要猜 modeler）。
 
 ## Layer 1 — Role guide
 

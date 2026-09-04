@@ -68,6 +68,7 @@ def sync(repo: Path, target: Path) -> dict:
             "Do not rewrite SKILL.md for DSH.",
             "Run python scripts from the upstream repository root.",
             "copied is not discovered/activated/verified.",
+            "Adapter copies the full skills tree; it cannot hide specialists from the host.",
         ],
     }
     (target / "source-manifest.yaml").write_text(
