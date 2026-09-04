@@ -11,7 +11,7 @@ def test_readme_links_to_the_cross_agent_installation_prompt():
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
     assert "docs/agent-skill-installation.md" in readme
     assert "安装提示词" in readme
-    assert "## Agent 安装" in readme
+    assert "## 快速开始" in readme
     assert "https://github.com/AlanAkillove/MMSkills" in readme
 
 

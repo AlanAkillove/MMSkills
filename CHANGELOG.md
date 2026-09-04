@@ -2,7 +2,19 @@
 
 本文件记录可复用技能和共享契约的变化。
 
-## [Unreleased] 0.3.1
+## [Unreleased]
+
+### Changed
+
+- 公开仓库面清理：删除开发过程文档、调研总账和历史 ADR；当前有效边界写入 `docs/architecture.md`。
+- README 改为用户文档入口；致谢补充 nature-skills，并区分设计启发与第三方代码复用。
+- 质量模型改为与实现路径无关的结果标准；TeX 设计稿改为当前使用说明。
+
+### Removed
+
+- `docs/research-plan.md`、`docs/block-design.md`、`docs/implementation-roadmap.md`、`docs/research/`、`docs/ai-disclosure-design.md`、`docs/anti-homogenization-design.md`、`docs/roles-and-gates.md`、`docs/tex-template-design.md` 与 `docs/adr/`。
+
+## [0.3.1]
 
 ### Changed
 
@@ -13,7 +25,7 @@
 ### Added
 
 - `negative-signal-registry.md`、`academic-signal-registry.md` 与 `scripts/scan_language_signals.py`。
-- ADR 0010：证据约束的学术表达自然化。
+- 证据约束的学术表达自然化。
 
 ## [0.3.0-rc2]
 

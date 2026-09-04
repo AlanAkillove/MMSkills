@@ -6,6 +6,12 @@ output/
 build/
 dist/
 __pycache__/
+
+# Local development notes (not part of the public product)
+.dev/
+.dev-notes/
+.local-research/
+scratch/
 .agents/
 tests/behavioral/results/runs/*
 !tests/behavioral/results/runs/.gitkeep

@@ -4,5 +4,5 @@
 2. [Can You Make It Sound Like You?](https://aclanthology.org/2026.acl-long.2030/) 提示人工后编辑不必然恢复作者风格，且可能降低风格多样性。本技能把审查和改写分离，优先恢复题目特征与作者决策，而不是追求分数变化。
 3. [What Are LLMs Doing to Scientific Communication?](https://aclanthology.org/2026.lrec-1.142/) 说明语言复杂度、词汇多样性和可读性评价不能互相替代。本技能要求读者影响、证据和替代解释共同判断。
 4. [GPT detectors are biased against non-native English writers](https://doi.org/10.1016/j.patter.2023.100779) 与 [DetectGPT 相关研究](https://aclanthology.org/2023.findings-emnlp.94/) 说明检测器存在偏差和可操纵性，因此不作为作者/违规证据。
-5. 本项目的[反同质化设计](../../../docs/anti-homogenization-design.md)、[质量模型](../../../docs/quality-model.md) 和 [nature-skills](https://github.com/Yuan1z0825/nature-skills) 提供了题目特异性账本、证据锚点、按需资料和一致性扫描的工程启示；不照搬期刊标准。
+5. 本项目的[质量模型](../../../docs/quality-model.md)、[反同质化审查](../../modeling-anti-homogenization-auditor/SKILL.md) 和 [nature-skills](https://github.com/Yuan1z0825/nature-skills) 提供了题目特异性账本、证据锚点、按需资料和一致性扫描的工程启示；不照搬期刊标准。
 6. [lieflat-less-ai-tone](https://github.com/larashero3-dotcom/lieflat-less-ai-tone)（MIT，核验日期 2026-09-04）报告了通用中文对照语料上的方法：先用负面证据推翻流行“AI 味”清单，再做白名单最小改写，并让作者风格优先于通用规则。其语料未公开，第三方无法核验；人类侧也不是数模论文。本技能只借鉴这三项方法，不把其倍率写入阈值，不复制 11 条规则，不输出 AI 分数。

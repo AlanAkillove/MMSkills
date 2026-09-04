@@ -4,12 +4,11 @@
 
 ## 依据入口
 
-- 项目来源登记：`../../../docs/research/source-register.md`
+- 赛事规则快照：`../../../references/rules/cumcm-2026.yaml`
 - ICMJE AI 与研究出版建议：<https://www.icmje.org/recommendations/browse/artificial-intelligence/>
 - Nature 写作建议：<https://www.nature.com/nature-portfolio/for-authors/write>
 - Nature 格式指南：<https://www.nature.com/nature/for-authors/formatting-guide>
 - COPE 审稿伦理指南：<https://members.publicationethics.org/sites/default/files/cope-ethical-guidelines-peer-reviewers-v2_0.pdf>
-- 用户指定的开源参考与学术 skill 迁移边界：`../../../docs/research/source-register.md` 的 D 节。
 
 ## 迁移限制
 

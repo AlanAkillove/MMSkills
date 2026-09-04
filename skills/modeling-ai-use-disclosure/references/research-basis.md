@@ -9,7 +9,7 @@
 - 中国大学生数学建模竞赛 2026 年论文格式规范：<https://www.mcm.edu.cn/html_cn/node/4cd596519c9eb9fbd866398f6df0caa3.html>
 - 项目内规则 profile：`../../../references/rules/cumcm-2026.yaml`
 - 项目内历史会话读取协议：`../../../references/ai-use-history-protocol.md`
-- 项目内 AI 披露总体设计：`../../../docs/ai-disclosure-design.md`
+- 项目内规则到 PDF 的映射：`profile-to-pdf.md`
 
 ## 设计迁移
 

@@ -10,7 +10,7 @@ DOC = ROOT / "docs" / "architecture.md"
 def test_legacy_stage_graph_is_appendix_only():
     text = DOC.read_text(encoding="utf-8")
     assert "附录 A" in text
-    assert "Legacy / full-orchestration" in text
+    assert "完整编排路径" in text
     appendix = text.index("附录 A")
     assert text.index("RULES_PROFILE") > appendix
     assert "unknown" in text
