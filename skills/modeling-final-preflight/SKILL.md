@@ -53,7 +53,7 @@ description: "在提交前汇总规则、论文、题意、假设、主张证据
 
 ### 3. 检查成文质量
 
-对最终候选 TeX/Markdown 运行 `scripts/check_manuscript_quality.py`。它只检查可观察的残留和阅读风险：草稿或待填内容、疑似内部编号、过程性说明/重复防御性声明、过密单段摘要、失效交叉引用和可能用列表替代论证的结构。列表、章节数量和参考论文差异只能形成待审查提示，不能直接判定论文好坏。
+对最终候选 TeX/Markdown 运行 `scripts/check_manuscript_quality.py`。它只检查可观察的残留和阅读风险：草稿或待填内容、疑似内部编号、过程性说明/重复防御性声明、过密单段摘要、失效交叉引用和可能用列表替代论证的结构。列表、章节数量和参考论文差异只能形成待审查提示，不能直接判定论文好坏。可选再运行 `modeling-ai-pattern-reviewer/scripts/scan_language_signals.py`（或胶水 `--language-scan`）：命中项只是 `candidate`/`warning`，不得因信号数量阻断，也不得计算 AI 痕迹率。P0/P1 仍只来自主张、事实、规则、引用、数字和提交问题。
 
 ### 4. 汇总语义状态
 

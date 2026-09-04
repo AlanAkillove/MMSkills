@@ -5,10 +5,13 @@
 ## 修订模式
 
 - `diagnose-only`：只报告模板化信号和缺口，不改原文。
-- `minimal-edit`（默认）：只做能明确改善信息传递的最小修改。
-- `paragraph-rebuild`：保留证据和段落功能，重排主语、句序和层次。
+- `signal-targeted`（终稿精修默认）：每个改动必须对应一个 `signal_id`；未命中的句子保持原样。
+- `minimal-edit`：只做能明确改善信息传递的最小修改，可用于方法/结果段。
+- `paragraph-rebuild`：仅当用户明确要求整段重写，或出现结构层阅读问题时，保留证据和段落功能后重排。
 - `section-revision`：跨段处理重复和信息顺序，逐块保存差异。
 - `diff-audit`：只核对已有修订是否改变保护内容。
+
+`signal-targeted` 下，revision_log 没有 `signal_id` 的 diff 视为越权润色，应撤回。
 
 ## 需要完整留痕时的顺序
 

@@ -40,6 +40,7 @@
 | SCI-COMM-LREC-2026 | [What Are LLMs Doing to Scientific Communication?](https://aclanthology.org/2026.lrec-1.142/) | LLM 修改后的科学文本更常出现复杂/较长词、特定句法和较低词汇多样性；可读性评价与主观态度并不完全一致 | 阅读体验必须与语言信号、学科准确性和读者任务共同审查，不能以单一风格分数替代人读 |
 | HOMOG-ACL-SRW-2025 | [Testing English News Articles for Lexical Homogenization](https://aclanthology.org/2025.acl-srw.95/) | 词汇同质化的测量结果并不总是稳定，研究明确提醒需要谨慎选择指标 | 词汇多样性、相似度或 detector 分数只能作诊断线索，不输出原创度/AI率结论 |
 | DETECTOR-ACL-2023 | [GPT detectors are biased against non-native English writers](https://doi.org/10.1016/j.patter.2023.100779)；另见 [DetectGPT and related detector limitations](https://aclanthology.org/2023.findings-emnlp.94/) | AI 检测存在跨语言偏差、误报和可操纵性 | `modeling-ai-pattern-reviewer` 只描述可观察的文本信号与证据，不以检测分数判定来源或违规 |
+| LIEFLAT-TONE-2026 | [larashero3-dotcom/lieflat-less-ai-tone](https://github.com/larashero3-dotcom/lieflat-less-ai-tone)（MIT；2026-09-04 查阅） | 用对照语料检验流行“AI 味”清单；强调负面证据、白名单最小改写、作者风格优先 | 语料未公开、不是数模论文；不复制倍率、11 条规则或检测分数 |
 
 ## D. GitHub 开源实践
 

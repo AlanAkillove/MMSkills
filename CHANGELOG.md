@@ -2,7 +2,20 @@
 
 本文件记录可复用技能和共享契约的变化。
 
-## [Unreleased] 0.3.0-rc2
+## [Unreleased] 0.3.1
+
+### Changed
+
+- `modeling-ai-pattern-reviewer` 用证据分层和负面信号表替代“均匀三点式/长句/同节奏”等经验清单；句长与被动句不再单独作为 AI-pattern。
+- Naturalizer 终稿精修默认 `signal-targeted`，并加入风格基线优先序；`paragraph-rebuild` 不再作为默认整段润色。
+- 终检可运行语言信号候选扫描，只记 warning，不阻断、不算 AI 痕迹率。
+
+### Added
+
+- `negative-signal-registry.md`、`academic-signal-registry.md` 与 `scripts/scan_language_signals.py`。
+- ADR 0010：证据约束的学术表达自然化。
+
+## [0.3.0-rc2]
 
 ### Changed
 

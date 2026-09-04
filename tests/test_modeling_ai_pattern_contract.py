@@ -29,6 +29,10 @@ def test_references_define_five_layers_and_protocol():
     for name in ("signal-taxonomy.md", "pattern-audit-protocol.md", "research-basis.md"):
         assert name in content
         assert (SKILL_DIR / "references" / name).is_file()
+    assert (SKILL_DIR / "references" / "negative-signal-registry.md").is_file()
+    assert (SKILL_DIR / "references" / "academic-signal-registry.md").is_file()
+    assert (SKILL_DIR / "scripts" / "scan_language_signals.py").is_file()
+    assert "negative-signal-registry.md" in content
     assert "防御性声明处理协议" in content
     assert (ROOT / "references" / "defensive-statement-protocol.md").is_file()
     taxonomy = (SKILL_DIR / "references" / "signal-taxonomy.md").read_text(encoding="utf-8")
@@ -51,11 +55,15 @@ def test_fixture_set_covers_false_positive_and_unauthorized_cases():
         "negative-defensive-statement-cluster.md",
         "positive-required-boundary.md",
         "negative-unauthorized-similarity.md",
+        "negative-false-positive-language.md",
+        "positive-reframe-packaging.md",
+        "positive-empty-colon.md",
+        "positive-iso-sentences.md",
         "expected-behavior.md",
     }
     assert required <= names
     expected = (FIXTURE_DIR / "expected-behavior.md").read_text(encoding="utf-8")
-    for phrase in ("合理规范", "题目/证据锚点", "防御性声明", "不说", "未授权"):
+    for phrase in ("合理规范", "题目/证据锚点", "防御性声明", "不说", "未授权", "假阳性"):
         assert phrase in expected
 
 

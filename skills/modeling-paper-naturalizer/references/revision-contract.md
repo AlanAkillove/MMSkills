@@ -7,7 +7,7 @@ revision_contract:
   source_manifest_hash: null
   paper_version: null
   scope: null
-  mode: minimal-edit
+  mode: signal-targeted
   locked:
     numbers_units: true
     formulas_commands: true
@@ -26,7 +26,7 @@ revision_contract:
 ## 修改记录字段
 
 ```text
-revision_id | location | claim_ids | evidence_ids | term_ids | figure_ids | before | after | problem_type | action | protected_content_touched | semantic_change | human_status | decision_id
+revision_id | location | signal_id | claim_ids | evidence_ids | term_ids | figure_ids | before | after | problem_type | action | protected_content_touched | semantic_change | human_status | decision_id
 ```
 
 `semantic_change` 使用 `none/possible/confirmed/unknown`。只要不是 `none`，就不能自动视为语言润色完成。

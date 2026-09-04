@@ -32,8 +32,8 @@ modeling-ai-use-disclosure
 - [`modeling-assumption-ledger`](modeling-assumption-ledger/)：登记题面条件、团队假设、推导条件和计算便利条件，追踪影响、边界、验证与人工确认。
 - [`modeling-claim-evidence-audit`](modeling-claim-evidence-audit/)：逐项核对论文主张、证据类型、范围和措辞强度，分离补证据与限缩主张。
 - [`modeling-terminology-auditor`](modeling-terminology-auditor/)：维护概念—术语—符号—单位映射，识别同义漂移和高级感包装。
-- [`modeling-ai-pattern-reviewer`](modeling-ai-pattern-reviewer/)：定位可观察的论文模板化信号和防御性声明簇，保留合理规范并禁止 AI 来源归因。
-- [`modeling-paper-naturalizer`](modeling-paper-naturalizer/)：在锁定数字、公式、术语、主张和证据后，做保真、最小化的中文表达自然化、声明去重和差异回归。
+- [`modeling-ai-pattern-reviewer`](modeling-ai-pattern-reviewer/)：定位可观察、可反驳的模板化信号；句长/被动/问句等不得单独作为 AI-pattern；禁止来源归因。
+- [`modeling-paper-naturalizer`](modeling-paper-naturalizer/)：终稿精修默认 `signal-targeted` 最小改写，锁定数字、公式、术语、主张和作者风格基线。
 - [`modeling-paper-reviewer`](modeling-paper-reviewer/)：以证据化预审角色检查题意、模型、数据实验、主张、阅读体验和赛事边界，不替作者改稿或做来源归因。
 - [`modeling-distinctiveness-coach`](modeling-distinctiveness-coach/)：在写前从题目锚点、团队决策和验证证据中保存真实差异，阻断强行复杂化和生造创新。
 - [`modeling-anti-homogenization-auditor`](modeling-anti-homogenization-auditor/)：成稿后逐层回查题目特异性、模型路径、证据故事、术语贡献和图表表达是否被模板抹平。

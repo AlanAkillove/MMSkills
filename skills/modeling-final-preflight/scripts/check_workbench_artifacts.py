@@ -22,7 +22,8 @@ FIGURES = ROOT / "skills" / "math-modeling" / "scripts" / "figures"
 TERM = ROOT / "skills" / "modeling-terminology-auditor" / "scripts"
 EVIDENCE = ROOT / "skills" / "math-modeling" / "scripts" / "evidence"
 TEX = ROOT / "skills" / "modeling-tex-paper-production" / "scripts"
-for path in (RESULTS, FIGURES, TERM, EVIDENCE, TEX):
+AIPAT = ROOT / "skills" / "modeling-ai-pattern-reviewer" / "scripts"
+for path in (RESULTS, FIGURES, TERM, EVIDENCE, TEX, AIPAT):
     sys.path.insert(0, str(path))
 
 from check_figure_placement import check_manifest  # noqa: E402
@@ -30,6 +31,7 @@ from check_pdf_visual import inspect_pdf  # noqa: E402
 from check_result_freshness import check_freshness  # noqa: E402
 from check_terminology_drift import scan  # noqa: E402
 from citations import compare_records  # noqa: E402
+from scan_language_signals import scan_text  # noqa: E402
 
 
 def main() -> int:
@@ -45,6 +47,7 @@ def main() -> int:
     parser.add_argument("--pdf", type=Path)
     parser.add_argument("--paper", choices=["a4", "letter"])
     parser.add_argument("--no-identity", action="store_true")
+    parser.add_argument("--language-scan", type=Path)
     parser.add_argument("--json-out", type=Path)
     args = parser.parse_args()
 
@@ -116,6 +119,13 @@ def main() -> int:
             for item in pdf_report.get("findings", [])
             if item.get("status") == "unassessed" or item.get("severity") == "P2"
         )
+    if args.language_scan:
+        report["checks_run"].append("language_signal_candidates")
+        candidates = scan_text(args.language_scan.read_text(encoding="utf-8"))
+        report["language_signal_candidates"] = candidates
+        report["warnings"].extend(
+            f"language {item['signal_id']}: {item['matched_text']}" for item in candidates
+        )
 
     if not report["checks_run"]:
         mark_unassessed("no_checks_requested", required=True)
@@ -146,6 +156,8 @@ def main() -> int:
     print(f"checks_run: {', '.join(report['checks_run'])}")
     if report["optional_unassessed"]:
         print(f"optional_unassessed: {', '.join(report['optional_unassessed'])}")
+    for item in report["warnings"]:
+        print(f"WARNING: {item}")
     return 0
 
 

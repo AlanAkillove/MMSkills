@@ -25,6 +25,7 @@ def test_entrypoint_is_status_aggregator_not_compliance_guarantee():
         "成文清洁",
         "check_manuscript_quality.py",
         "check_workbench_artifacts.py",
+        "scan_language_signals.py",
     ):
         assert phrase in content
 

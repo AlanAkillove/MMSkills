@@ -23,8 +23,10 @@ description: "在锁定数字、公式、引用、术语、主张和题目特征
 
 先直接改用户指定的段落或回答当前诊断问题。默认不先读全套问题地图/假设账本/证据矩阵，也不先生成三份文件。缺材料时仍可局部修订，但要标明保真边界。
 
-用户未指定时：方法/结果/公式用 `minimal-edit`；空泛引言可用 `paragraph-rebuild`；高风险先 `diagnose-only`。
+用户未指定时：终稿精修默认 `signal-targeted`（每处修改绑定 `signal_id`，未命中的句子保持原样）；方法/结果/公式也可用 `minimal-edit`；只有用户明确要求整段重写或出现结构层阅读问题时才用 `paragraph-rebuild`；高风险先 `diagnose-only`。
+
+风格基线优先于通用自然化规则：作者/用户指定风格 > 同一论文已确认章节 > 学科/数模规范 > 通用 signal。不要做句子级模仿，也不要把“因此，由式(12)可得”改成口语。
 
 只有跨会话、用户要求留痕、`working_depth=full` 或最终交付时，才落盘 `revised_text.md`、`revision_log.md` 和 `preservation_report.md`。模式、保护清单、五步流程和防御性声明处理见 references。
 
-完整协议见 [revision-contract.md](references/revision-contract.md)、[naturalization-patterns.md](references/naturalization-patterns.md)、[protected-syntax.md](references/protected-syntax.md)、[recommended-workflow.md](references/recommended-workflow.md)、共享的[防御性声明处理协议](../../references/defensive-statement-protocol.md) 和 [research-basis.md](references/research-basis.md)。
+完整协议见 [revision-contract.md](references/revision-contract.md)、[naturalization-patterns.md](references/naturalization-patterns.md)、[protected-syntax.md](references/protected-syntax.md)、[style-baseline.md](references/style-baseline.md)、[recommended-workflow.md](references/recommended-workflow.md)、共享的[防御性声明处理协议](../../references/defensive-statement-protocol.md) 和 [research-basis.md](references/research-basis.md)。

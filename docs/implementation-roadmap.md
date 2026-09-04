@@ -21,6 +21,16 @@
 
 对应决策见 [`docs/adr/0009-role-oriented-workbench.md`](adr/0009-role-oriented-workbench.md)。
 
+## 阶段 1.1：证据约束的学术自然化（0.3.1）
+
+不新增 Skill，不碰 Router。按 ADR 0010：
+
+1. 重建 AI-pattern taxonomy 与负面信号表；
+2. Naturalizer 增加 `signal-targeted` 与风格基线；
+3. 机械候选扫描接入终检 warning，禁止 AI 分数。
+
+对应决策见 [`docs/adr/0010-evidence-grounded-naturalization.md`](adr/0010-evidence-grounded-naturalization.md)。
+
 ## 阶段 0.9：动作门运行时补全（已完成）
 
 0.2.2 不做 0.3.0，也不新增 skill，只清 0.2.1 残留的旧语义：

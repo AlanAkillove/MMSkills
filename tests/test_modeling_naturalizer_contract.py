@@ -17,6 +17,7 @@ def test_entrypoint_declares_naturalization_boundary_and_handoff():
         "不以规避任何检测器为功能目标",
         "minimal-edit",
         "diagnose-only",
+        "signal-targeted",
         "preservation_report.md",
         "P0",
         "P1",
@@ -33,6 +34,7 @@ def test_references_cover_revision_contract_and_protected_syntax():
         "naturalization-patterns.md",
         "protected-syntax.md",
         "research-basis.md",
+        "style-baseline.md",
     }
     assert required_refs <= {
         path.name for path in (SKILL_DIR / "references").glob("*.md")
@@ -78,6 +80,7 @@ def test_fixture_set_covers_safe_edits_and_semantic_drift():
         "negative-terminology-drift.md",
         "negative-redundant-defensive-statements.md",
         "positive-required-limitation.md",
+        "positive-signal-targeted.md",
     }
     assert required <= names
     expected = (FIXTURE_DIR / "expected-behavior.md").read_text(encoding="utf-8")
@@ -89,6 +92,7 @@ def test_fixture_set_covers_safe_edits_and_semantic_drift():
         "LaTeX",
         "缺证据",
         "术语漂移",
+        "signal-targeted",
     ):
         assert phrase in expected
     drift = (FIXTURE_DIR / "negative-meaning-drift.md").read_text(encoding="utf-8")
