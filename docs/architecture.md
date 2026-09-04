@@ -82,7 +82,7 @@ math-modeling
 0.3 默认会碰到的产物：
 
 - `terminology_table.md`：建模阶段建立；写作只做 drift。解释一个符号不落盘。
-- `results_snapshot.json`：可含多条 claim；机械产物是 `snapshot`，有 `decision_id` 后才升级为 `frozen`。路径使用仓库相对 locator。
+- `results_snapshot.json`：可含多条 claim；机械产物是 `snapshot`，有 `decision_id` 后才升级为 `frozen`。路径必须是仓库相对 locator；source 在 project root 外应报错，除非显式 `--allow-external-source`。
 - `run_summary.json`：探索期轻量复现摘要（含 Python/OS/git revision），不是实验报告。
 - `decision_log.md` / `decision_id`：adopt / freeze / submit 等 action gate。
 - 文献综合默认留在对话；进入模型依据、citation-audit、跨会话或提交时才写 `literature_orientation_ledger.md` 或 citation matrix。

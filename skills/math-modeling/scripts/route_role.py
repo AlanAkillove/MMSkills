@@ -28,15 +28,24 @@ INTENT_PATTERNS: List[Tuple[str, re.Pattern[str], str]] = [
     ("preflight", re.compile(r"提交前|终检|preflight", re.I), "high"),
     ("terminology_audit", re.compile(r"术语漂移|术语审查|terminology drift", re.I), "high"),
     ("terminology_establish", re.compile(r"术语表|统一叫|canonical term|terminology_table", re.I), "high"),
-    ("literature", re.compile(r"文献|相关工作|论文检索|DOI|orientation", re.I), "medium"),
+    (
+        "model_from_literature",
+        re.compile(
+            r"(根据|结合|基于).{0,30}(这些|这几篇|已读|上述)?(论文|文献).{0,30}"
+            r"(推模型|建模|设计模型|比较模型|继续.{0,12}模型)",
+            re.I,
+        ),
+        "high",
+    ),
+    ("model", re.compile(r"比较.*模型|候选模型|模型设计|采用这个模型|继续.*模型|推模型", re.I), "high"),
+    ("revise", re.compile(r"重写摘要|改摘要|续写|自然化|精修\s*\d|5\.3|章节", re.I), "high"),
+    ("draft", re.compile(r"写论文|正文|摘要|draft", re.I), "medium"),
+    ("literature", re.compile(r"文献|相关工作|论文检索|相关论文|这几篇论文|DOI|orientation", re.I), "medium"),
     ("figure", re.compile(r"画图|绘图|figure|plot", re.I), "medium"),
     ("figure_inspect", re.compile(r"检查图|修改图", re.I), "low"),
     ("experiment", re.compile(r"实验|跑代码|求解|python|matlab", re.I), "medium"),
     ("numeric_ambiguous", re.compile(r"数值", re.I), "low"),
-    ("model", re.compile(r"比较.*模型|候选模型|模型设计|采用这个模型|继续.*模型|推模型", re.I), "high"),
     ("understand", re.compile(r"理解|弄懂|歧管|机理|题意|familiar", re.I), "medium"),
-    ("revise", re.compile(r"重写摘要|改摘要|续写|自然化|精修\s*\d|5\.3|章节", re.I), "high"),
-    ("draft", re.compile(r"写论文|正文|摘要|draft", re.I), "medium"),
     ("continue_local", re.compile(r"继续问题|接着(写|做|算)|continue (question|q)\s*\d+", re.I), "low"),
 ]
 
@@ -118,9 +127,11 @@ def route_query(
         "matched_rule": matched_rule,
         "requires_context": requires_context,
         "note": (
-            "High-confidence hint only. If role is unknown or requires_context is true, "
-            "ask which role is in progress; do not default to modeler. "
-            "Do not open the stage registry unless load_stage_registry is true."
+            "High-confidence hint only. unknown means this script cannot judge; "
+            "use the explicit intent, then recent conversation and current artifacts, "
+            "then current_role; ask the user only if those still fail. "
+            "Do not default to modeler. Do not open the stage registry unless "
+            "load_stage_registry is true."
         ),
     }
 

@@ -30,13 +30,18 @@ def lookup(payload: Any, locator: str) -> Any:
     raise ValueError("locator must look like $.path.to.field")
 
 
-def project_relative(path: Path, repo_root: Path) -> str:
+def project_relative(path: Path, repo_root: Path, *, allow_external: bool = False) -> str:
     resolved = path.resolve()
     root = repo_root.resolve()
     try:
         return resolved.relative_to(root).as_posix()
-    except ValueError:
-        return resolved.as_posix()
+    except ValueError as exc:
+        if allow_external:
+            return resolved.as_posix()
+        raise ValueError(
+            f"source is outside repo root ({root.as_posix()}); "
+            "pass --allow-external-source to record an absolute path"
+        ) from exc
 
 
 def claims_from_payload(payload: dict[str, Any]) -> list[dict[str, Any]]:
@@ -78,6 +83,7 @@ def freeze_claim(
     status: str,
     human_status: str,
     decision_id: str | None,
+    allow_external: bool = False,
 ) -> dict[str, Any]:
     payload = json.loads(source.read_text(encoding="utf-8"))
     value = lookup(payload, locator)
@@ -86,7 +92,7 @@ def freeze_claim(
         "claim_id": claim_id,
         "value": value,
         "unit": unit,
-        "source_file": project_relative(source, repo_root),
+        "source_file": project_relative(source, repo_root, allow_external=allow_external),
         "source_locator": locator,
         "source_hash": sha256_file(source),
         "recorded_at": recorded_at,
@@ -116,22 +122,32 @@ def main() -> int:
         choices=["unreviewed", "confirmed"],
         default=None,
     )
+    parser.add_argument(
+        "--allow-external-source",
+        action="store_true",
+        help="Allow recording an absolute path when source is outside --repo-root",
+    )
     args = parser.parse_args()
     if args.status == "frozen" and not args.decision_id:
         parser.error("--status frozen requires --decision-id from a human freeze decision")
     repo_root = (args.repo_root or Path.cwd()).resolve()
     human_status = args.human_status or ("confirmed" if args.status == "frozen" else "unreviewed")
-    claim = freeze_claim(
-        args.source,
-        locator=args.locator,
-        claim_id=args.claim_id,
-        unit=args.unit,
-        scope=args.scope,
-        repo_root=repo_root,
-        status=args.status,
-        human_status=human_status,
-        decision_id=args.decision_id,
-    )
+    try:
+        claim = freeze_claim(
+            args.source,
+            locator=args.locator,
+            claim_id=args.claim_id,
+            unit=args.unit,
+            scope=args.scope,
+            repo_root=repo_root,
+            status=args.status,
+            human_status=human_status,
+            decision_id=args.decision_id,
+            allow_external=args.allow_external_source,
+        )
+    except ValueError as exc:
+        print(f"ERROR: {exc}")
+        return 2
     snapshot = load_snapshot(args.output)
     upsert_claim(snapshot, claim)
     args.output.write_text(json.dumps(snapshot, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")

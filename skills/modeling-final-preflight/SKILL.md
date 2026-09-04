@@ -49,7 +49,7 @@ description: "在提交前汇总规则、论文、题意、假设、主张证据
 
 ### 2. 先跑机械检查
 
-检查文件存在/大小/格式、页数/首页/声明位置、匿名字符串/元数据、引用/图表/章节编号、清单与压缩包、hash 和缺失文件。若存在 `results_snapshot`、术语表或图表 manifest，再运行 `scripts/check_workbench_artifacts.py`：过期数字、术语机械 drift、diagnostic 图混入正文、本地 citation 字段冲突。该胶水必须报告 `checks_run` 与 `unassessed`；零检查不能写成 OK。术语脚本 OK 只表示机械别名扫描通过。若已有 PDF，同一脚本加 `--pdf` 且必须从 `rules_profile` 传入 `--paper a4|letter`（MCM/ICM 常用 Letter）。身份检查只扫队号/指导教师等赛事封面词，不把参考文献里的 `.edu.cn` 当 P1。机械检查结果也要带证据路径和工具版本。
+检查文件存在/大小/格式、页数/首页/声明位置、匿名字符串/元数据、引用/图表/章节编号、清单与压缩包、hash 和缺失文件。若存在 `results_snapshot`、术语表或图表 manifest，再运行 `scripts/check_workbench_artifacts.py`：过期数字、术语机械 drift、diagnostic 图混入正文、本地 citation 字段冲突。该胶水必须报告 `checks_run`、`required_unassessed` 与 `optional_unassessed`；零检查或缺少赛事纸张 profile 是 required-unassessed，不能写成 OK。光栅未安装属于 optional-unassessed。术语脚本 OK 只表示机械别名扫描通过。若已有 PDF，同一脚本加 `--pdf` 且必须从 `rules_profile` 传入 `--paper a4|letter`（MCM/ICM 常用 Letter）。身份检查只扫队号/指导教师等赛事封面词，不把参考文献里的 `.edu.cn` 当 P1。机械检查结果也要带证据路径和工具版本。
 
 ### 3. 检查成文质量
 

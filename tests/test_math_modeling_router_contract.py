@@ -25,6 +25,7 @@ def test_entrypoint_is_a_thin_router():
         "不从算法名称",
         "modeling-pipeline-orchestrator",
         "adopt / freeze / submit",
+        "脚本自己不能判断",
     ):
         assert phrase in text
     assert "RULES_PROFILE" not in text
@@ -90,11 +91,22 @@ def test_resume_may_load_orchestrator():
 
 def test_continue_from_papers_is_modeler_and_polish_section_is_writer():
     model = route_query("根据这些论文继续推模型")
+    assert model["intent"] == "model_from_literature"
+    assert model["matched_rule"] == "model_from_literature"
     assert model["role"] == "modeler"
+    assert model["specialists"] == [
+        "modeling-model-architect",
+        "modeling-literature-evidence",
+    ]
     assert model["requires_context"] is False
     assert model["load_orchestrator"] is False
+    literature_only = route_query("找相关文献")
+    assert literature_only["intent"] == "literature"
+    assert literature_only["specialists"] == ["modeling-literature-evidence"]
+    assert "modeling-model-architect" not in literature_only["specialists"]
     polish = route_query("精修 5.3")
     assert polish["role"] == "writer"
+    assert polish["specialists"] == ["modeling-paper-writer"]
     assert polish["load_orchestrator"] is False
 
 

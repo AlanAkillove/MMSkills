@@ -56,7 +56,7 @@ description: "围绕数模题意、模型方法、数据来源和论文主张建
 
 不得把“文献使用过某模型”改写成“该模型适合本题”；不得把综述中的二手陈述冒充原始研究；不得把某篇论文的结果外推到本题数据而不说明外推限制。
 
-在 `orientation` 或 `modeling-synthesis` 中，每个被纳入学习/承重范围的来源还要生成 `literature_insight_id`，记录领域概念、方法/机理、`source_does_not_support`（或 citation 模式的 `source_does_not_say`）、可迁移思想、不可迁移边界、与本题对象的相同/不同处以及待团队复述的问题。来源卡片是学习材料，不是采用决定；后来若将其思想用于模型，必须再绑定具体的 `model_decision_id` 和人工决定。
+局部研究讨论直接说“这篇论文的可迁移点是……不能支撑的是……”，不生成 `LIT-01` / `literature_insight_id` 一类内部编号。只有进入持久化证据、跨会话 handoff 或正式模型依据时，才为来源分配 `literature_insight_id`，并记录领域概念、方法/机理、`source_does_not_support`（或 citation 模式的 `source_does_not_say`）、可迁移思想、不可迁移边界、与本题对象的相同/不同处以及待团队复述的问题。来源卡片是学习材料，不是采用决定；后来若将其思想用于模型，必须再绑定具体的 `model_decision_id` 和人工决定。
 
 ### 4. 绑定主张和引用位置
 

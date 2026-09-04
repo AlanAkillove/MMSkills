@@ -174,9 +174,32 @@ def test_preflight_workbench_glue_flags_stale_numbers_and_wrapper_terms(
     assert "terminology" in blob
 
 
-def test_preflight_glue_zero_checks_is_unassessed_not_ok():
-    result = run(PREFLIGHT / "check_workbench_artifacts.py")
+def test_preflight_glue_zero_checks_is_unassessed_not_ok(tmp_path: Path):
+    report = tmp_path / "empty.json"
+    result = run(PREFLIGHT / "check_workbench_artifacts.py", "--json-out", str(report))
     assert result.returncode == 2
     assert "UNASSESSED" in result.stdout
     assert "OK: workbench artifacts" not in result.stdout
     assert "checks_run" in result.stdout
+    payload = json.loads(report.read_text(encoding="utf-8"))
+    assert "no_checks_requested" in payload["required_unassessed"]
+    assert "no_checks_requested" in payload["unassessed"]
+
+
+def test_pdf_without_paper_profile_is_required_unassessed(tmp_path: Path):
+    from test_pdf_visual_contract import write_simple_pdf
+
+    pdf = tmp_path / "letter.pdf"
+    write_simple_pdf(pdf, width=612.0, height=792.0, texts=["MCM page"])
+    report = tmp_path / "pdf.json"
+    result = run(
+        PREFLIGHT / "check_workbench_artifacts.py",
+        "--pdf",
+        str(pdf),
+        "--json-out",
+        str(report),
+    )
+    assert result.returncode == 2
+    assert "OK: workbench artifacts" not in result.stdout
+    payload = json.loads(report.read_text(encoding="utf-8"))
+    assert "pdf_paper_size" in payload["required_unassessed"]

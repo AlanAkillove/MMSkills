@@ -2,7 +2,17 @@
 
 本文件记录可复用技能和共享契约的变化。
 
-## [Unreleased] 0.3.0-rc
+## [Unreleased] 0.3.0-rc2
+
+### Changed
+
+- Router 把“根据这些论文继续推模型”一类复合意图放在 generic literature 之前，路由到 `modeling-model-architect` + `modeling-literature-evidence`；测试断言 specialists，不只断言 role。
+- `unknown` 表示脚本不能判断：先用显式意图、会话上下文和当前 artifact，再问用户。
+- freeze 在 source 位于 repo root 外时默认报错，需 `--allow-external-source` 才记录绝对路径。
+- 终检胶水区分 `required_unassessed` / `optional_unassessed`；缺少 paper profile 时不再打印 OK；`--json-out` 在补齐零检查状态之后写盘。
+- 局部文献讨论不生成 `literature_insight_id`；只在持久化、跨会话 handoff 或正式模型依据时分配。
+
+## [0.3.0-rc]
 
 ### Changed
 

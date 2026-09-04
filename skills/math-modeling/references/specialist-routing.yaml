@@ -1,5 +1,5 @@
 # Machine-readable default ownership. Not a hard dependency graph.
-schema_version: "0.3.0-rc"
+schema_version: "0.3.0-rc2"
 never_preload:
   - modeling-pipeline-orchestrator
   - modeling-process-freezer
@@ -64,6 +64,9 @@ intents:
   model:
     role: modeler
     specialists: [modeling-model-architect]
+  model_from_literature:
+    role: modeler
+    specialists: [modeling-model-architect, modeling-literature-evidence]
   terminology_establish:
     role: modeler
     specialists: [modeling-terminology-auditor]

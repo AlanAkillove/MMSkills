@@ -53,8 +53,15 @@ def main() -> int:
         "warnings": [],
         "checks_run": [],
         "unassessed": [],
+        "optional_unassessed": [],
+        "required_unassessed": [],
     }
     repo_root = args.repo_root or Path.cwd()
+
+    def mark_unassessed(item: str, *, required: bool) -> None:
+        bucket = "required_unassessed" if required else "optional_unassessed"
+        report[bucket].append(item)
+        report["unassessed"].append(item)
 
     if args.snapshot:
         report["checks_run"].append("result_freshness")
@@ -70,7 +77,7 @@ def main() -> int:
         report["terminology_drift"] = drifts
         report["errors"].extend(f"terminology {item['kind']}: {item['term']}" for item in drifts)
     elif args.terminology_table or args.manuscript:
-        report["unassessed"].append("terminology_mechanical_drift_needs_table_and_manuscript")
+        mark_unassessed("terminology_mechanical_drift_needs_table_and_manuscript", required=True)
     if args.figure_manifest:
         report["checks_run"].append("figure_placement")
         payload = yaml.safe_load(args.figure_manifest.read_text(encoding="utf-8"))
@@ -86,11 +93,11 @@ def main() -> int:
         report["citation_errors"] = citation_errors
         report["errors"].extend(citation_errors)
     elif args.claimed_citation or args.fetched_citation:
-        report["unassessed"].append("citation_compare_needs_claimed_and_fetched")
+        mark_unassessed("citation_compare_needs_claimed_and_fetched", required=True)
     if args.pdf:
         report["checks_run"].append("pdf_visual")
         if not args.paper:
-            report["unassessed"].append("pdf_paper_size")
+            mark_unassessed("pdf_paper_size", required=True)
         pdf_report = inspect_pdf(
             args.pdf,
             paper=args.paper,
@@ -102,20 +109,23 @@ def main() -> int:
             for item in pdf_report.get("findings", [])
             if item.get("severity") in {"P0", "P1"}
         )
+        if (pdf_report.get("raster") or {}).get("status") == "unassessed":
+            mark_unassessed("pdf_raster", required=False)
         report["warnings"].extend(
             f"pdf {item['id']}: {item['message']}"
             for item in pdf_report.get("findings", [])
             if item.get("status") == "unassessed" or item.get("severity") == "P2"
         )
 
+    if not report["checks_run"]:
+        mark_unassessed("no_checks_requested", required=True)
     if args.json_out:
         args.json_out.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
     if not report["checks_run"]:
-        report["unassessed"].append("no_checks_requested")
         print("UNASSESSED: no workbench checks were requested")
         print("checks_run: []")
-        print(f"unassessed: {', '.join(report['unassessed'])}")
+        print(f"required_unassessed: {', '.join(report['required_unassessed'])}")
         return 2
 
     if report["errors"]:
@@ -125,10 +135,17 @@ def main() -> int:
         if report["unassessed"]:
             print(f"unassessed: {', '.join(report['unassessed'])}")
         return 1
+    if report["required_unassessed"]:
+        print("UNASSESSED: required workbench checks are incomplete")
+        print(f"checks_run: {', '.join(report['checks_run'])}")
+        print(f"required_unassessed: {', '.join(report['required_unassessed'])}")
+        if report["optional_unassessed"]:
+            print(f"optional_unassessed: {', '.join(report['optional_unassessed'])}")
+        return 2
     print("OK: workbench artifacts")
     print(f"checks_run: {', '.join(report['checks_run'])}")
-    if report["unassessed"]:
-        print(f"unassessed: {', '.join(report['unassessed'])}")
+    if report["optional_unassessed"]:
+        print(f"optional_unassessed: {', '.join(report['optional_unassessed'])}")
     return 0
 
 

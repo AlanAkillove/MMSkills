@@ -134,3 +134,58 @@ def test_frozen_status_requires_human_decision_id(tmp_path: Path):
     assert claim["status"] == "frozen"
     assert claim["decision_id"] == "DEC-freeze-1"
     assert claim["human_status"] == "confirmed"
+
+
+def test_source_outside_repo_requires_explicit_allow(tmp_path: Path):
+    outside = tmp_path / "metrics.json"
+    outside.write_bytes((FIXTURES / "metrics-old.json").read_bytes())
+    snapshot = tmp_path / "snapshot.json"
+    blocked = subprocess.run(
+        [
+            sys.executable,
+            str(SCRIPTS / "freeze_results.py"),
+            "--source",
+            str(outside),
+            "--locator",
+            "$.thermal_resistance",
+            "--claim-id",
+            "thermal_resistance",
+            "--repo-root",
+            str(ROOT),
+            "--output",
+            str(snapshot),
+        ],
+        cwd=ROOT,
+        check=False,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+    )
+    assert blocked.returncode == 2
+    assert "outside repo root" in blocked.stdout
+    assert not snapshot.exists()
+    allowed = subprocess.run(
+        [
+            sys.executable,
+            str(SCRIPTS / "freeze_results.py"),
+            "--source",
+            str(outside),
+            "--locator",
+            "$.thermal_resistance",
+            "--claim-id",
+            "thermal_resistance",
+            "--repo-root",
+            str(ROOT),
+            "--allow-external-source",
+            "--output",
+            str(snapshot),
+        ],
+        cwd=ROOT,
+        check=False,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+    )
+    assert allowed.returncode == 0, allowed.stderr
+    source_file = json.loads(snapshot.read_text(encoding="utf-8"))["claims"][0]["source_file"]
+    assert Path(source_file).is_absolute()
