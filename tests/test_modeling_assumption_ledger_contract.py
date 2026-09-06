@@ -20,6 +20,7 @@ def test_entrypoint_has_scope_and_human_gate():
         "needs-human-confirmation",
         "Research Chair/用户批准",
         "不伪造",
+        "Assumption Challenger",
     ):
         assert phrase in content
 

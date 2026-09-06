@@ -69,6 +69,8 @@ description: "为数学建模项目登记、审查和冻结假设，区分题面
 
 把高影响假设按“接受、接受但限缩结论、待验证、拒绝/替代”分组，交给 Research Chair/用户确认。确认前可提出候选和条件分支，但不能把 `proposed` 写成 `accepted`，也不能让下游把未确认假设当成最终模型输入。
 
+高影响假设在 accept 前应启动独立 Assumption Challenger（Subagent 模式）：只给题意、数据和该假设，任务是找出更弱/代价更小的替代，或证明它失败会破坏什么。提出者自己写的“该假设较为合理”不能代替这次 challenge。
+
 ## 最低交付物
 
 默认更新 `assumption_ledger.md`，至少包含：

@@ -31,31 +31,6 @@ INVALIDATE = re.compile(
     r"重新建模|物理模型|换题|改做编程|跑代码|机理研究|重新研究",
     re.I,
 )
-PRECISION_INTENTS = {
-    "understand",
-    "formal_intake",
-    "literature",
-    "model",
-    "model_from_literature",
-    "terminology_establish",
-    "experiment",
-    "figure",
-    "figure_inspect",
-    "disclose",
-    "resume",
-    "full_audit",
-    "submission_plan",
-    "diagnose_state",
-}
-EXPANDABLE_INTENTS = {
-    "review",
-    "composite_review",
-    "draft",
-    "revise",
-    "terminology_audit",
-    "preflight",
-    "continue_local",
-}
 
 
 def _load_yaml(path: Path) -> Dict[str, Any]:
@@ -239,38 +214,49 @@ def retrieve_capabilities(
         for skill in crit.get("promote") or []:
             if skill not in selected:
                 selected.append(skill)
+
+    def _uniq(items: List[str]) -> List[str]:
+        seen: Set[str] = set()
+        ordered: List[str] = []
+        for item in items:
+            if item not in seen:
+                seen.add(item)
+                ordered.append(item)
+        return ordered
+
     candidates = list(selected)
     for skill, weights in coverage_of(index).items():
         if skill in candidates or skill in exclude:
             continue
         if any(facet in weights for facet in facets):
             candidates.append(skill)
+    for skill in crit.get("mandatory_consideration") or []:
+        if skill not in candidates:
+            candidates.append(skill)
+    facet_count = len(facets)
     return {
         "role": resolved_role,
         "implied_role": implied,
         "task_facets": facets,
         "facets_by_role": by_role,
-        "candidates": candidates,
+        "candidates": _uniq(candidates),
         "specialists": selected,
         "mandatory_consideration": crit["mandatory_consideration"],
         "critical_matched": crit["matched"],
         "working_set": cache,
         "diagnosis": diagnosis,
-        "expandable": (intent or "continue_local") in EXPANDABLE_INTENTS,
-        "precision_locked": (intent or "") in PRECISION_INTENTS,
+        "expandable": facet_count >= 2,
+        "precision_locked": facet_count <= 1,
     }
 
 
 def should_expand(intent: str, retrieval: Dict[str, Any], current_specialists: Sequence[str]) -> bool:
-    if retrieval.get("precision_locked"):
-        return False
-    if not retrieval.get("expandable", True):
-        return False
+    """Fan-out when the request itself has multiple facets, not because of intent type."""
     facets = retrieval.get("task_facets") or []
     selected = retrieval.get("specialists") or []
     if retrieval.get("working_set", {}).get("hit") and not facets:
         return False
-    if len(facets) >= 2 and selected:
+    if len(facets) >= 2:
         return True
     if intent in {"review", "composite_review", "preflight"} and selected:
         return set(selected) != set(current_specialists) and len(selected) >= len(current_specialists)

@@ -33,6 +33,7 @@ def test_entrypoint_is_baseline_first_and_human_led():
         "literature_orientation_ledger",
         "P0",
         "P1",
+        "Model Critic",
     ):
         assert phrase in content
 

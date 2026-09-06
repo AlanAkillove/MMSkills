@@ -54,7 +54,8 @@ figure_design:
 
 ## 设计检查
 
-- `figure_question` 必须是读者问题，不写成“展示结果”或“美化页面”；
+- 未规划运行图默认 `placement: diagnostic`；promote 到 `paper` 需要 visual brief、事实审计和独立 visual review；
+- `figure_question` 必须是读者问题，不写成“展示结果”或“美化页面”，也不写期望曲线形状；
 - `evidence_role`、`chart_type` 和每个面板的 `role` 必须互相匹配；
 - `claim_ids` 只登记已有主张，不在设计过程中凭空生成结论；
 - `transformations` 记录筛选、聚合、排序、归一化、单位转换和舍入；

@@ -12,3 +12,4 @@ Expected mechanical findings under `cumcm-natural-cn` + `cumcm-2026`:
 - unordered-list-forbidden
 - orphan-bibliography (`\\bibitem` without `\\cite`)
 - coverage-short when `--pdf-pages 11`
+- problem-restatement-section (`\\section{问题重述}`)

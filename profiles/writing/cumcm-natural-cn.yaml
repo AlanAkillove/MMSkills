@@ -20,11 +20,17 @@ prose:
   unordered_lists: forbidden
   default_model_evaluation_triple: forbidden
 
+sections:
+  problem_restatement: forbidden
+  reason: >
+    赛委员会推荐不单独写“问题重述”章，以免与题面高度重合、抬高查重。
+    必要对象、任务和条件并入问题分析或各问建模，不要整章复述题面。
+
 ordered_lists:
   allowed_for:
-    - problem_restatement
     - algorithm_steps
     - formal_assumptions
+    - numbered_subproblems_in_analysis
 
 equations:
   boxed_emphasis: forbidden
@@ -35,7 +41,7 @@ equations:
     - colorbox
 
 body_length:
-  preferred_pages: [26, 28]
+  preferred_pages: null
   short_manuscript_triggers: coverage_audit
   padding_forbidden: true
 

@@ -100,6 +100,7 @@ CITE_KEY = re.compile(r"\\cite[t]?\{([^}]+)\}")
 BIBITEM_KEY = re.compile(r"\\bibitem(?:\[[^\]]*\])?\{([^}]+)\}")
 TWENTY_PAGE_LIMIT = re.compile(r"(正文|[Mm]ain text).{0,24}(?:<=|≤|不超过|不多于)\s*20\s*页")
 EVALUATION_TRIPLE = re.compile(r"优点.{0,12}局限.{0,12}改进")
+PROBLEM_RESTATEMENT_SECTION = re.compile(r"\\(?:sub)*section\*?\{\s*[^}]*问题重述")
 
 
 def narrative_list_risk(text: str) -> Optional[Dict[str, Any]]:
@@ -180,6 +181,7 @@ def apply_writing_profile(
     rules_profile: Optional[Dict[str, Any]] = None,
     pdf_pages: Optional[int] = None,
     raw_content: Optional[str] = None,
+    preferred_pages: Optional[List[int]] = None,
 ) -> None:
     prose = writing_profile.get("prose") or {}
     if prose.get("unordered_lists") == "forbidden":
@@ -191,8 +193,21 @@ def apply_writing_profile(
                 category="unordered-list-forbidden",
                 severity="P1",
                 message=f"当前写作 profile 禁止无序 itemize（{len(itemize)} 处）",
-                suggestion="把分点改成连续段落。问题重述、算法步骤和正式假设可用 enumerate。",
+                suggestion="把分点改成连续段落。算法步骤和正式假设可用 enumerate。不要写问题重述专章。",
                 lines=line_numbers(text, itemize),
+            )
+    sections_cfg = writing_profile.get("sections") or {}
+    if sections_cfg.get("problem_restatement") == "forbidden":
+        restated = list(PROBLEM_RESTATEMENT_SECTION.finditer(text))
+        if restated:
+            add_finding(
+                findings,
+                finding_id="MQL-017",
+                category="problem-restatement-section",
+                severity="P1",
+                message="当前写作 profile 禁止单独的“问题重述”章节",
+                suggestion="不要整章复述题面。必要对象、任务和条件并入问题分析或各问建模。",
+                lines=line_numbers(text, restated),
             )
     if prose.get("default_model_evaluation_triple") == "forbidden" and EVALUATION_TRIPLE.search(text):
         add_finding(
@@ -252,7 +267,7 @@ def apply_writing_profile(
                 suggestion="删除孤立条目，或在首次使用处 \\cite。",
             )
     body = writing_profile.get("body_length") or {}
-    preferred = body.get("preferred_pages") or []
+    preferred = preferred_pages if preferred_pages else (body.get("preferred_pages") or [])
     official_limit = None
     if rules_profile:
         official_limit = (
@@ -326,6 +341,7 @@ def check_manuscript(
     writing_profile: Optional[Path] = None,
     rules_profile: Optional[Path] = None,
     pdf_pages: Optional[int] = None,
+    preferred_pages: Optional[List[int]] = None,
 ) -> Dict[str, Any]:
     content = path.read_text(encoding="utf-8")
     text = visible_tex(content)
@@ -427,6 +443,7 @@ def check_manuscript(
             rules_profile=rules_payload,
             pdf_pages=pdf_pages,
             raw_content=content,
+            preferred_pages=preferred_pages,
         )
 
     metrics = style_metrics(text)
@@ -451,6 +468,13 @@ def check_manuscript(
     }
 
 
+def parse_preferred_pages(value: Optional[str]) -> Optional[List[int]]:
+    if not value:
+        return None
+    parts = [part.strip() for part in value.replace("-", ",").split(",") if part.strip()]
+    return [int(part) for part in parts]
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("input", type=Path, help="TeX or TeX-like manuscript source")
@@ -459,6 +483,10 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--writing-profile", type=Path, help="manuscript writing profile YAML")
     parser.add_argument("--rules-profile", type=Path, help="official contest rules profile YAML")
     parser.add_argument("--pdf-pages", type=int, help="observed PDF page count for coverage audit")
+    parser.add_argument(
+        "--preferred-pages",
+        help="optional project overlay like 26,28; public writing profiles should leave this empty",
+    )
     parser.add_argument(
         "--fail-on",
         choices=("p1", "any", "never"),
@@ -477,6 +505,7 @@ def main() -> int:
             writing_profile=args.writing_profile,
             rules_profile=args.rules_profile,
             pdf_pages=args.pdf_pages,
+            preferred_pages=parse_preferred_pages(args.preferred_pages),
         )
     except (OSError, UnicodeError) as exc:
         print(f"ERROR: cannot inspect manuscript: {exc}", file=sys.stderr)

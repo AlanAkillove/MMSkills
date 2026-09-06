@@ -19,6 +19,8 @@ def test_entrypoint_is_contract_before_prose():
         "section_contract",
         "paper_blueprint.md",
         "argument_map.md",
+        "visual_plan",
+        "问题重述",
         "人工确认门",
         "P0",
         "P1",

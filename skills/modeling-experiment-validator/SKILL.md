@@ -17,6 +17,7 @@ description: "把数模论文中的计算、仿真、对照、敏感性和稳健
 - 不反复调参后只保留测试集最好结果。
 - 不能运行时状态必须是 `unverified/unknown`。
 - `validation_status` 的 `verified` 只表示输入/输出/范围已核对，不等于模型真理。
+- `result_verification`（审计：算对了吗、划分有没有泄漏）不等于 `result_interpretation_review`（审阅：这些数能否支持准备写入论文的主张、baseline 是否公平、能不能写“明显提高”）。冻结 claim-bearing 结果前，后者由独立 Subagent 完成。
 - P0：输出不可追溯、关键结果冲突或明显泄漏。P1：只报最好结果或基线不公平。
 
 ## 默认怎么帮用户

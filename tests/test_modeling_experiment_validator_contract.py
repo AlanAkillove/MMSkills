@@ -22,6 +22,8 @@ def test_entrypoint_requires_registered_and_reproducible_experiments():
         "output_hashes",
         "validation_status",
         "unverified/unknown",
+        "result_verification",
+        "result_interpretation_review",
     ):
         assert phrase in content
 

@@ -29,7 +29,7 @@ L3  Reference / Tool  references/、scripts/
 自动进入决策路径，不是可选附录。数据：`references/capabilities/{role}.yaml`。脚本：`scripts/route_capabilities.py`。
 
 路径：`query → task facets → capability retrieval → candidate specialists → minimal coverage`。
-`mandatory_consideration` 保证关键能力进入候选；真正加载哪些完整 Skill 仍由当前任务决定。
+`mandatory_consideration` 保证关键能力进入候选；真正加载哪些完整 Skill 仍由当前任务决定。产物跨越质量边界时读 `quality-policy.yaml`：审计可由工具/同上下文完成，审阅与挑战必须独立 Subagent。
 
 ## Layer 2 — Specialist
 
@@ -49,7 +49,7 @@ math-modeling + 一个角色 + 0~2 个 specialist
 
 这是典型局部任务预算，不是 Router 硬上限。明确的复合任务按 capability coverage 选择最小集合。这仍不是全流程预加载。
 
-最终成稿审阅必须使用独立 Subagent：重新读取磁盘上的 `.tex`/`.pdf`，不把写作 rationale 当作质量证据。
+最终成稿审阅必须使用独立 Subagent：重新读取磁盘上的 `.tex`/`.pdf`，不把写作 rationale 当作质量证据。承重章节完成后做 scoped review；写整篇前考虑 visual plan。未规划图保持 diagnostic。
 
 不合理：rules → topic → literature → familiarization → data → model → experiment → writer → reviewer。
 

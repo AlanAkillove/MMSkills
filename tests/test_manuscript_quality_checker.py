@@ -116,6 +116,38 @@ def test_checker_accepts_clean_small_manuscript(tmp_path: Path):
     assert "STATUS: pass" in result.stdout
 
 
+def test_checker_flags_problem_restatement_with_writing_profile(tmp_path: Path):
+    manuscript = tmp_path / "restatement.tex"
+    report = tmp_path / "report.json"
+    manuscript.write_text(
+        r"""\begin{document}
+\begin{abstract}
+第一段交代对象与任务。
+
+第二段给出方法和限制。
+\end{abstract}
+\section{问题重述}
+题面要求建立模型并给出结果。
+\label{sec:restatement}
+详见第\ref{sec:restatement}节。
+\end{document}
+""",
+        encoding="utf-8",
+    )
+    writing = ROOT / "profiles" / "writing" / "cumcm-natural-cn.yaml"
+    result = run_checker(
+        manuscript,
+        "--writing-profile",
+        str(writing),
+        "--output",
+        str(report),
+    )
+    assert result.returncode == 1, result.stdout + result.stderr
+    payload = json.loads(report.read_text(encoding="utf-8"))
+    categories = {item["category"] for item in payload["findings"]}
+    assert "problem-restatement-section" in categories
+
+
 def test_checker_does_not_forbid_itemize_without_writing_profile(tmp_path: Path):
     manuscript = tmp_path / "one-list.tex"
     report = tmp_path / "report.json"

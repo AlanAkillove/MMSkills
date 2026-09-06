@@ -25,7 +25,7 @@ def test_capability_index_is_part_of_router_contract():
     assert "route_capabilities.py" in text
     assert "L1.5" in progressive
     assert "问题维度" in writer
-    for name in ("writer.yaml", "modeler.yaml", "computationalist.yaml", "critical.yaml"):
+    for name in ("writer.yaml", "modeler.yaml", "computationalist.yaml", "critical.yaml", "quality-policy.yaml"):
         assert (CAP_DIR / name).is_file()
 
 
@@ -86,10 +86,47 @@ def test_dsh_dimensions_still_cover_writer_review_set():
     assert "modeling-final-preflight" in plan["mandatory_consideration"]
 
 
-def test_single_review_keeps_precision():
+def test_final_review_keeps_precision():
     plan = route_query("审阅论文")
     assert plan["specialists"] == ["modeling-paper-reviewer"]
-    assert plan["mandatory_consideration"]  # consider, not necessarily load extras
+    assert "modeling-paper-reviewer" in plan["mandatory_consideration"]
+    assert "modeling-paper-reviewer" in plan["capability_candidates"]
+
+
+def test_final_submission_draft_enters_candidate_set_without_forcing_load():
+    retrieval = retrieve_capabilities("这是最终提交稿，帮我看看。")
+    assert "modeling-rules-profile" in retrieval["mandatory_consideration"]
+    assert "modeling-final-preflight" in retrieval["mandatory_consideration"]
+    assert "modeling-rules-profile" in retrieval["candidates"]
+    assert "modeling-final-preflight" in retrieval["candidates"]
+    plan = route_query("这是最终提交稿，帮我看看。")
+    assert "modeling-rules-profile" in plan["capability_candidates"]
+    assert "modeling-final-preflight" in plan["capability_candidates"]
+    assert "modeling-rules-profile" not in plan["specialists"]
+    assert "modeling-final-preflight" not in plan["specialists"]
+
+
+def test_modeler_composite_is_not_precision_locked():
+    plan = route_query("结合这些论文推模型，同时把新的物理量和术语统一一下。")
+    assert plan["role"] == "modeler"
+    assert "modeling-model-architect" in plan["specialists"]
+    assert "modeling-literature-evidence" in plan["specialists"]
+    assert "modeling-terminology-auditor" in plan["specialists"]
+    retrieval = retrieve_capabilities(
+        "结合这些论文推模型，同时把新的物理量和术语统一一下。",
+        role="modeler",
+        intent="model_from_literature",
+    )
+    assert retrieval["precision_locked"] is False
+    assert len(retrieval["task_facets"]) >= 2
+
+
+def test_computationalist_composite_covers_experiment_and_figure():
+    plan = route_query("跑一下参数敏感性，同时把结果图画出来并检查图中单位。")
+    assert plan["role"] == "computationalist"
+    assert "modeling-experiment-validator" in plan["specialists"]
+    assert "modeling-figure-designer" in plan["specialists"]
+    assert "modeling-figure-table-auditor" in plan["specialists"]
 
 
 def test_working_set_hit_does_not_reload_catalog():

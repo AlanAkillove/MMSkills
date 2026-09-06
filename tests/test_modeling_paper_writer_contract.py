@@ -22,6 +22,8 @@ def test_writer_is_intent_first_and_not_a_template_filler():
         "results_snapshot",
         "论证覆盖",
         "itemize",
+        "问题重述",
+        "candidate",
     ):
         assert phrase in content
 

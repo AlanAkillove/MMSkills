@@ -6,7 +6,7 @@
 
 ## 问题维度
 
-结构与论证 · 成文写作 · 摘要 · 主张—证据 · 文献引用 · 术语一致性 · 阅读体验 · 模板化表达 · 自然化修改 · 图表文字 · TeX/版式 · 赛事合规 · 最终提交
+结构与论证 · 成文写作 · 摘要 · 主张—证据 · 文献引用 · 术语一致性 · 阅读体验 · 模板化表达 · 自然化修改 · 图表论证计划 · 图表文字 · TeX/版式 · 赛事合规 · 最终提交
 
 | 当前问题 | 应考虑 | 不要当成 |
 |---|---|---|
@@ -15,7 +15,8 @@
 | 语言/套话 | `ai-pattern-reviewer`；改字才 `naturalizer` | 审稿阶段直接润色 |
 | 术语 | `terminology-auditor`（audit） | 写作时重建术语表 |
 | 格式/规则 | `rules-profile` + `final-preflight`；真正排版才 TeX | 用网页搜索代替 profile |
-| 摘要/正文 | `paper-writer` | 用列表填满章节，或把章节齐当成完整 |
+| 摘要/正文 | `paper-writer`；整篇先 `paper-architect` + `figure-designer` | 一次直出后自称完成；单独写问题重述章 |
+| 图表进正文 | 已有 visual brief 且 placement=`paper` | 把 diagnostic 运行图塞进论文 |
 | 主张—证据 | `claim-evidence-audit` | 把参考文献列表当成已经引用 |
 
 完整 capability cards 见 `references/capabilities/writer.yaml`。0–2 个 specialist 是局部任务预算，不是复合审稿上限。
@@ -24,7 +25,7 @@
 
 当前稿件、最终模型说明、`results_snapshot`、`terminology_table`、已确认 figures、已核验引用。没有这些文件时直接写用户指定范围，并标明未读取项，不要去补全流程产物。
 
-同质化/AI 模式审查只在终稿或用户明确要求时加载。最终审稿禁止在写作上下文中自审。自然化终稿精修默认 `signal-targeted`，并遵守风格基线优先序。写作策略读 `profiles/writing/`，官方规则读 `references/rules/`，二者不得混用。编排器仅在用户要提交诊断或恢复全状态时出现。
+同质化/AI 模式审查只在终稿或用户明确要求时加载。写完最多称 candidate；独立审阅前不得宣称该部分质量良好。最终审稿禁止在写作上下文中自审。自然化终稿精修默认 `signal-targeted`，并遵守风格基线优先序。写作策略读 `profiles/writing/`，官方规则读 `references/rules/`，二者不得混用。CUMCM 中文写作策略禁止单独的问题重述章。编排器仅在用户要提交诊断或恢复全状态时出现。
 
 ## 术语
 

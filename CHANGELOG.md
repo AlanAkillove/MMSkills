@@ -2,6 +2,30 @@
 
 本文件记录可复用技能和共享契约的变化。
 
+## [0.3.5]
+
+### Added
+
+- Independent Quality Control：`quality-policy.yaml` 按产物升级描述 audit / independent review / challenge。不新增公开 Skill。
+- 写整篇路由 `draft_full`：先考虑 `paper-architect` 与 `figure-designer`，再写正文。
+- 机械预检拦截单独的「问题重述」章节（CUMCM 写作策略，不是官方法条）。
+
+### Changed
+
+- 核心模型 adopt、高影响假设、claim-bearing 结果冻结、承重章节和最终论文要求独立评价；产出者同上下文只做便宜核对。
+- 论文按承重单元形成 candidate 后再 scoped review；全文独立审阅仍必须保留。
+- 图表前置：未规划运行图默认 `diagnostic`；promote 到 `paper` 需要 visual brief、事实审计和独立 visual review。`figure-designer` 标为 shared capability。
+- CUMCM 中文写作 profile 禁止问题重述专章；必要对象与任务并入问题分析或各问建模。
+
+## [0.3.4]
+
+### Fixed
+
+- `mandatory_consideration` 始终进入 candidate set，不再只在 diagnosis 时并入。
+- Capability expansion 按 facet 数量决定：单个 facet 保持 precision，多个 facet 允许 Modeler/Computationalist 复合召回。
+- 合规门读取 rules profile / preflight / submission context；调用者 boolean 不能得到 `passed`。`cumcm-2026` 仍为 draft/pending 时保持 unassessed。
+- 26–28 页从公共 Writer 和 `cumcm-natural-cn` 默认中移除，改为项目 overlay。
+
 ## [0.3.3]
 
 ### Added

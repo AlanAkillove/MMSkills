@@ -13,7 +13,7 @@
 | `modeling-problem-intake` | 把题面拆成任务、变量、目标、约束和歧义 | `question_map.md` |
 | `modeling-assumption-ledger` | 登记假设、理由、影响、验证与确认状态 | `assumption_ledger.md` |
 | `modeling-claim-evidence-audit` | 绑定主张、证据、边界和验证入口 | `claim_evidence_matrix.csv` |
-| `modeling-paper-reviewer` | 以证据化审稿角色发现题意、模型、证据、阅读和合规问题 | `review_report.md` + `review_findings.jsonl` |
+| `modeling-paper-reviewer` | 以独立上下文审稿；承重章节 scoped review，全文 manuscript review | `review_report.md` + `review_findings.jsonl` |
 | `modeling-paper-naturalizer` | 在保留含义和证据的前提下自然化表达 | `revised_text.md` + changelog |
 | `modeling-final-preflight` | 提交前汇总格式、引用、图表、身份、支撑和 AI 披露状态 | `preflight_report.md` + release manifest |
 
@@ -23,9 +23,9 @@
 |---|---|---|
 | `modeling-rules-profile` | 把赛事要求转为有来源、有效期和冲突状态的规则 profile | `rules_profile.yaml` + source register |
 | `modeling-data-audit` | 检查数据口径、泄漏、缺失、异常和可复现性 | `data_audit.md` |
-| `modeling-model-architect` | 组织基线、候选模型、通俗分项评估、理解校验、取舍和人类决策 | `model_registry.md` + candidate cards/decision brief |
-| `modeling-experiment-validator` | 记录实验、比较、敏感性、不确定性和稳健性 | `experiment_registry.jsonl` + reproduction manifest |
-| `modeling-figure-designer` | 从题目、证据和读者任务设计并制作论文图表、模型图和多面板图 | `figure_design_brief.md` + source/render + manifest |
+| `modeling-model-architect` | 组织基线、候选模型、通俗分项评估；adopt 前独立 Model Critic | `model_registry.md` + candidate cards/decision brief |
+| `modeling-experiment-validator` | 记录实验并做结果审计；claim-bearing 冻结前另做解释审阅 | `experiment_registry.jsonl` + reproduction manifest |
+| `modeling-figure-designer` | 写稿前规划 visual argument；未规划图默认 diagnostic | `figure_design_brief.md` + source/render + manifest |
 | `modeling-distinctiveness-coach` | 写前保留题目特征和真实取舍，阻断强行创新 | `distinctiveness_ledger.md` |
 | `modeling-terminology-auditor` | 建模阶段建立术语表，成稿后只做 drift audit | `terminology_table.md` |
 | `modeling-anti-homogenization-auditor` | 审核题目特征、建模路径、证据组织和表达是否被模板抹平 | `distinctiveness_audit.md` |

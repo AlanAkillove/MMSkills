@@ -12,7 +12,7 @@ items:
     cues: "冻结结果|冻结数字|写入论文的数值"
     require_consideration:
       - modeling-experiment-validator
-    note: "机械产物是 results_snapshot；有 decision_id 才是 frozen。"
+    note: "机械产物是 results_snapshot；有 decision_id 才是 frozen。审计核对数值；独立审阅判断数值能否支持主张。"
   final_manuscript:
     cues: "最终论文|成稿审阅|终稿"
     require_consideration:
@@ -23,4 +23,15 @@ items:
     cues: "审阅|审稿|预审|评审"
     require_consideration:
       - modeling-paper-reviewer
-    note: "最终审稿必须独立 Subagent。"
+    note: "最终审稿与承重章节审阅必须独立 Subagent。"
+  adopt_model:
+    cues: "采用这个模型|采用该模型|确定采用|选定模型|把模型定下来"
+    require_consideration:
+      - modeling-model-architect
+    note: "adopt 前独立 model review；高风险再 challenge。不是 mandatory_call。"
+  visual_first:
+    cues: "写整篇|正式写论文|把论文写出来|开始写论文"
+    require_consideration:
+      - modeling-paper-architect
+      - modeling-figure-designer
+    note: "整篇写作前先考虑论证蓝图和图表计划。"

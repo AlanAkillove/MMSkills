@@ -57,11 +57,51 @@ def test_compliance_claim_without_profile_is_illegal():
     gate = assess_compliance(claimed_status="格式合规")
     assert gate["compliance_status"] == "unassessed"
     assert gate["illegal_compliance_claim"] is True
-    passed = assess_compliance(
+    lied = assess_compliance(
         rules_profile_id="cumcm-2026",
         rules_year="2026",
         official_source_verified=True,
         required_checks_executed=True,
+        claimed_status="passed",
+    )
+    assert lied["compliance_status"] == "unassessed"
+    assert lied["caller_assertions_ignored"] is True
+
+
+def test_compliance_gate_reads_profile_instead_of_caller_bools():
+    import yaml
+
+    draft = yaml.safe_load(RULES.read_text(encoding="utf-8"))
+    blocked = assess_compliance(
+        rules_profile=draft,
+        official_source_verified=True,
+        required_checks_executed=True,
+        claimed_status="格式合规",
+    )
+    assert blocked["compliance_status"] == "unassessed"
+    assert "profile_status_draft" in blocked["reasons"]
+    assert "human_confirmation_pending" in blocked["reasons"]
+    assert blocked["illegal_compliance_claim"] is True
+
+    verified = yaml.safe_load(
+        (ROOT / "tests" / "fixtures" / "compliance-gate" / "verified-profile.yaml").read_text(
+            encoding="utf-8"
+        )
+    )
+    preflight = json.loads(
+        (ROOT / "tests" / "fixtures" / "compliance-gate" / "preflight-complete.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    context = json.loads(
+        (ROOT / "tests" / "fixtures" / "compliance-gate" / "submission-context.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    passed = assess_compliance(
+        rules_profile=verified,
+        preflight_report=preflight,
+        submission_context=context,
         claimed_status="passed",
     )
     assert passed["compliance_status"] == "passed"
@@ -128,6 +168,8 @@ def test_sanitized_dsh_manuscript_fails_writing_profile(tmp_path: Path):
             str(RULES),
             "--pdf-pages",
             "11",
+            "--preferred-pages",
+            "26,28",
             "--output",
             str(report),
         ],
@@ -149,6 +191,7 @@ def test_sanitized_dsh_manuscript_fails_writing_profile(tmp_path: Path):
         "unordered-list-forbidden",
         "orphan-bibliography",
         "coverage-short",
+        "problem-restatement-section",
     ):
         assert required in categories
 

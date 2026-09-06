@@ -14,6 +14,7 @@ facets:
   claims: 主张—证据
   citations: 文献引用
   naturalize: 自然化修改
+  visual_plan: 图表论证计划
   figures_text: 图表文字
   tex: TeX/版式
   format: 赛事格式
@@ -32,6 +33,7 @@ facet_cues:
   claims: "主张|证据链|结论边界"
   citations: "文内引用|参考文献|\\\\cite"
   naturalize: "自然化|润色"
+  visual_plan: "写整篇|正式写论文|把论文写出来|开始写论文|图表计划|visual.?plan"
   figures_text: "图注|表注"
   tex: "LaTeX|\\\\TeX|编译 PDF|排版修复"
   format: "格式规范|论文格式|(?:结构(?:和|,|、).{0,8})格式"
@@ -49,6 +51,10 @@ cards:
   - id: modeling-paper-writer
     primary: [draft, abstract, prose]
     not_for: [审稿诊断]
+  - id: modeling-figure-designer
+    primary: [visual_plan]
+    shared: true
+    not_for: [改某一段正文时重做全部图]
   - id: modeling-claim-evidence-audit
     primary: [claims]
     secondary: [citations]
@@ -86,6 +92,7 @@ cards:
 coverage:
   modeling-paper-architect: {structure: 2}
   modeling-paper-writer: {draft: 2, abstract: 2, prose: 2}
+  modeling-figure-designer: {visual_plan: 2}
   modeling-claim-evidence-audit: {claims: 2, citations: 1}
   modeling-terminology-auditor: {terminology: 2}
   modeling-paper-reviewer: {review: 2, structure: 2, claims: 2, prose: 1}

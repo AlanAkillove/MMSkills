@@ -1,0 +1,6 @@
+schema_version: "0.3.4"
+kind: project_writing_preference
+not_official_rules: true
+# 复制到项目内再改。公共 cumcm-natural-cn 不设目标页数。
+body_length:
+  preferred_pages: [26, 28]

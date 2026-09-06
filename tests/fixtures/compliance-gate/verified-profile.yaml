@@ -1,0 +1,17 @@
+schema_version: "0.3.4"
+profile_id: "fixture-verified-2026"
+status: verified
+competition:
+  name: "Fixture contest"
+  year: 2026
+sources:
+  - source_id: FIXTURE-OFFICIAL
+    authority: official_organizing_committee
+    accessed_at: "2026-09-01"
+human_confirmation:
+  required: true
+  status: confirmed
+  person: fixture
+  date: "2026-09-01"
+  scope: "fixture only"
+  decision_id: DEC-FIXTURE

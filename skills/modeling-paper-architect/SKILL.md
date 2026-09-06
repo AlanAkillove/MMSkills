@@ -5,7 +5,7 @@ description: "从题意、假设、差异化账本、模型注册、实验和主
 
 # 数学建模论文结构架构
 
-在写作前或重构时，把题目子问题映射到主张、证据、章节和图表。提供可调整的建议，不把蓝图变成审批流程，也不代替选模型、补实验或直接完成正文。
+在写作前或重构时，把题目子问题映射到主张、证据、章节和图表。**Visual argument plan 是一等对象**：正式写整篇前先确定每条承重主张用哪张图/表回答什么读者问题，再让 Writer 围绕这些证据写。提供可调整的建议，不把蓝图变成审批流程，也不代替选模型、补实验或直接完成正文。
 
 ## 何时使用
 
@@ -22,6 +22,10 @@ description: "从题意、假设、差异化账本、模型注册、实验和主
 
 先直接回答当前结构问题：这一节要回答哪一问、缺哪条证据、相邻节怎么接。默认不先生成五份蓝图文件。
 
-一个 `section_contract` 仍应能说出：该节任务、主张/证据、段落功能、不应出现的填充。需要交接或最终采用时，再落盘 `paper_blueprint.md`、`section_contracts.yaml`、`argument_map.md`。
+一个 `section_contract` 仍应能说出：该节任务、主张/证据、段落功能、不应出现的填充。整篇写作还应有 `visual_plan`：每张拟进正文的图/表写清 `reader_question`、支撑的 claim、比较什么、放在哪一节之后。不要写“曲线应该先降后升”这类预设结论。未规划的运行图默认 `diagnostic`，不能因为看起来不错就进正文。
+
+CUMCM 中文写作 profile 下，不要规划单独的「问题重述」章；必要对象和任务并入问题分析或各问建模。
+
+需要交接或最终采用时，再落盘 `paper_blueprint.md`、`section_contracts.yaml`、`argument_map.md`。承重单元成熟度只用 `draft` / `candidate` / `reviewed` / `accepted-for-assembly`；写完最多称为 candidate，独立审阅前不得说“这一部分已经完成且质量良好”。
 
 完整字段见 [blueprint-contract.md](references/blueprint-contract.md)、[argument-mapping.md](references/argument-mapping.md)、[section-and-paragraph-functions.md](references/section-and-paragraph-functions.md)、[recommended-workflow.md](references/recommended-workflow.md) 和 [research-basis.md](references/research-basis.md)。

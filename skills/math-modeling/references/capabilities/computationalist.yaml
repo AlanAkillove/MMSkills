@@ -9,8 +9,8 @@ facets:
 facet_cues:
   data_change: "清洗数据|切分|缺失处理"
   experiment: "跑代码|敏感性|求解|matlab|实验登记"
-  figure: "画图|绘图|plot"
-  figure_audit: "核图|图中的单位|图中的数"
+  figure: "画图|绘图|plot|画出来|结果图"
+  figure_audit: "核图|图中的单位|图中单位|图中的数"
 diagnosis_facets: []
 exclude_when_diagnosing: []
 cards:
@@ -20,6 +20,7 @@ cards:
     primary: [experiment]
   - id: modeling-figure-designer
     primary: [figure]
+    shared: true
   - id: modeling-figure-table-auditor
     primary: [figure_audit]
 coverage:

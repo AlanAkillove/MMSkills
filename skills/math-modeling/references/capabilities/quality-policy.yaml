@@ -1,0 +1,87 @@
+schema_version: "0.3.5"
+kind: quality_policy
+principle: "审计查错，审阅评质，挑战反证；重要评价不由产出者自己完成。"
+not_a_workflow: true
+# Subagent 绑定质量边界，不绑定每个 Skill。
+isolation:
+  producer_may: cheap_sanity_check
+  producer_may_not: [independent_review, challenge, declare_quality_good]
+  subagent:
+    required_for: [independent_review, challenge]
+    context: fresh
+    inputs: artifacts_and_source_only
+    forbid_inputs: [producer_rationale, sunk_cost, ready_to_adopt]
+    output: findings_not_decisions
+    cannot_self_close: true
+  host_without_subagent:
+    review_isolation: unavailable
+    allow: non_isolated_semantic_review
+    confidence: reduced
+    forbid_claim: "已经完成独立审稿"
+
+maturity:
+  exploratory: "可讨论，不要求 Subagent"
+  candidate: "可供检查，尚未独立审阅"
+  reviewed: "已完成所需 audit/review"
+  finalized: "人类确认后可冻结/提交"
+  section_states: [draft, candidate, reviewed, accepted-for-assembly]
+
+intensity:
+  Q1: [audit]
+  Q2: [audit, independent_review]
+  Q3: [audit, independent_review, challenge]
+
+artifact_types:
+  model_candidate:
+    before: adopt
+    intensity: Q2
+    challenge: high_risk
+    audit: {mode: tool_or_inline, owner: modeling-model-architect}
+    review: {mode: independent_subagent, required: true}
+    note: "Critic 只看题意、必要文献、数据和候选说明，不看主 Agent 为何喜欢该模型。"
+  high_impact_assumption:
+    before: accept
+    intensity: Q3
+    audit: {mode: ledger_consistency}
+    review: {mode: independent_subagent, recommended: true}
+    challenge: {mode: independent_subagent, required: true}
+  result:
+    before: freeze_claim_bearing
+    intensity: Q2
+    audit: {mode: tool, owner: modeling-experiment-validator}
+    review:
+      mode: independent_subagent
+      required: true
+      question: "这些数值能否支持准备写入论文的主张？"
+  paper_figure:
+    before: promote_from_diagnostic
+    intensity: Q2
+    audit: {mode: tool, owner: modeling-figure-table-auditor}
+    visual_review: {mode: independent_subagent, required: true}
+    requires_visual_brief: true
+  manuscript_section:
+    before: assembly
+    intensity: Q2
+    when: claim_bearing
+    audit: {mode: tool}
+    review: {mode: independent_subagent, scoped: true}
+    skip_when: [symbol_table, trivial_transition]
+  abstract_or_conclusion:
+    before: assembly
+    intensity: Q2
+    audit: {mode: tool}
+    review: {mode: independent_subagent, scoped: true}
+  final_manuscript:
+    before: final
+    intensity: Q2
+    audit: {mode: tool, owner: modeling-final-preflight}
+    review: {mode: independent_subagent, required: true, full: true}
+  rules_format:
+    before: compliance_claim
+    intensity: Q1
+    audit: {mode: tool}
+    review: only_if_rule_ambiguous
+
+unplanned_runtime_figure:
+  default_placement: diagnostic
+  cannot_enter_paper_until: [visual_brief, data_audit, visual_review]

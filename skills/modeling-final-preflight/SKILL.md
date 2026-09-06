@@ -53,7 +53,7 @@ description: "在提交前汇总规则、论文、题意、假设、主张证据
 
 ### 3. 检查成文质量
 
-对最终候选 TeX/Markdown 运行 `scripts/check_manuscript_quality.py`，终稿加上 `--writing-profile` 与 `--rules-profile`。机械项包括：无序 itemize、boxed 公式、英文摘要、孤立参考文献、错误页数规则。列表、章节数量和参考论文差异不能直接判定论文好坏。未解析 rules profile 时运行 `scripts/check_compliance_gate.py`，禁止输出 compliant。可选再运行 `modeling-ai-pattern-reviewer/scripts/scan_language_signals.py`（或胶水 `--language-scan`）：命中项只是 `candidate`/`warning`。P0/P1 仍只来自主张、事实、规则、引用、数字和提交问题；写作 profile 的机械禁令除外。
+对最终候选 TeX/Markdown 运行 `scripts/check_manuscript_quality.py`，终稿加上 `--writing-profile` 与 `--rules-profile`。机械项包括：无序 itemize、boxed 公式、英文摘要、孤立参考文献、单独问题重述章、错误页数规则。列表、章节数量和参考论文差异不能直接判定论文好坏。未解析 rules profile 时运行 `scripts/check_compliance_gate.py`，禁止输出 compliant。可选再运行 `modeling-ai-pattern-reviewer/scripts/scan_language_signals.py`（或胶水 `--language-scan`）：命中项只是 `candidate`/`warning`。P0/P1 仍只来自主张、事实、规则、引用、数字和提交问题；写作 profile 的机械禁令除外。
 
 ### 4. 汇总语义状态
 

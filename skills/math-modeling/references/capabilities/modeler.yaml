@@ -15,10 +15,10 @@ facet_cues:
   topic: "选题|多题比较|选哪一题"
   understand: "让我理解|帮我理解|弄懂|熟悉题目|阅读赛题"
   intake: "问题地图|正式题意|固化题意"
-  literature: "文献|相关工作|DOI|orientation"
+  literature: "文献|相关工作|DOI|orientation|这些论文|这几篇论文|已读论文"
   model: "比较.*模型|候选模型|模型设计|物理模型|重新建模|推模型"
   assumption: "假设账本|登记假设"
-  terminology_establish: "术语表|统一叫|canonical term"
+  terminology_establish: "术语表|统一叫|canonical term|术语统一|统一.{0,8}术语|术语.{0,8}统一|物理量"
   data_explore: "数据口径|缺失值|变量含义"
   distinctiveness: "题目特异|反同质化"
 diagnosis_facets: []

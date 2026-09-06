@@ -111,6 +111,17 @@ def test_continue_from_papers_is_modeler_and_polish_section_is_writer():
     assert polish["role"] == "writer"
     assert polish["specialists"] == ["modeling-paper-writer"]
     assert polish["load_orchestrator"] is False
+    full = route_query("把论文写出来")
+    assert full["intent"] == "draft_full"
+    assert full["role"] == "writer"
+    assert full["specialists"] == [
+        "modeling-paper-architect",
+        "modeling-figure-designer",
+        "modeling-paper-writer",
+    ]
+    local_draft = route_query("写论文")
+    assert local_draft["intent"] == "draft"
+    assert local_draft["specialists"] == ["modeling-paper-writer"]
 
 
 def test_cli_json_roundtrip():

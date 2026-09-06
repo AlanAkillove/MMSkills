@@ -1,5 +1,5 @@
 # Machine-readable default ownership. Not a hard dependency graph.
-schema_version: "0.3.3"
+schema_version: "0.3.5"
 never_preload:
   - modeling-pipeline-orchestrator
   - modeling-process-freezer
@@ -84,6 +84,14 @@ intents:
   draft:
     role: writer
     specialists: [modeling-paper-writer]
+  draft_full:
+    role: writer
+    persist_artifacts: false
+    specialists:
+      - modeling-paper-architect
+      - modeling-figure-designer
+      - modeling-paper-writer
+    note: "先论证/图表计划，再写正文。运行图默认 diagnostic。"
   composite_review:
     role: writer
     persist_artifacts: false
