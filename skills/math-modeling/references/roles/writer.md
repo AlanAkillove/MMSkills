@@ -15,7 +15,7 @@
 | 语言/套话 | `ai-pattern-reviewer`；改字才 `naturalizer` | 审稿阶段直接润色 |
 | 术语 | `terminology-auditor`（audit） | 写作时重建术语表 |
 | 格式/规则 | `rules-profile` + `final-preflight`；真正排版才 TeX | 用网页搜索代替 profile |
-| 摘要/正文 | `paper-writer`；整篇先 `paper-architect` + `figure-designer` | 一次直出后自称完成；单独写问题重述章 |
+| 摘要/正文 | 局部用 `paper-writer`；整篇第一轮只 `paper-architect` + `figure-designer` | 同一轮直接写完整稿；单独写问题重述章 |
 | 图表进正文 | 已有 visual brief 且 placement=`paper` | 把 diagnostic 运行图塞进论文 |
 | 主张—证据 | `claim-evidence-audit` | 把参考文献列表当成已经引用 |
 

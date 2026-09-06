@@ -78,15 +78,24 @@ def inspect_preflight(report: Optional[dict[str, Any]]) -> dict[str, Any]:
             "present": False,
             "checks_run": [],
             "required_unassessed": ["preflight_report_missing"],
+            "errors": [],
+            "status": None,
+            "failed": False,
         }
     checks = report.get("checks_run") or report.get("checks") or []
     if isinstance(checks, dict):
         checks = list(checks.keys())
     unassessed = list(report.get("required_unassessed") or [])
+    errors = list(report.get("errors") or [])
+    status = report.get("status") or report.get("overall_status")
+    failed = bool(errors) or str(status or "").lower() in {"fail", "failed", "error", "blocked"}
     return {
         "present": True,
         "checks_run": list(checks),
         "required_unassessed": unassessed,
+        "errors": errors,
+        "status": status,
+        "failed": failed,
     }
 
 
@@ -145,8 +154,22 @@ def assess_compliance(
             reasons.append("official_source_missing")
     if context_facts["present"] and context_facts.get("status") not in {None, "resolved"}:
         reasons.append("submission_context_unresolved")
+    if (
+        profile_facts
+        and context_facts["present"]
+    ):
+        ctx_id = context_facts.get("rules_profile_id")
+        ctx_year = context_facts.get("rules_year")
+        profile_id = profile_facts.get("profile_id")
+        profile_year = profile_facts.get("rules_year")
+        if ctx_id and profile_id and str(ctx_id) != str(profile_id):
+            reasons.append("rules_profile_id_mismatch")
+        if ctx_year is not None and profile_year is not None and str(ctx_year) != str(profile_year):
+            reasons.append("rules_year_mismatch")
     if not preflight_facts["present"] or not preflight_facts["checks_run"] or preflight_facts["required_unassessed"]:
         reasons.append("required_checks_incomplete")
+    if preflight_facts.get("failed"):
+        reasons.append("preflight_errors")
     if official_source_verified or required_checks_executed or required_unassessed is not None:
         # Keep the fields visible, but they cannot clear a failed artifact check.
         pass

@@ -33,7 +33,7 @@ description: "组织数模问题的可解释基线、候选模型、适配条件
 1. 专家层：变量/约束、假设、数据需求、验证计划和证据；
 2. 用户层：用本题对象说明用途、适配、代价、风险和未知。用户层不使用总分。
 
-状态只用 `baseline` / `candidate` / `adopted` / `rejected` / `failed` / `unknown`。`adopted` 不等于最优。**正式 adopt 前必须独立 Model Critic**（Subagent 模式，不是新的公开 Skill）：只给原题/确认题意、必要文献、数据情况和候选说明，不给“主 Agent 为何喜欢/已投入多少时间/准备采用”。Critic 回答模型实际解决了什么、最强未验证假设、是否改题、何处易失效、验证能否区分碰巧拟合、是否有更简单替代、哪些结论现在不能声称。高影响或单一候选占优时再加 challenge，必要时盲审两阶段（先不看候选，只写合理模型应满足什么）。产出者自己填写的失败边界不能代替这次审查。
+状态只用 `baseline` / `candidate` / `adopted` / `rejected` / `failed` / `unknown`。`adopted` 不等于最优。**正式 adopt 前必须独立 Model Critic**（Subagent 模式，不是新的公开 Skill）：只给原题/确认题意、必要文献、数据情况和候选说明，不给“主 Agent 为何喜欢/已投入多少时间/准备采用”。标记 `adopted` 前运行 `math-modeling/scripts/resolve_quality.py --artifact-type model_candidate --target-state adopted`；缺少当前 hash 的审查证据时仍可讨论，不得标记 adopted。Critic 回答模型实际解决了什么、最强未验证假设、是否改题、何处易失效、验证能否区分碰巧拟合、是否有更简单替代、哪些结论现在不能声称。高影响或单一候选占优时再加 challenge，必要时盲审两阶段（先不看候选，只写合理模型应满足什么）。产出者自己填写的失败边界不能代替这次审查。
 
 只有跨会话、用户要求留痕、`working_depth=full` 或最终交付时，才落盘 `model_registry.md`、`model_candidate_cards.md`、`model_decision_brief.md` 和带 `human_status` / `understanding_check` 的决策记录。详细字段、六步比较法和验证准备度按需读取 references。
 

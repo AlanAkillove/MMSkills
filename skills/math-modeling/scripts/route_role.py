@@ -157,7 +157,7 @@ def route_query(
         confidence = "medium"
         loaded = ["math-modeling", f"role:{role}"]
         loaded.extend(specialists)
-    elif should_expand(intent, retrieval, specialists):
+    elif (not spec.get("do_not_expand")) and should_expand(intent, retrieval, specialists):
         specialists = merge_specialists(specialists, retrieval.get("specialists") or [])
         loaded = ["math-modeling"]
         if role != "unknown":
@@ -165,6 +165,13 @@ def route_query(
         loaded.extend(specialists)
         if load_orchestrator and "modeling-pipeline-orchestrator" not in specialists:
             loaded.append("modeling-pipeline-orchestrator")
+    specialists = merge_specialists(specialists, retrieval.get("shared_specialists") or [])
+    loaded = ["math-modeling"]
+    if role != "unknown":
+        loaded.append(f"role:{role}")
+    loaded.extend(specialists)
+    if load_orchestrator and "modeling-pipeline-orchestrator" not in specialists:
+        loaded.append("modeling-pipeline-orchestrator")
     if not review_isolation and "modeling-paper-reviewer" in specialists:
         review_isolation = "required_subagent"
     return {
@@ -177,6 +184,8 @@ def route_query(
         "load_stage_registry": load_orchestrator,
         "persist_artifacts": bool(spec.get("persist_artifacts", False)),
         "review_isolation": review_isolation,
+        "deferred_specialists": _as_list(spec.get("deferred_specialists")),
+        "action_gate": spec.get("action_gate"),
         "never_preload": never_preload,
         "confidence": confidence,
         "matched_rule": matched_rule,

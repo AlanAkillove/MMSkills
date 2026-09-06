@@ -25,7 +25,7 @@ def test_capability_index_is_part_of_router_contract():
     assert "route_capabilities.py" in text
     assert "L1.5" in progressive
     assert "问题维度" in writer
-    for name in ("writer.yaml", "modeler.yaml", "computationalist.yaml", "critical.yaml", "quality-policy.yaml"):
+    for name in ("writer.yaml", "modeler.yaml", "computationalist.yaml", "critical.yaml", "quality-policy.yaml", "shared.yaml"):
         assert (CAP_DIR / name).is_file()
 
 

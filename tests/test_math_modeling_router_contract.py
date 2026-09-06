@@ -37,6 +37,7 @@ def test_entrypoint_is_a_thin_router():
     cap_dir = SKILL / "references" / "capabilities"
     assert (cap_dir / "writer.yaml").is_file()
     assert (SKILL / "scripts" / "route_capabilities.py").is_file()
+    assert (SKILL / "scripts" / "resolve_quality.py").is_file()
 
 
 def test_local_continue_does_not_preload_orchestrator_or_registry():
@@ -117,8 +118,10 @@ def test_continue_from_papers_is_modeler_and_polish_section_is_writer():
     assert full["specialists"] == [
         "modeling-paper-architect",
         "modeling-figure-designer",
-        "modeling-paper-writer",
     ]
+    assert full["deferred_specialists"] == ["modeling-paper-writer"]
+    assert "argument_plan_candidate" in full["action_gate"]
+    assert "modeling-paper-writer" not in full["specialists"]
     local_draft = route_query("写论文")
     assert local_draft["intent"] == "draft"
     assert local_draft["specialists"] == ["modeling-paper-writer"]

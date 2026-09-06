@@ -1,0 +1,26 @@
+# quality_evidence（可选，仅在跨越质量边界时使用）
+
+```yaml
+quality_evidence:
+  artifact_id: null
+  artifact_hash: null
+  audit:
+    status: missing | pass | fail | unassessed
+    source: null
+    artifact_hash: null
+  review:
+    status: missing | pass | fail | unassessed
+    isolation: fresh_subagent | unavailable | same_context
+    reviewer: null
+    artifact_hash: null
+    findings_open: []
+  challenge:
+    status: missing | pass | fail | unassessed
+    isolation: fresh_subagent | unavailable | same_context
+    artifact_hash: null
+  human_decision:
+    status: pending | confirmed
+    decision_id: null
+```
+
+`reviewed` 只在 audit/review 的 `artifact_hash` 与当前产物一致且无 P0/P1 未关闭时成立。

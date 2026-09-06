@@ -1,0 +1,14 @@
+schema_version: "0.3.6"
+kind: shared_capability_index
+# 真正跨角色的少数能力。Router 仍先选 primary role，这些技能可进入任意角色的 candidate/min-cover。
+cards:
+  - id: modeling-figure-designer
+    primary: [figure_design, visual_argument]
+    not_for: [改某一段正文时重做全部图]
+facet_cues:
+  figure_design: "示意图|结构图|流程图|机理图|模型图|设计一张|画一张"
+  visual_argument: "这张图应该怎样|图.{0,12}论证|论证.{0,12}图|服务问题"
+coverage:
+  modeling-figure-designer: {figure_design: 2, visual_argument: 2}
+cost:
+  modeling-figure-designer: 2

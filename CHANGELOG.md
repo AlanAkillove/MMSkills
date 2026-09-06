@@ -2,6 +2,24 @@
 
 本文件记录可复用技能和共享契约的变化。
 
+## [0.3.6]
+
+### Added
+
+- Quality Boundary Resolver：`resolve_quality.py` 按 artifact 状态转换检查 audit/review/challenge/human decision；缺少当前 `artifact_hash` 的证据时允许讨论、禁止标记目标状态。
+- Review bundle：一个承重单元一次独立 Subagent；透镜写在 `independent-review-contract.md`。
+- `capabilities/shared.yaml`：Figure Designer 可跨角色进入候选。
+
+### Changed
+
+- `draft_full` 第一轮只加载 `paper-architect` 与 `figure-designer`，Writer 延后到论证/图表计划经用户讨论之后。
+- 图表 `placement` 与 `maturity` 分开；定量图与概念/结构图使用不同 `evidence_audit`。
+- CUMCM 写作策略中问题重述禁令不再借用“委员会”措辞。
+
+### Fixed
+
+- 合规门检查 preflight `errors` / 失败状态，并要求 submission context 与 rules profile 的 id、年份一致。
+
 ## [0.3.5]
 
 ### Added

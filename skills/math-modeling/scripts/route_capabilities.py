@@ -27,6 +27,7 @@ ROLE_FILES = {
     "writer": CAP_DIR / "writer.yaml",
 }
 CRITICAL_PATH = CAP_DIR / "critical.yaml"
+SHARED_PATH = CAP_DIR / "shared.yaml"
 INVALIDATE = re.compile(
     r"重新建模|物理模型|换题|改做编程|跑代码|机理研究|重新研究",
     re.I,
@@ -48,6 +49,12 @@ def load_indexes() -> Dict[str, Dict[str, Any]]:
 
 def load_critical() -> Dict[str, Any]:
     return _load_yaml(CRITICAL_PATH)
+
+
+def load_shared() -> Dict[str, Any]:
+    if not SHARED_PATH.is_file():
+        return {}
+    return _load_yaml(SHARED_PATH)
 
 
 def extract_facets(query: str, index: Dict[str, Any]) -> List[str]:
@@ -200,15 +207,20 @@ def retrieve_capabilities(
 ) -> Dict[str, Any]:
     indexes = indexes or load_indexes()
     critical = critical or load_critical()
+    shared_index = load_shared()
     by_role = extract_all_facets(query, indexes)
     implied = imply_role(by_role)
     resolved_role = role if role and role not in {"unknown", "inherit", "cross_cutting"} else implied
     facets = list(by_role.get(resolved_role or "", []) or [])
+    shared_facets = extract_facets(query, shared_index) if shared_index else []
     cache = working_set_status(query, role=resolved_role, facets=facets, working_set=working_set)
     index = indexes.get(resolved_role or "", {})
     diagnosis = bool(set(facets) & set(index.get("diagnosis_facets") or []))
     exclude = list(index.get("exclude_when_diagnosing") or []) if diagnosis else []
+    if intent == "draft_full":
+        exclude.append("modeling-paper-writer")
     selected = min_cover(facets, index, exclude=exclude) if facets and index else []
+    shared_selected = min_cover(shared_facets, shared_index) if shared_facets and shared_index else []
     crit = critical_hits(query, facets, critical)
     if diagnosis:
         for skill in crit.get("promote") or []:
@@ -233,14 +245,19 @@ def retrieve_capabilities(
     for skill in crit.get("mandatory_consideration") or []:
         if skill not in candidates:
             candidates.append(skill)
+    for skill in shared_selected:
+        if skill not in candidates:
+            candidates.append(skill)
     facet_count = len(facets)
     return {
         "role": resolved_role,
         "implied_role": implied,
         "task_facets": facets,
+        "shared_facets": shared_facets,
         "facets_by_role": by_role,
         "candidates": _uniq(candidates),
         "specialists": selected,
+        "shared_specialists": shared_selected,
         "mandatory_consideration": crit["mandatory_consideration"],
         "critical_matched": crit["matched"],
         "working_set": cache,

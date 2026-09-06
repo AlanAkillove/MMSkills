@@ -1,8 +1,9 @@
-schema_version: "0.3.5"
+schema_version: "0.3.6"
 kind: quality_policy
 principle: "审计查错，审阅评质，挑战反证；重要评价不由产出者自己完成。"
 not_a_workflow: true
-# Subagent 绑定质量边界，不绑定每个 Skill。
+executor: scripts/resolve_quality.py
+# Subagent 绑定质量边界，不绑定每个 Skill。缺少证据时允许继续讨论，不允许标记目标状态。
 isolation:
   producer_may: cheap_sanity_check
   producer_may_not: [independent_review, challenge, declare_quality_good]
@@ -22,14 +23,41 @@ isolation:
 maturity:
   exploratory: "可讨论，不要求 Subagent"
   candidate: "可供检查，尚未独立审阅"
-  reviewed: "已完成所需 audit/review"
+  reviewed: "当前 artifact_hash 已完成所需 audit/review"
   finalized: "人类确认后可冻结/提交"
   section_states: [draft, candidate, reviewed, accepted-for-assembly]
+
+quality_evidence:
+  required_on_transition: true
+  fields:
+    audit: [status, source, artifact_hash]
+    review: [status, isolation, reviewer, artifact_hash, findings_open]
+    challenge: [status, isolation, artifact_hash]
+    human_decision: [status, decision_id]
+  stale_if_hash_mismatch: true
 
 intensity:
   Q1: [audit]
   Q2: [audit, independent_review]
   Q3: [audit, independent_review, challenge]
+
+review_units:
+  question_bundle:
+    member_types: [manuscript_section, result, paper_figure]
+    one_review: true
+    lens: question_closure
+  model_bundle:
+    member_types: [model_candidate]
+    one_review: true
+    lens: model_critic
+  assumption_bundle:
+    member_types: [high_impact_assumption]
+    one_review: true
+    lens: assumption_challenger
+  manuscript_bundle:
+    member_types: [abstract_or_conclusion, final_manuscript]
+    one_review: true
+    lens: manuscript
 
 artifact_types:
   model_candidate:
@@ -59,18 +87,21 @@ artifact_types:
     audit: {mode: tool, owner: modeling-figure-table-auditor}
     visual_review: {mode: independent_subagent, required: true}
     requires_visual_brief: true
+    evidence_audit:
+      quantitative: [visual_brief, data_unit_audit, visual_review]
+      conceptual: [visual_brief, semantic_geometry_audit, visual_review]
   manuscript_section:
     before: assembly
     intensity: Q2
     when: claim_bearing
     audit: {mode: tool}
-    review: {mode: independent_subagent, scoped: true}
+    review: {mode: independent_subagent, required: true, scoped: true}
     skip_when: [symbol_table, trivial_transition]
   abstract_or_conclusion:
     before: assembly
     intensity: Q2
     audit: {mode: tool}
-    review: {mode: independent_subagent, scoped: true}
+    review: {mode: independent_subagent, required: true, scoped: true}
   final_manuscript:
     before: final
     intensity: Q2
@@ -84,4 +115,4 @@ artifact_types:
 
 unplanned_runtime_figure:
   default_placement: diagnostic
-  cannot_enter_paper_until: [visual_brief, data_audit, visual_review]
+  cannot_enter_paper_until: [visual_brief, evidence_audit, visual_review]

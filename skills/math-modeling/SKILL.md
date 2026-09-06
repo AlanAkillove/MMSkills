@@ -17,7 +17,7 @@ description: "数学建模人机协作的统一入口。把当前任务路由到
 - **编程手 / Computationalist**：数据、实现、实验、数值核验、研究用图。
 - **论文手 / Writer**：结构、正文、摘要、引用、术语 drift、审稿、排版、终检。
 
-角色指南只在确定角色后读取：`references/roles/modeler.md`、`computationalist.md`、`writer.md`。路由表见 `references/specialist-routing.yaml`。能力目录见 `references/capabilities/`。可用 `scripts/route_role.py` 与 `scripts/route_capabilities.py` 做确定性分流和召回。机械核验按需运行 `scripts/results/`、`scripts/figures/`、`scripts/evidence/citations.py` 和 `scripts/model/check_feasibility_probe.py`。
+角色指南只在确定角色后读取：`references/roles/modeler.md`、`computationalist.md`、`writer.md`。路由表见 `references/specialist-routing.yaml`。能力目录见 `references/capabilities/`。可用 `scripts/route_role.py` 与 `scripts/route_capabilities.py` 做确定性分流和召回。产物跨越质量边界时运行 `scripts/resolve_quality.py`：缺少审查证据仍可讨论，但不得标记 adopted / frozen / paper / assembled。机械核验按需运行 `scripts/results/`、`scripts/figures/`、`scripts/evidence/citations.py` 和 `scripts/model/check_feasibility_probe.py`。
 
 ## 本轮怎么做
 
@@ -26,9 +26,9 @@ description: "数学建模人机协作的统一入口。把当前任务路由到
 3. 先在对话里回答。跨会话、人类决策、结果将成为下游输入、或最终提交时才落盘。“让我理解题目”只讲解，不创建 `question_map.md`。
 4. 只有完整赛程初始化、跨会话恢复、full audit 或提交诊断才调用 `modeling-pipeline-orchestrator`。
 5. 赛题年份与提交规则年份必须分开。禁止从 `problem_year` 推断 `rules_year`。未解析 `rules_profile_id` 时可以写稿和编译，但不得声称格式合规或提交就绪。
-6. 质量原则：**审计查错，审阅评质，挑战反证；重要评价不由产出者自己完成。** 同上下文自检只做便宜核对。核心模型 adopt、高影响假设、claim-bearing 结果冻结、承重章节和最终论文的评价必须独立 Subagent。策略见 `references/capabilities/quality-policy.yaml`。宿主无 Subagent 时标 `review_isolation=unavailable`，允许降低置信度的语义审阅，不得声称已完成独立审稿。
-7. 正式写整篇前先考虑论证蓝图和图表计划。未规划运行图默认 `diagnostic`，不能直接进正文。CUMCM 中文写作 profile 禁止单独的「问题重述」章。
-8. 最终成稿审阅必须启动独立 Subagent（独立上下文、只读磁盘上的终稿）。承重论文单元完成后再做 scoped review，不要等整篇写完才第一次审。主会话不得自审自夸。
+6. 质量原则：**审计查错，审阅评质，挑战反证；重要评价不由产出者自己完成。** 同上下文自检只做便宜核对。核心模型 adopt、高影响假设、claim-bearing 结果冻结、承重章节和最终论文的评价必须独立 Subagent。策略见 `references/capabilities/quality-policy.yaml`，执行约束是 `scripts/resolve_quality.py`。`reviewed` 必须覆盖当前 `artifact_hash`。一个承重单元用一次 Subagent（review bundle），不要每个图各开一次。宿主无 Subagent 时标 `review_isolation=unavailable`，允许降低置信度的语义审阅，不得声称已完成独立审稿。
+7. 正式写整篇的第一轮只加载论证蓝图和图表计划，等用户讨论后再加载 Writer。未规划运行图默认 `diagnostic`，不能直接进正文。CUMCM 中文写作 profile 禁止单独的「问题重述」章。
+8. 最终成稿审阅必须启动独立 Subagent（独立上下文、只读磁盘上的终稿）。承重论文单元完成后再做 scoped review，不要等整篇写完才第一次审。主会话不得自审自夸。透镜见 `references/independent-review-contract.md`。
 
 ## 硬约束
 

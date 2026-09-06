@@ -1,0 +1,6 @@
+{
+  "checks_run": ["manuscript_quality", "identity"],
+  "required_unassessed": [],
+  "errors": ["figure diagnostic mixed into paper"],
+  "status": "fail"
+}

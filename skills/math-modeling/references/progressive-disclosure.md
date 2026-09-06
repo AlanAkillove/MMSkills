@@ -29,7 +29,7 @@ L3  Reference / Tool  references/、scripts/
 自动进入决策路径，不是可选附录。数据：`references/capabilities/{role}.yaml`。脚本：`scripts/route_capabilities.py`。
 
 路径：`query → task facets → capability retrieval → candidate specialists → minimal coverage`。
-`mandatory_consideration` 保证关键能力进入候选；真正加载哪些完整 Skill 仍由当前任务决定。产物跨越质量边界时读 `quality-policy.yaml`：审计可由工具/同上下文完成，审阅与挑战必须独立 Subagent。
+`mandatory_consideration` 保证关键能力进入候选；真正加载哪些完整 Skill 仍由当前任务决定。产物跨越质量边界时运行 `scripts/resolve_quality.py`，读 `quality-policy.yaml`：缺少证据可继续讨论，不能标记目标状态。`reviewed` 必须绑定当前 `artifact_hash`。跨角色能力见 `shared.yaml`。
 
 ## Layer 2 — Specialist
 

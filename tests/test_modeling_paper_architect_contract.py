@@ -56,6 +56,8 @@ def test_references_define_blueprint_and_argument_mapping():
         "paragraph_functions",
         "must_not_invent",
         "human_status",
+        "placement",
+        "maturity",
     ):
         assert phrase in contract
     for phrase in ("主线图", "篇幅预算", "摘要与结论回归", "结构反模板检查"):

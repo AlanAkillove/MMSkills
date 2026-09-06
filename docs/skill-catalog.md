@@ -25,7 +25,7 @@
 | `modeling-data-audit` | 检查数据口径、泄漏、缺失、异常和可复现性 | `data_audit.md` |
 | `modeling-model-architect` | 组织基线、候选模型、通俗分项评估；adopt 前独立 Model Critic | `model_registry.md` + candidate cards/decision brief |
 | `modeling-experiment-validator` | 记录实验并做结果审计；claim-bearing 冻结前另做解释审阅 | `experiment_registry.jsonl` + reproduction manifest |
-| `modeling-figure-designer` | 写稿前规划 visual argument；未规划图默认 diagnostic | `figure_design_brief.md` + source/render + manifest |
+| `modeling-figure-designer` | 写稿前规划 visual argument；跨角色 shared；未规划图默认 diagnostic | `figure_design_brief.md` + source/render + manifest |
 | `modeling-distinctiveness-coach` | 写前保留题目特征和真实取舍，阻断强行创新 | `distinctiveness_ledger.md` |
 | `modeling-terminology-auditor` | 建模阶段建立术语表，成稿后只做 drift audit | `terminology_table.md` |
 | `modeling-anti-homogenization-auditor` | 审核题目特征、建模路径、证据组织和表达是否被模板抹平 | `distinctiveness_audit.md` |

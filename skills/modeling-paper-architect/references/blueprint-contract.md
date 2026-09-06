@@ -64,19 +64,20 @@ paragraph_contract:
 ```yaml
 visual_plan:
   visual_id: fig-sensitivity
-  role: paper
+  placement: diagnostic | comparison | paper | appendix
+  maturity: planned | produced | audited | reviewed | accepted
   reader_question: null
   claim_supported: null
   evidence_source: null
-  visual_form: line | contour | scatter | table | other
+  visual_form: line | contour | scatter | table | schematic | other
+  figure_kind: quantitative | conceptual
   comparison: {x: null, y: null}
   reader_task: null
   caption_job: null
   placement_after: null
   source_artifact: {script: null, data: null}
-  status: planned | diagnostic | paper | appendix
 ```
 
-`reader_question` 写读者要比较什么，不写期望曲线形状。未进入本计划的运行图保持 `diagnostic`。
+`reader_question` 写读者要比较什么，不写期望曲线形状。未进入本计划的运行图保持 `placement: diagnostic`。`placement` 不是成熟度。
 
 章节/段落契约只规定信息职责，不规定固定措辞。`must_not_invent` 应列出未确认的数字、机制、实验和“创新”表述。CUMCM 写作策略禁止单独的问题重述章，不要把它写进 `required_sections`。

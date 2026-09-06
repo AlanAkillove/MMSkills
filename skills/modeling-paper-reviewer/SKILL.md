@@ -20,6 +20,8 @@ description: "以数模竞赛预审/评阅角色，按题意、模型、数据�
 - **Section review**：承重单元（如一整问的模型—求解—结果）形成 candidate 后做 scoped review。只读该单元和必要上游证据。阻止问题向后传播。
 - **Manuscript review**：主体组装后从 fresh context 看全文：跨章术语、同构结构、摘要主线、图表风格。最终成稿仍必须做。
 
+一个承重单元（如一整问的模型—求解—结果—图表）形成 candidate 后，用一次 scoped review bundle，不要每个图各开 Subagent。详细透镜见 math-modeling `independent-review-contract.md`。
+
 最终成稿审阅、承重章节的独立审阅，以及用户明确要求的多维审稿，**必须**启动独立 Subagent：
 
 1. 使用宿主的 Subagent / 独立 Agent 能力（Cursor `Task`、Codex subagent、新会话等），给它独立上下文。

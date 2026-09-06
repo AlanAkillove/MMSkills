@@ -27,6 +27,7 @@ def test_entrypoint_defines_design_scope_and_human_boundary():
         "placement",
         "visual-first",
         "visual brief",
+        "maturity",
     ):
         assert phrase in content
 

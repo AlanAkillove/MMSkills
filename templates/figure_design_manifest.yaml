@@ -6,6 +6,7 @@ figure_design:
   reader_task: null
   evidence_role: null
   placement: paper
+  maturity: planned
   used_in_manuscript: false
   question_ids: []
   claim_ids: []

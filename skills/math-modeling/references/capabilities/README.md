@@ -11,4 +11,4 @@
 `mandatory_consideration` 表示候选阶段不能忘掉，不表示必须跑完整流程。
 Working set 只缓存角色、最近能力和 artifact 指针，不缓存 Skill 正文；显式换任务时失效。
 
-质量策略（audit / review / challenge、artifact 成熟度）见 [`quality-policy.yaml`](quality-policy.yaml)。它描述产物升级所需的质量证据，不是 workflow 引擎，也不新增公开 Skill。
+质量策略（audit / review / challenge、artifact 成熟度）见 [`quality-policy.yaml`](quality-policy.yaml)。执行器是 `scripts/resolve_quality.py`，不是 workflow 引擎，也不新增公开 Skill。跨角色能力见 [`shared.yaml`](shared.yaml)。

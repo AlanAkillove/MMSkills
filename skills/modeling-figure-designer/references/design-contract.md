@@ -14,6 +14,7 @@ figure_design:
   reader_task: compare | locate_trend | inspect_distribution | inspect_relationship | inspect_boundary | follow_process | verify_result | other
   evidence_role: descriptive | comparative | trend | relationship | distribution | sensitivity | feasibility | process | schematic | result_table
   placement: diagnostic | comparison | paper | appendix
+  maturity: planned | produced | audited | reviewed | accepted
   used_in_manuscript: false
   question_ids: []
   claim_ids: []
@@ -54,7 +55,8 @@ figure_design:
 
 ## 设计检查
 
-- 未规划运行图默认 `placement: diagnostic`；promote 到 `paper` 需要 visual brief、事实审计和独立 visual review；
+- 未规划运行图默认 `placement: diagnostic`；promote 到 `paper` 需要 visual brief、evidence_audit 和独立 visual review。定量图审计数据/单位，概念/结构图审计几何与术语；
+- `placement` 与 `maturity` 分开：`paper` 不是“已经审完”；
 - `figure_question` 必须是读者问题，不写成“展示结果”或“美化页面”，也不写期望曲线形状；
 - `evidence_role`、`chart_type` 和每个面板的 `role` 必须互相匹配；
 - `claim_ids` 只登记已有主张，不在设计过程中凭空生成结论；

@@ -29,7 +29,8 @@ def test_full_manuscript_considers_architect_and_figures():
     assert plan["intent"] == "draft_full"
     assert "modeling-paper-architect" in plan["specialists"]
     assert "modeling-figure-designer" in plan["specialists"]
-    assert "modeling-paper-writer" in plan["specialists"]
+    assert "modeling-paper-writer" not in plan["specialists"]
+    assert "modeling-paper-writer" in plan["deferred_specialists"]
     assert "modeling-paper-architect" in plan["mandatory_consideration"]
     assert "modeling-figure-designer" in plan["mandatory_consideration"]
 

@@ -25,7 +25,7 @@ math-modeling
   -> 当前任务需要的参考资料 / 工具
 ```
 
-普通单任务通常 0–2 个专项技能（预算，不是硬上限）。复合任务按能力覆盖选择最小集合。重要产物跨越质量边界时做独立审阅；最终审稿必须独立 Subagent。
+普通单任务通常 0–2 个专项技能（预算，不是硬上限）。复合任务按能力覆盖选择最小集合。产物跨越质量边界时由 `resolve_quality.py` 约束；最终审稿必须独立 Subagent。
 
 `route_role.py` 是高置信度提示器。没有可靠当前角色时，“继续问题三”“检查图”“数值”应返回 `unknown` / `requires_context`，不要默认建模手。
 
@@ -49,8 +49,8 @@ math-modeling
 10. 官方规则与写作策略分开：后者在 `profiles/writing/`。CUMCM 中文终稿的 itemize、boxed 公式、孤立参考文献、单独问题重述章由预检机械执行。目标页数属于项目 preference，不是公共默认。
 11. 最终成稿审阅必须使用独立 Subagent，从磁盘重读稿件。承重章节完成后做 scoped review；全文审阅仍然必须保留。
 12. 契约测试通过不能宣称真实 Agent 行为已经验证。
-13. Independent Quality Control：审计查对错，审阅评质量，挑战找反例。产出者可做便宜自检，但不能把自己的评价当成独立审查。策略在 `skills/math-modeling/references/capabilities/quality-policy.yaml`。
-14. 图表前置：正式写整篇前先有 visual/tabular evidence plan。未规划运行图默认 `diagnostic`，promote 到 `paper` 才进正文。`figure-designer` 是跨角色 shared capability。
+13. Independent Quality Control：审计查对错，审阅评质量，挑战找反例。`quality-policy.yaml` 由 `scripts/resolve_quality.py` 执行。缺少当前 hash 的审查证据时允许讨论，不允许标记 adopted / frozen / paper / assembled。一个承重单元一次 Subagent。
+14. 图表前置：正式写整篇第一轮只加载论证与图表计划，讨论后再写正文。未规划运行图默认 `diagnostic`。`placement` 与 `maturity` 分开。`figure-designer` 是 shared capability，可进入任意角色候选。
 15. CUMCM 中文写作策略禁止单独的「问题重述」章（不是官方法条）。必要题面事实并入问题分析或各问建模。
 
 明确不做：算法百科、固定候选/图数量、强制基线、把普通对话做成阶段流水线、按词频改写、把通用中文写作阈值硬套数模论文、把写作偏好写成官方规则、所有 Skill 都强制 Subagent。

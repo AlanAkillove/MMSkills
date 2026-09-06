@@ -23,8 +23,7 @@ prose:
 sections:
   problem_restatement: forbidden
   reason: >
-    赛委员会推荐不单独写“问题重述”章，以免与题面高度重合、抬高查重。
-    必要对象、任务和条件并入问题分析或各问建模，不要整章复述题面。
+    本写作策略不设置单独的问题重述章。必要题面对象、任务和条件并入问题分析或各问建模，以减少重复并提高正文信息密度。
 
 ordered_lists:
   allowed_for:
