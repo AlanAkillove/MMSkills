@@ -17,7 +17,7 @@
 | 冻结/检查论文数字 | `scripts/results/freeze_results.py`、`check_result_freshness.py`（机械产物是 `snapshot`；有 `decision_id` 后才是 `frozen`） |
 | 记录一次试算 | `scripts/results/write_run_summary.py` |
 
-不要默认加载论文写作、自然化、规则 profile 或编排器。
+先按问题维度召回（`references/capabilities/computationalist.yaml`），再加载完整 Skill。不要默认加载论文写作、自然化、规则 profile 或编排器。
 
 ## 运行契约
 

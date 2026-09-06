@@ -116,6 +116,32 @@ def test_checker_accepts_clean_small_manuscript(tmp_path: Path):
     assert "STATUS: pass" in result.stdout
 
 
+def test_checker_does_not_forbid_itemize_without_writing_profile(tmp_path: Path):
+    manuscript = tmp_path / "one-list.tex"
+    report = tmp_path / "report.json"
+    manuscript.write_text(
+        r"""\begin{document}
+\begin{abstract}
+第一段交代对象与任务。
+
+第二段给出方法和限制。
+\end{abstract}
+\section{问题分析}
+\begin{itemize}
+\item 仅一项分点
+\end{itemize}
+\end{document}
+""",
+        encoding="utf-8",
+    )
+    result = run_checker(manuscript, "--output", str(report))
+    assert result.returncode == 0, result.stdout + result.stderr
+    payload = json.loads(report.read_text(encoding="utf-8"))
+    categories = {item["category"] for item in payload["findings"]}
+    assert "unordered-list-forbidden" not in categories
+    assert "boxed-equation" not in categories
+
+
 if __name__ == "__main__":
     import tempfile
 

@@ -1,5 +1,5 @@
 # Machine-readable default ownership. Not a hard dependency graph.
-schema_version: "0.3.0-rc2"
+schema_version: "0.3.3"
 never_preload:
   - modeling-pipeline-orchestrator
   - modeling-process-freezer
@@ -58,6 +58,11 @@ intents:
   understand:
     role: modeler
     specialists: [modeling-problem-familiarization]
+    persist_artifacts: false
+  formal_intake:
+    role: modeler
+    specialists: [modeling-problem-intake]
+    persist_artifacts: true
   literature:
     role: modeler
     specialists: [modeling-literature-evidence]
@@ -79,6 +84,22 @@ intents:
   draft:
     role: writer
     specialists: [modeling-paper-writer]
+  composite_review:
+    role: writer
+    persist_artifacts: false
+    review_isolation: required_subagent
+    specialists:
+      - modeling-paper-reviewer
+      - modeling-reader-experience-auditor
+      - modeling-terminology-auditor
+      - modeling-ai-pattern-reviewer
+      - modeling-rules-profile
+      - modeling-final-preflight
+  review:
+    role: writer
+    persist_artifacts: false
+    review_isolation: required_subagent
+    specialists: [modeling-paper-reviewer]
   revise:
     role: writer
     specialists: [modeling-paper-writer]

@@ -15,4 +15,6 @@
 
 阶段注册表中的 `depends_on` 是真正会影响 ready 的硬依赖；`recommended_after` 只是推荐先后，不应阻断用户明确要求的解释、探索、续写或局部修稿。`core_decision` 的人工确认在最终采用/定稿/冻结前仍然不可省略，`review_checkpoint` 默认是可延后的核对点。
 
-这些 schema 不替代人工确认，也不把结构合法误认为数学正确。修改字段时应同步更新对应 skill、模板、fixtures、ADR 和变更记录；对既有字段做破坏性修改必须提供迁移说明。
+这些 schema 不替代人工确认，也不把结构合法误认为数学正确。修改字段时应同步更新对应 skill、模板、fixtures、`docs/architecture.md` 和变更记录；对既有字段做破坏性修改必须提供迁移说明。
+
+`submission-context.schema.json` 把赛题身份（`problem.year`）与提交规则（`submission.rules_year` / `rules_profile_id`）分开。禁止从赛题年份推断规则年份。

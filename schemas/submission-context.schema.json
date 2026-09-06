@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/AlanAkillove/MMSkills/schemas/submission-context.schema.json",
+  "title": "Submission context",
+  "description": "Separate the contest problem identity from the rules used to write and submit the paper. Never infer rules_year from problem_year.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["problem", "submission"],
+  "properties": {
+    "schema_version": { "type": "string" },
+    "problem": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "competition": { "type": ["string", "null"] },
+        "year": { "type": ["integer", "string", "null"] },
+        "problem": { "type": ["string", "null"] }
+      }
+    },
+    "submission": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["rules_year", "rules_profile_id"],
+      "properties": {
+        "competition": { "type": ["string", "null"] },
+        "rules_year": { "type": ["integer", "string", "null"] },
+        "rules_profile_id": { "type": ["string", "null"] },
+        "writing_profile_id": { "type": ["string", "null"] }
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": ["resolved", "unassessed", "conflict"]
+    }
+  }
+}

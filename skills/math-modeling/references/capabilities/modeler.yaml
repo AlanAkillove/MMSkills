@@ -1,0 +1,56 @@
+schema_version: "0.3.3"
+kind: capability_index
+role: modeler
+facets:
+  topic: 选题比较
+  understand: 理解题目/背景
+  intake: 正式问题地图
+  literature: 文献证据
+  model: 模型构思与比较
+  assumption: 假设账本
+  terminology_establish: 建立术语
+  data_explore: 数据口径
+  distinctiveness: 题目特异性
+facet_cues:
+  topic: "选题|多题比较|选哪一题"
+  understand: "让我理解|帮我理解|弄懂|熟悉题目|阅读赛题"
+  intake: "问题地图|正式题意|固化题意"
+  literature: "文献|相关工作|DOI|orientation"
+  model: "比较.*模型|候选模型|模型设计|物理模型|重新建模|推模型"
+  assumption: "假设账本|登记假设"
+  terminology_establish: "术语表|统一叫|canonical term"
+  data_explore: "数据口径|缺失值|变量含义"
+  distinctiveness: "题目特异|反同质化"
+diagnosis_facets: []
+exclude_when_diagnosing: []
+cards:
+  - id: modeling-topic-selection
+    primary: [topic]
+  - id: modeling-problem-familiarization
+    primary: [understand]
+    not_for: [生成 question_map]
+  - id: modeling-problem-intake
+    primary: [intake]
+  - id: modeling-literature-evidence
+    primary: [literature]
+  - id: modeling-model-architect
+    primary: [model]
+  - id: modeling-assumption-ledger
+    primary: [assumption]
+  - id: modeling-terminology-auditor
+    primary: [terminology_establish]
+  - id: modeling-data-audit
+    primary: [data_explore]
+  - id: modeling-distinctiveness-coach
+    primary: [distinctiveness]
+coverage:
+  modeling-topic-selection: {topic: 2}
+  modeling-problem-familiarization: {understand: 2}
+  modeling-problem-intake: {intake: 2}
+  modeling-literature-evidence: {literature: 2}
+  modeling-model-architect: {model: 2}
+  modeling-assumption-ledger: {assumption: 2}
+  modeling-terminology-auditor: {terminology_establish: 2}
+  modeling-data-audit: {data_explore: 2}
+  modeling-distinctiveness-coach: {distinctiveness: 2}
+cost: {}

@@ -2,10 +2,34 @@
 
 本文件记录可复用技能和共享契约的变化。
 
-## [Unreleased]
+## [0.3.3]
+
+### Added
+
+- L1.5 Capability Index：按问题维度召回 specialist，再做最小覆盖；数据在 `references/capabilities/`，脚本为 `route_capabilities.py`。
+- 关键能力 `mandatory_consideration`：提交合规、终稿审阅等至少进入候选集。
+- 可选 session working-set 状态：只记角色和最近能力，显式换任务时失效。
 
 ### Changed
 
+- Router 从单标签 `intent → skill` 升级为 `query → facets → retrieval → min cover`。0–2 specialist 改为局部任务预算，不再是复合任务上限。
+- 角色指南改为问题空间目录；完整 Skill 与 references 仍懒加载。
+
+## [0.3.2]
+
+### Added
+
+- 提交上下文解析：`problem_year` 与 `rules_year` / `rules_profile_id` 分离，禁止从赛题年份推断提交规则。
+- 独立写作策略 profile：`profiles/writing/cumcm-natural-cn.yaml`，不把英文摘要、按问摘要、禁止 itemize/boxed 等偏好写成官方法条。
+- 合规门：`check_compliance_gate.py`。未解析 rules profile 时只能是 `unassessed`，禁止声称格式合规或提交就绪。
+- 脱敏回归稿 `tests/fixtures/dsh-replay-2025b-cumcm2026/`：覆盖错误页数规则、英文摘要、`\\boxed`、itemize、孤立参考文献和短稿覆盖审查。
+
+### Changed
+
+- 成文预检按 writing profile 机械拦截 itemize、boxed 公式、英文摘要、孤立 bibitem 和 20 页规则残留；短于写作目标页数只触发 coverage audit，不得注水。
+- 路由：多维审稿加载完成该任务的 Writer 审查集合，并要求独立 Subagent；“让我理解题目”走 familiarization 且不落盘；正式问题地图改为显式 opt-in。
+- Writer 检查子问题论证覆盖，不再用章节是否齐全代替完整。
+- 最终审稿必须独立 Subagent、只读磁盘终稿；宿主不支持时标 `review_isolation_unavailable`。
 - 公开仓库面清理：删除开发过程文档、调研总账和历史 ADR；当前有效边界写入 `docs/architecture.md`。
 - README 改为用户文档入口；致谢补充 nature-skills，并区分设计启发与第三方代码复用。
 - 质量模型改为与实现路径无关的结果标准；TeX 设计稿改为当前使用说明。

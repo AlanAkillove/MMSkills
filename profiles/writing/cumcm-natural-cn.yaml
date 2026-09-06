@@ -1,0 +1,44 @@
+schema_version: "0.3.2"
+kind: manuscript_writing_profile
+profile_id: cumcm-natural-cn
+not_official_rules: true
+applies_with_rules_profiles:
+  - cumcm-2026
+source_note: >
+  这是 MMSkills 的中文 CUMCM 写作策略，不是组委会官方格式规范。
+  官方页数、摘要页、目录和文内引用义务以 rules profile 为准。
+
+abstract:
+  english_abstract: false
+  organization: problem_by_problem
+  reason: >
+    2026 官方只规定摘要无需译成英文、原则上不超过一页。
+    本 profile 进一步要求不写英文摘要，并按子问写成自然段，便于评委建立问题—方法—结果对应。
+
+prose:
+  paragraph_first: true
+  unordered_lists: forbidden
+  default_model_evaluation_triple: forbidden
+
+ordered_lists:
+  allowed_for:
+    - problem_restatement
+    - algorithm_steps
+    - formal_assumptions
+
+equations:
+  boxed_emphasis: forbidden
+  forbidden_commands:
+    - boxed
+    - fbox
+    - framebox
+    - colorbox
+
+body_length:
+  preferred_pages: [26, 28]
+  short_manuscript_triggers: coverage_audit
+  padding_forbidden: true
+
+references:
+  orphan_entries: forbidden
+  in_text_required: true

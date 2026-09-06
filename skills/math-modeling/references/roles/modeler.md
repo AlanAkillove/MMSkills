@@ -8,21 +8,18 @@
 
 ## 按需 specialist
 
-只在当前问题真正需要时加载一个或少量：
+只在当前问题真正需要时加载。先看问题维度，再读完整 Skill。
 
-| 用户现在要… | 加载 |
+| 当前问题 | 应考虑 |
 |---|---|
-| 多题比较/选题 | `modeling-topic-selection` |
-| 弄懂对象、图表、过程 | `modeling-problem-familiarization` |
-| 整理子问题/变量/约束 | `modeling-problem-intake` |
+| 还没读懂对象/背景 | `modeling-problem-familiarization`（对话讲解，不写问题地图） |
+| 要把题意固化成地图 | `modeling-problem-intake` |
 | 查或精读相关工作 | `modeling-literature-evidence` |
 | 比较或登记候选模型 | `modeling-model-architect` |
-| 登记假设 | `modeling-assumption-ledger` |
-| 建立或更新术语/符号 | `modeling-terminology-auditor`（`establish`） |
-| 看数据口径/缺失 | `modeling-data-audit`（explain/explore） |
-| 题目特异性提醒 | `modeling-distinctiveness-coach` |
+| 多题比较/选题 | `modeling-topic-selection` |
+| 登记假设 / 建立术语 / 数据口径 / 题目特异性 | 对应 assumption / terminology(`establish`) / data-audit / distinctiveness |
 
-不要默认加载编排器、process-freezer、论文写作或终检。
+不要默认加载编排器、process-freezer、论文写作或终检。完整卡片见 `references/capabilities/modeler.yaml`。
 
 ## 认知顺序（可跳步，不是门禁）
 

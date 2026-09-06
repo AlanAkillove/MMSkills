@@ -34,6 +34,9 @@ def test_entrypoint_is_a_thin_router():
     assert (SKILL / "references" / "roles" / "writer.md").is_file()
     assert (SKILL / "references" / "specialist-routing.yaml").is_file()
     assert (SKILL / "references" / "progressive-disclosure.md").is_file()
+    cap_dir = SKILL / "references" / "capabilities"
+    assert (cap_dir / "writer.yaml").is_file()
+    assert (SKILL / "scripts" / "route_capabilities.py").is_file()
 
 
 def test_local_continue_does_not_preload_orchestrator_or_registry():

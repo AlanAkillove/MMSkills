@@ -1,0 +1,30 @@
+schema_version: "0.3.3"
+kind: capability_index
+role: computationalist
+facets:
+  data_change: 数据处理
+  experiment: 实验与求解
+  figure: 绘图
+  figure_audit: 核图
+facet_cues:
+  data_change: "清洗数据|切分|缺失处理"
+  experiment: "跑代码|敏感性|求解|matlab|实验登记"
+  figure: "画图|绘图|plot"
+  figure_audit: "核图|图中的单位|图中的数"
+diagnosis_facets: []
+exclude_when_diagnosing: []
+cards:
+  - id: modeling-data-audit
+    primary: [data_change]
+  - id: modeling-experiment-validator
+    primary: [experiment]
+  - id: modeling-figure-designer
+    primary: [figure]
+  - id: modeling-figure-table-auditor
+    primary: [figure_audit]
+coverage:
+  modeling-data-audit: {data_change: 2}
+  modeling-experiment-validator: {experiment: 2}
+  modeling-figure-designer: {figure: 2}
+  modeling-figure-table-auditor: {figure_audit: 2}
+cost: {}

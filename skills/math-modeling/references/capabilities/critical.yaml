@@ -1,0 +1,26 @@
+schema_version: "0.3.3"
+kind: critical_capabilities
+# 命中后必须进入候选集。不是 mandatory_call。
+items:
+  submission_compliance:
+    cues: "提交|合规|格式规范|符合比赛|最终版|提交稿"
+    require_consideration:
+      - modeling-rules-profile
+      - modeling-final-preflight
+    promote_when_any_facet: [review, format, rules, preflight]
+  freeze_result:
+    cues: "冻结结果|冻结数字|写入论文的数值"
+    require_consideration:
+      - modeling-experiment-validator
+    note: "机械产物是 results_snapshot；有 decision_id 才是 frozen。"
+  final_manuscript:
+    cues: "最终论文|成稿审阅|终稿"
+    require_consideration:
+      - modeling-paper-reviewer
+      - modeling-terminology-auditor
+    note: "引用完整性由 reviewer/preflight 机械项覆盖；此处只保证审稿与术语进入考虑。"
+  independent_review:
+    cues: "审阅|审稿|预审|评审"
+    require_consideration:
+      - modeling-paper-reviewer
+    note: "最终审稿必须独立 Subagent。"

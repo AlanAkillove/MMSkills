@@ -1,0 +1,108 @@
+schema_version: "0.3.3"
+kind: capability_index
+role: writer
+# 问题空间，不是 Skill 名称目录。
+facets:
+  review: 整体审稿
+  structure: 结构与论证
+  prose: 成文与语言
+  readability: 阅读体验
+  template_language: 模板化表达
+  terminology: 术语一致性
+  abstract: 摘要
+  draft: 正文写作
+  claims: 主张—证据
+  citations: 文献引用
+  naturalize: 自然化修改
+  figures_text: 图表文字
+  tex: TeX/版式
+  format: 赛事格式
+  rules: 赛事规则
+  preflight: 提交前汇总
+  disclosure: AI 披露
+facet_cues:
+  review: "审阅|审稿|预审|评审|审一遍|还有哪些问题"
+  structure: "论文结构|论证结构|章节结构|结构(?:和|,|、).{0,8}格式"
+  prose: "写作质量|语言表达|文笔|(?:^|、|和|与|看)写作(?:、|和|与|方面|质量|$)"
+  readability: "阅读体验|阅读摩擦|评委读|写作质量"
+  template_language: "模板化|套话|同质化|语言表达"
+  terminology: "术语"
+  abstract: "摘要"
+  draft: "写论文|改正文|续写正文"
+  claims: "主张|证据链|结论边界"
+  citations: "文内引用|参考文献|\\\\cite"
+  naturalize: "自然化|润色"
+  figures_text: "图注|表注"
+  tex: "LaTeX|\\\\TeX|编译 PDF|排版修复"
+  format: "格式规范|论文格式|(?:结构(?:和|,|、).{0,8})格式"
+  rules: "赛事规则|rules profile|是否符合比赛"
+  preflight: "提交前|终检|preflight"
+  disclosure: "AI\\s*披露|使用详情"
+diagnosis_facets: [review, readability, template_language, terminology, format, rules, preflight]
+exclude_when_diagnosing:
+  - modeling-paper-writer
+  - modeling-paper-naturalizer
+cards:
+  - id: modeling-paper-architect
+    primary: [structure]
+    not_for: [已经在写正文时重建目录]
+  - id: modeling-paper-writer
+    primary: [draft, abstract, prose]
+    not_for: [审稿诊断]
+  - id: modeling-claim-evidence-audit
+    primary: [claims]
+    secondary: [citations]
+  - id: modeling-terminology-auditor
+    primary: [terminology]
+    not_for: [写作时重建术语表]
+  - id: modeling-paper-reviewer
+    primary: [review, structure, claims]
+    secondary: [prose]
+    not_for: [局部改写, 只改错别字]
+    mandatory_when: [final_manuscript_review]
+  - id: modeling-reader-experience-auditor
+    primary: [readability]
+    secondary: [structure, prose]
+  - id: modeling-ai-pattern-reviewer
+    primary: [template_language]
+    secondary: [prose]
+    not_for: [判断是否使用了 AI]
+  - id: modeling-paper-naturalizer
+    primary: [naturalize]
+    not_for: [审稿诊断阶段]
+  - id: modeling-figure-table-auditor
+    primary: [figures_text]
+  - id: modeling-tex-paper-production
+    primary: [tex]
+    secondary: [format]
+  - id: modeling-rules-profile
+    primary: [rules]
+    secondary: [format]
+  - id: modeling-final-preflight
+    primary: [preflight]
+    secondary: [rules, format]
+  - id: modeling-ai-use-disclosure
+    primary: [disclosure]
+coverage:
+  modeling-paper-architect: {structure: 2}
+  modeling-paper-writer: {draft: 2, abstract: 2, prose: 2}
+  modeling-claim-evidence-audit: {claims: 2, citations: 1}
+  modeling-terminology-auditor: {terminology: 2}
+  modeling-paper-reviewer: {review: 2, structure: 2, claims: 2, prose: 1}
+  modeling-reader-experience-auditor: {readability: 2, structure: 1, prose: 1}
+  modeling-ai-pattern-reviewer: {template_language: 2, prose: 1}
+  modeling-paper-naturalizer: {naturalize: 2}
+  modeling-figure-table-auditor: {figures_text: 2}
+  modeling-tex-paper-production: {tex: 2, format: 1}
+  modeling-rules-profile: {rules: 2, format: 2}
+  modeling-final-preflight: {preflight: 2, rules: 1, format: 1}
+  modeling-ai-use-disclosure: {disclosure: 2}
+cost:
+  modeling-paper-reviewer: 2
+  modeling-reader-experience-auditor: 2
+  modeling-ai-pattern-reviewer: 2
+  modeling-terminology-auditor: 1
+  modeling-rules-profile: 1
+  modeling-final-preflight: 2
+  modeling-paper-writer: 2
+  modeling-tex-paper-production: 2

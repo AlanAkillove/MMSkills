@@ -19,9 +19,9 @@ description: "在提交前汇总规则、论文、题意、假设、主张证据
 
 ## 输入与读取顺序
 
-1. 固定目标赛事/年份/组别/赛区、提交时间窗和有效 `rules_profile`；profile 过期/冲突时只做非合规部分并标阻断；
+1. 固定提交上下文：`problem.year` 与 `submission.rules_year`/`rules_profile_id` 分开；未解析 profile 时 `compliance_status=unassessed`，禁止声称格式合规；
 2. 固定电子论文、源文/渲染件、附录、支撑包、代码、数据、AI trace、规则和各 artifact 的版本/hash；
-3. 读取 `question_map`、`assumption_ledger`、`claim_evidence_matrix`、`terminology_table.md`（若只有旧 `terminology_ledger` 则沿用）、`distinctiveness_ledger`、model/experiment/figure/reader/support 审计；
+3. 读取写作 profile（若目标为中文 CUMCM 终稿，默认 `profiles/writing/cumcm-natural-cn.yaml`）和官方 `rules_profile`；
 4. 读取规则 profile 的论文/支撑/匿名/AI/文件大小/声明位置/提交字段；
 5. 记录未读材料、未执行代码、未知字段、冲突、人工尚未确认和冻结后改动。
 
@@ -53,7 +53,7 @@ description: "在提交前汇总规则、论文、题意、假设、主张证据
 
 ### 3. 检查成文质量
 
-对最终候选 TeX/Markdown 运行 `scripts/check_manuscript_quality.py`。它只检查可观察的残留和阅读风险：草稿或待填内容、疑似内部编号、过程性说明/重复防御性声明、过密单段摘要、失效交叉引用和可能用列表替代论证的结构。列表、章节数量和参考论文差异只能形成待审查提示，不能直接判定论文好坏。可选再运行 `modeling-ai-pattern-reviewer/scripts/scan_language_signals.py`（或胶水 `--language-scan`）：命中项只是 `candidate`/`warning`，不得因信号数量阻断，也不得计算 AI 痕迹率。P0/P1 仍只来自主张、事实、规则、引用、数字和提交问题。
+对最终候选 TeX/Markdown 运行 `scripts/check_manuscript_quality.py`，终稿加上 `--writing-profile` 与 `--rules-profile`。机械项包括：无序 itemize、boxed 公式、英文摘要、孤立参考文献、错误页数规则。列表、章节数量和参考论文差异不能直接判定论文好坏。未解析 rules profile 时运行 `scripts/check_compliance_gate.py`，禁止输出 compliant。可选再运行 `modeling-ai-pattern-reviewer/scripts/scan_language_signals.py`（或胶水 `--language-scan`）：命中项只是 `candidate`/`warning`。P0/P1 仍只来自主张、事实、规则、引用、数字和提交问题；写作 profile 的机械禁令除外。
 
 ### 4. 汇总语义状态
 

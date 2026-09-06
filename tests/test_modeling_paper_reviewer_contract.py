@@ -21,6 +21,7 @@ def test_entrypoint_preserves_reviewer_role_boundary():
         "acceptance_test",
         "human_decision_queue.md",
         "竞赛保密窗口",
+        "独立 Subagent",
     ):
         assert phrase in content
 

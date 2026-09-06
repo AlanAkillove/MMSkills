@@ -271,6 +271,12 @@ submission:
     file_format: [PDF, Word]
     recommended_format: PDF
     max_size_mb: 20
+    toc: prohibited
+    abstract:
+      max_pages: 1
+      english_translation: not_required
+    references:
+      in_text_marking: required
   support_materials:
     single_archive: true
     formats: [RAR, ZIP]

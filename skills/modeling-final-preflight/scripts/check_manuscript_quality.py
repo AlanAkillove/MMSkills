@@ -15,6 +15,11 @@ import sys
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional, Sequence, Tuple
 
+try:
+    import yaml
+except ImportError:  # pragma: no cover
+    yaml = None  # type: ignore[assignment]
+
 
 PATTERNS: Sequence[Tuple[str, str, str, str]] = (
     (
@@ -83,9 +88,18 @@ def add_finding(
 
 
 NARRATIVE_SECTION = re.compile(
-    r"(问题分析|总体分析|建模路线|结果解释|结论|讨论)"
+    r"(问题分析|总体分析|建模路线|结果解释|结论|讨论|模型评价|可靠性)"
 )
 SECTION_SPLIT = re.compile(r"\\(?:sub)*section\*?\{([^}]+)\}")
+BOXED_COMMANDS = re.compile(r"\\(?:boxed|fbox|framebox|colorbox)\b|\\box\{")
+ENGLISH_ABSTRACT = re.compile(
+    r"\\textbf\{\s*Abstract\s*\}|\\section\*?\{\s*Abstract\s*\}",
+    re.I,
+)
+CITE_KEY = re.compile(r"\\cite[t]?\{([^}]+)\}")
+BIBITEM_KEY = re.compile(r"\\bibitem(?:\[[^\]]*\])?\{([^}]+)\}")
+TWENTY_PAGE_LIMIT = re.compile(r"(正文|[Mm]ain text).{0,24}(?:<=|≤|不超过|不多于)\s*20\s*页")
+EVALUATION_TRIPLE = re.compile(r"优点.{0,12}局限.{0,12}改进")
 
 
 def narrative_list_risk(text: str) -> Optional[Dict[str, Any]]:
@@ -141,6 +155,144 @@ def style_metrics(text: str) -> Dict[str, Any]:
     }
 
 
+def load_yaml_profile(path: Optional[Path]) -> Optional[Dict[str, Any]]:
+    if path is None:
+        return None
+    if yaml is None:
+        raise RuntimeError("PyYAML is required to load writing/rules profiles")
+    payload = yaml.safe_load(path.read_text(encoding="utf-8"))
+    return payload if isinstance(payload, dict) else None
+
+
+def citation_keys(text: str) -> tuple[set[str], set[str]]:
+    cited: set[str] = set()
+    for match in CITE_KEY.finditer(text):
+        cited.update(part.strip() for part in match.group(1).split(",") if part.strip())
+    bibitems = {match.group(1).strip() for match in BIBITEM_KEY.finditer(text)}
+    return cited, bibitems
+
+
+def apply_writing_profile(
+    text: str,
+    findings: List[Dict[str, Any]],
+    writing_profile: Dict[str, Any],
+    *,
+    rules_profile: Optional[Dict[str, Any]] = None,
+    pdf_pages: Optional[int] = None,
+    raw_content: Optional[str] = None,
+) -> None:
+    prose = writing_profile.get("prose") or {}
+    if prose.get("unordered_lists") == "forbidden":
+        itemize = list(re.finditer(r"\\begin\{itemize\}", text))
+        if itemize:
+            add_finding(
+                findings,
+                finding_id="MQL-010",
+                category="unordered-list-forbidden",
+                severity="P1",
+                message=f"当前写作 profile 禁止无序 itemize（{len(itemize)} 处）",
+                suggestion="把分点改成连续段落。问题重述、算法步骤和正式假设可用 enumerate。",
+                lines=line_numbers(text, itemize),
+            )
+    if prose.get("default_model_evaluation_triple") == "forbidden" and EVALUATION_TRIPLE.search(text):
+        add_finding(
+            findings,
+            finding_id="MQL-011",
+            category="evaluation-triple",
+            severity="P2",
+            message="检测到“优点—局限—改进方向”式模型评价骨架",
+            suggestion="写成讨论段，说明主要误差来源和验证边界，不要用三组 bullet 收束。",
+        )
+    equations = writing_profile.get("equations") or {}
+    if equations.get("boxed_emphasis") == "forbidden":
+        boxed = list(BOXED_COMMANDS.finditer(text))
+        if boxed:
+            add_finding(
+                findings,
+                finding_id="MQL-012",
+                category="boxed-equation",
+                severity="P1",
+                message="禁止用 boxed/fbox/framebox/colorbox 对公式做视觉框强调",
+                suggestion="给公式编号，在正文写“由式（n）可得”，不要画框。",
+                lines=line_numbers(text, boxed),
+            )
+    abstract_cfg = writing_profile.get("abstract") or {}
+    if abstract_cfg.get("english_abstract") is False:
+        english = list(ENGLISH_ABSTRACT.finditer(text))
+        if english:
+            add_finding(
+                findings,
+                finding_id="MQL-013",
+                category="english-abstract-forbidden",
+                severity="P1",
+                message="当前写作 profile 不生成英文摘要",
+                suggestion="删除 Abstract；官方“无需翻译成英文”不是要求补英文摘要。",
+                lines=line_numbers(text, english),
+            )
+    refs_cfg = writing_profile.get("references") or {}
+    if refs_cfg.get("orphan_entries") == "forbidden":
+        cited, bibitems = citation_keys(text)
+        orphans = sorted(bibitems - cited)
+        if bibitems and not cited:
+            add_finding(
+                findings,
+                finding_id="MQL-014",
+                category="orphan-bibliography",
+                severity="P1",
+                message=f"参考文献 {len(bibitems)} 条，正文 \\cite 为 0",
+                suggestion="在首次使用参数、模型或材料常数处给出文内引用；孤立 bibitem 不能作为文献证据。",
+            )
+        elif orphans:
+            add_finding(
+                findings,
+                finding_id="MQL-014",
+                category="orphan-bibliography",
+                severity="P1",
+                message="存在正文未引用的参考文献：" + ", ".join(orphans),
+                suggestion="删除孤立条目，或在首次使用处 \\cite。",
+            )
+    body = writing_profile.get("body_length") or {}
+    preferred = body.get("preferred_pages") or []
+    official_limit = None
+    if rules_profile:
+        official_limit = (
+            ((rules_profile.get("submission") or {}).get("paper") or {}).get("main_text_page_limit")
+        )
+    try:
+        official_limit = int(official_limit) if official_limit is not None else None
+    except (TypeError, ValueError):
+        official_limit = None
+    page_limit_haystack = raw_content if raw_content is not None else text
+    if official_limit == 30 and TWENTY_PAGE_LIMIT.search(page_limit_haystack):
+        add_finding(
+            findings,
+            finding_id="MQL-015",
+            category="wrong-rules-year-page-limit",
+            severity="P1",
+            message="稿件仍按正文不超过 20 页描述，与当前 rules profile 的 30 页上限冲突",
+            suggestion="赛题年份不是提交规则年份。加载 cumcm-2026，不要搜索或套用 2025 页数。",
+        )
+    if (
+        pdf_pages is not None
+        and isinstance(preferred, list)
+        and len(preferred) >= 1
+        and pdf_pages < int(preferred[0])
+    ):
+        add_finding(
+            findings,
+            finding_id="MQL-016",
+            category="coverage-short",
+            severity="P2",
+            message=(
+                f"PDF 约 {pdf_pages} 页，低于当前写作目标 {preferred[0]}–{preferred[-1]} 页"
+            ),
+            suggestion=(
+                "触发论证覆盖审查：参数来源、算法细节、验证和不确定度是否缺失。"
+                "不得用空话、重复或多余图表注水。官方上限仍以 rules profile 为准。"
+            ),
+        )
+
+
 def compare_metrics(reference: Optional[Path], current: Dict[str, Any]) -> Optional[Dict[str, Any]]:
     if reference is None:
         return None
@@ -167,7 +319,14 @@ def compare_metrics(reference: Optional[Path], current: Dict[str, Any]) -> Optio
     }
 
 
-def check_manuscript(path: Path, reference: Optional[Path] = None) -> Dict[str, Any]:
+def check_manuscript(
+    path: Path,
+    reference: Optional[Path] = None,
+    *,
+    writing_profile: Optional[Path] = None,
+    rules_profile: Optional[Path] = None,
+    pdf_pages: Optional[int] = None,
+) -> Dict[str, Any]:
     content = path.read_text(encoding="utf-8")
     text = visible_tex(content)
     findings: List[Dict[str, Any]] = []
@@ -258,20 +417,37 @@ def check_manuscript(path: Path, reference: Optional[Path] = None) -> Dict[str, 
             ),
         )
 
+    writing_payload = load_yaml_profile(writing_profile)
+    rules_payload = load_yaml_profile(rules_profile)
+    if writing_payload:
+        apply_writing_profile(
+            text,
+            findings,
+            writing_payload,
+            rules_profile=rules_payload,
+            pdf_pages=pdf_pages,
+            raw_content=content,
+        )
+
     metrics = style_metrics(text)
+    cited, bibitems = citation_keys(text)
+    metrics["cite_keys"] = len(cited)
+    metrics["bibitems"] = len(bibitems)
     p1 = sum(1 for finding in findings if finding["severity"] == "P1")
     p2 = sum(1 for finding in findings if finding["severity"] == "P2")
     status = "blocked" if p1 else "needs_review" if p2 else "pass"
     return {
         "tool": "check_manuscript_quality",
-        "tool_version": "0.2.1",
+        "tool_version": "0.3.2",
         "input": str(path),
         "status": status,
         "severity_counts": {"P1": p1, "P2": p2},
         "metrics": metrics,
         "findings": findings,
         "reference_comparison": compare_metrics(reference, metrics),
-        "scope_note": "可观察的成文清洁与阅读风险检查；不计算 AI 率、原创度、相似度或获奖概率。",
+        "writing_profile": str(writing_profile) if writing_profile else None,
+        "rules_profile": str(rules_profile) if rules_profile else None,
+        "scope_note": "可观察的成文清洁、写作 profile 机械项与阅读风险检查；不计算 AI 率、原创度、相似度或获奖概率。",
     }
 
 
@@ -280,6 +456,9 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("input", type=Path, help="TeX or TeX-like manuscript source")
     parser.add_argument("--output", type=Path, help="optional JSON report path")
     parser.add_argument("--reference", type=Path, help="optional local manuscript used only as a style reference")
+    parser.add_argument("--writing-profile", type=Path, help="manuscript writing profile YAML")
+    parser.add_argument("--rules-profile", type=Path, help="official contest rules profile YAML")
+    parser.add_argument("--pdf-pages", type=int, help="observed PDF page count for coverage audit")
     parser.add_argument(
         "--fail-on",
         choices=("p1", "any", "never"),
@@ -292,7 +471,13 @@ def parse_args() -> argparse.Namespace:
 def main() -> int:
     args = parse_args()
     try:
-        report = check_manuscript(args.input, args.reference)
+        report = check_manuscript(
+            args.input,
+            args.reference,
+            writing_profile=args.writing_profile,
+            rules_profile=args.rules_profile,
+            pdf_pages=args.pdf_pages,
+        )
     except (OSError, UnicodeError) as exc:
         print(f"ERROR: cannot inspect manuscript: {exc}", file=sys.stderr)
         return 2

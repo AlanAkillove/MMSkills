@@ -1,0 +1,9 @@
+schema_version: "0.3.3"
+kind: session_working_set
+# 可选缓存。不要因为调用 Skill 就创建本文件。
+active_working_set:
+  role: writer
+  recent_capabilities: [draft, terminology]
+  recently_loaded: [modeling-paper-writer, modeling-terminology-auditor]
+  current_artifacts: [main.tex, paper.pdf]
+  rules_profile: cumcm-2026
